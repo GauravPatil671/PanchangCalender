@@ -33,56 +33,58 @@ export default function PanchangHeroCard({ panchang, onOpenLocationModal }) {
         ॐ
       </div>
 
-      <div className="relative p-4 sm:p-8 lg:p-10 space-y-6 sm:space-y-8">
+      <div className="relative p-3.5 xs:p-5 sm:p-8 lg:p-10 space-y-4 sm:space-y-8">
         
         {/* Top Header: Date, Location & Hindu Maas Context */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6 pb-5 sm:pb-6 border-b border-stone-200/90 dark:border-stone-800">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-6 pb-4 sm:pb-6 border-b border-stone-200/90 dark:border-stone-800">
           
-          <div className="space-y-2">
-            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-vedic-saffron-600 text-white text-[11px] sm:text-xs font-bold uppercase tracking-wider shadow-sm">
+          <div className="space-y-1.5 sm:space-y-2">
+            <div className="flex flex-wrap items-center gap-1 sm:gap-2">
+              <span className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full bg-vedic-saffron-600 text-white text-[10px] sm:text-xs font-bold uppercase tracking-wider shadow-sm">
                 Daily Panchang
               </span>
-              <span className="text-[11px] sm:text-xs font-medium text-stone-600 dark:text-stone-300 bg-stone-100 dark:bg-stone-800 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
+              <span className="text-[10px] sm:text-xs font-medium text-stone-600 dark:text-stone-300 bg-stone-100 dark:bg-stone-800 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full">
                 दैनिक पञ्चाङ्गम्
               </span>
-              <span className="text-[11px] sm:text-xs font-semibold text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/80 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
-                Vikram Samvat {panchang.samvat.vikram}
+              <span className="text-[10px] sm:text-xs font-semibold text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/80 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full">
+                VS {panchang.samvat.vikram}
               </span>
             </div>
             
-            <h1 className="text-2xl sm:text-4xl font-extrabold font-serif text-stone-900 dark:text-white tracking-tight">
+            <h1 className="text-xl xs:text-2xl sm:text-4xl font-extrabold font-serif text-stone-900 dark:text-white tracking-tight">
               {dateFormatted}
             </h1>
             
-            <div className="flex flex-wrap items-center gap-2 text-sm sm:text-base text-stone-700 dark:text-stone-300">
+            <div className="flex flex-wrap items-center gap-1.5 text-xs sm:text-base text-stone-700 dark:text-stone-300">
               <span className="font-bold text-vedic-saffron-700 dark:text-vedic-saffron-400">{dayName}</span>
               <span className="text-stone-300 dark:text-stone-600">•</span>
               <span className="font-medium">{panchang.month.purnimanta} Maas</span>
               <span className="text-stone-300 dark:text-stone-600">•</span>
-              <span className="font-medium text-amber-800 dark:text-amber-300">{panchang.paksha} Paksha ({panchang.pakshaHindi})</span>
-              <span className="text-stone-300 dark:text-stone-600">•</span>
-              <span className="text-xs text-stone-500 dark:text-stone-400">{panchang.samvat.ritu} Ritu</span>
+              <span className="font-medium text-amber-800 dark:text-amber-300">{panchang.paksha} ({panchang.pakshaHindi})</span>
+              <span className="text-stone-300 dark:text-stone-600 hidden xs:inline">•</span>
+              <span className="text-[11px] text-stone-500 dark:text-stone-400 hidden xs:inline">{panchang.samvat.ritu} Ritu</span>
             </div>
           </div>
 
           {/* Location Selector Pill */}
-          <div className="flex flex-col sm:flex-row items-start lg:items-end gap-2 self-start lg:self-auto">
+          <div className="flex flex-col sm:flex-row items-start lg:items-end gap-2 self-start lg:self-auto w-full sm:w-auto">
             <button
               onClick={onOpenLocationModal}
-              className="group flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-white dark:bg-stone-800/90 border border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 hover:border-vedic-saffron-500 dark:hover:border-vedic-saffron-400 shadow-sm transition-all text-xs sm:text-sm font-semibold"
+              className="group flex items-center justify-between sm:justify-start w-full sm:w-auto gap-2 px-3 py-2 rounded-2xl bg-white dark:bg-stone-800/90 border border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 hover:border-vedic-saffron-500 dark:hover:border-vedic-saffron-400 shadow-sm transition-all text-xs sm:text-sm font-semibold"
               title="Click to calculate for your city"
             >
-              <div className="w-6 h-6 rounded-full bg-vedic-saffron-100 dark:bg-vedic-saffron-950/80 flex items-center justify-center text-vedic-saffron-600 dark:text-vedic-saffron-400 group-hover:scale-110 transition-transform">
-                <MapPin className="w-3.5 h-3.5" />
-              </div>
-              <div className="text-left">
-                <div className="text-[11px] text-stone-500 dark:text-stone-400 font-normal">Location Timings</div>
-                <div className="font-bold text-stone-900 dark:text-white">
-                  {selectedLocation.city}, {selectedLocation.state}
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-vedic-saffron-100 dark:bg-vedic-saffron-950/80 flex items-center justify-center text-vedic-saffron-600 dark:text-vedic-saffron-400 group-hover:scale-110 transition-transform">
+                  <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                </div>
+                <div className="text-left">
+                  <div className="text-[10px] text-stone-500 dark:text-stone-400 font-normal leading-tight">Location</div>
+                  <div className="font-bold text-xs sm:text-sm text-stone-900 dark:text-white truncate max-w-[130px] xs:max-w-[180px]">
+                    {selectedLocation.city}, {selectedLocation.state}
+                  </div>
                 </div>
               </div>
-              <span className="text-xs text-vedic-saffron-600 dark:text-vedic-saffron-400 underline ml-2 font-medium">
+              <span className="text-[11px] text-vedic-saffron-600 dark:text-vedic-saffron-400 underline ml-2 font-medium">
                 Change
               </span>
             </button>

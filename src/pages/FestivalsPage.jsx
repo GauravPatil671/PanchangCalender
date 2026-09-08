@@ -43,7 +43,7 @@ export default function FestivalsPage() {
   }, [festivals, searchQuery, selectedCategory, selectedMonth]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+    <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-6 sm:py-12 space-y-6 sm:space-y-8">
       
       {/* Page Header */}
       <div className="text-center max-w-3xl mx-auto space-y-3">

@@ -84,17 +84,17 @@ export default function DailyPanchangPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
+    <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-6 sm:py-12 space-y-6 sm:space-y-10">
       
       {/* Date Navigation & Picker Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 sm:p-6 rounded-3xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-sm">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 p-3.5 sm:p-6 rounded-3xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-sm">
         
         {/* Title */}
-        <div className="space-y-1">
-          <span className="text-xs uppercase font-bold tracking-wider text-vedic-saffron-600 dark:text-vedic-saffron-400">
+        <div className="space-y-0.5 sm:space-y-1">
+          <span className="text-[10px] sm:text-xs uppercase font-bold tracking-wider text-vedic-saffron-600 dark:text-vedic-saffron-400">
             Daily Panchang Ephemeris
           </span>
-          <h1 className="text-xl sm:text-3xl font-bold font-serif text-stone-900 dark:text-white flex flex-wrap items-center gap-1.5 sm:gap-2">
+          <h1 className="text-lg sm:text-3xl font-bold font-serif text-stone-900 dark:text-white flex flex-wrap items-center gap-1.5 sm:gap-2">
             <span>{formatDateDisplay(currentDate)}</span>
             <span className="text-xs sm:text-sm font-sans font-normal text-stone-500">
               ({formatDayOfWeek(currentDate)})
@@ -103,11 +103,11 @@ export default function DailyPanchangPage() {
         </div>
 
         {/* Date Controls */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
           
           <button
             onClick={handleToday}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 text-xs font-bold transition-colors"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 text-xs font-bold transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Today</span>
@@ -119,7 +119,7 @@ export default function DailyPanchangPage() {
               type="date"
               value={currentDate}
               onChange={(e) => handleDateChange(e.target.value)}
-              className="px-2.5 py-2 rounded-xl bg-stone-50 dark:bg-stone-800 border border-stone-300 dark:border-stone-700 text-xs font-bold text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-vedic-saffron-500 cursor-pointer"
+              className="px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-xl bg-stone-50 dark:bg-stone-800 border border-stone-300 dark:border-stone-700 text-xs font-bold text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-vedic-saffron-500 cursor-pointer max-w-[130px] sm:max-w-none"
             />
           </div>
 
@@ -127,18 +127,18 @@ export default function DailyPanchangPage() {
           <div className="flex items-center gap-1">
             <button
               onClick={handlePrev}
-              className="flex items-center gap-1 px-3 py-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-vedic-saffron-100 hover:text-vedic-saffron-700 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 text-xs font-bold transition-colors"
+              className="flex items-center gap-1 p-1.5 sm:px-3 sm:py-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-vedic-saffron-100 hover:text-vedic-saffron-700 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 text-xs font-bold transition-colors"
               title="Previous Day"
             >
               <ChevronLeft className="w-4 h-4" />
-              <span className="hidden xs:inline">Prev</span>
+              <span className="hidden sm:inline">Prev</span>
             </button>
             <button
               onClick={handleNext}
-              className="flex items-center gap-1 px-3 py-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-vedic-saffron-100 hover:text-vedic-saffron-700 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 text-xs font-bold transition-colors"
+              className="flex items-center gap-1 p-1.5 sm:px-3 sm:py-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-vedic-saffron-100 hover:text-vedic-saffron-700 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 text-xs font-bold transition-colors"
               title="Next Day"
             >
-              <span className="hidden xs:inline">Next</span>
+              <span className="hidden sm:inline">Next</span>
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>

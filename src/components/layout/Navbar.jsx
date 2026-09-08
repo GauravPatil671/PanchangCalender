@@ -40,23 +40,23 @@ export default function Navbar() {
   return (
     <>
       <header className="sticky top-0 z-40 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border-b border-stone-200/80 dark:border-stone-800/80 transition-colors shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-16 md:h-20">
             
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-vedic-saffron-600 via-amber-500 to-vedic-gold-400 flex items-center justify-center text-white shadow-md shadow-vedic-saffron-500/20 group-hover:scale-105 transition-transform">
-                <span className="text-xl font-bold font-serif">ॐ</span>
+            <Link to="/" className="flex items-center gap-2 sm:gap-3 group flex-shrink-0">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-vedic-saffron-600 via-amber-500 to-vedic-gold-400 flex items-center justify-center text-white shadow-md shadow-vedic-saffron-500/20 group-hover:scale-105 transition-transform">
+                <span className="text-base sm:text-xl font-bold font-serif">ॐ</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-bold tracking-tight font-serif text-stone-900 dark:text-white flex items-center gap-1.5">
+                <span className="text-base sm:text-xl font-bold tracking-tight font-serif text-stone-900 dark:text-white flex items-center gap-1">
                   Panchang
-                  <span className="text-xs uppercase font-sans tracking-widest px-2 py-0.5 rounded-full bg-vedic-saffron-100 dark:bg-vedic-saffron-950/80 text-vedic-saffron-700 dark:text-vedic-saffron-400 font-semibold border border-vedic-saffron-200 dark:border-vedic-saffron-800">
+                  <span className="text-[10px] sm:text-xs uppercase font-sans tracking-widest px-1.5 py-0.2 sm:px-2 sm:py-0.5 rounded-full bg-vedic-saffron-100 dark:bg-vedic-saffron-950/80 text-vedic-saffron-700 dark:text-vedic-saffron-400 font-semibold border border-vedic-saffron-200 dark:border-vedic-saffron-800 hidden xs:inline">
                     पंचांग
                   </span>
                 </span>
-                <span className="text-[11px] text-stone-500 dark:text-stone-400 tracking-wider">
-                  Vedic Calendar & Timings
+                <span className="text-[10px] sm:text-[11px] text-stone-500 dark:text-stone-400 tracking-wider hidden xs:block">
+                  Vedic Calendar
                 </span>
               </div>
             </Link>
@@ -82,26 +82,25 @@ export default function Navbar() {
             </nav>
 
             {/* Right Controls: Location & Theme & Mobile Toggle */}
-            <div className="flex items-center gap-1.5 sm:gap-3">
+            <div className="flex items-center gap-1 sm:gap-2.5">
               
               {/* Location Badge Button */}
               <button
                 onClick={() => setIsSelectorOpen(true)}
-                className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-vedic-sand/70 dark:bg-stone-800/90 border border-stone-300/70 dark:border-stone-700 text-stone-700 dark:text-stone-200 hover:border-vedic-saffron-400 dark:hover:border-vedic-saffron-500 text-xs sm:text-sm font-medium transition-all shadow-sm"
+                className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-vedic-sand/70 dark:bg-stone-800/90 border border-stone-300/70 dark:border-stone-700 text-stone-700 dark:text-stone-200 hover:border-vedic-saffron-400 dark:hover:border-vedic-saffron-500 text-[11px] sm:text-sm font-medium transition-all shadow-sm"
                 title="Change city or location"
                 aria-label="Select location"
               >
-                <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vedic-saffron-600 dark:text-vedic-saffron-400 flex-shrink-0 animate-pulse" />
-                <span className="max-w-[85px] xs:max-w-[110px] sm:max-w-[180px] truncate">
-                  <span className="sm:hidden">📍 {selectedLocation.city}</span>
-                  <span className="hidden sm:inline">📍 {selectedLocation.city}, {selectedLocation.state}</span>
+                <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-vedic-saffron-600 dark:text-vedic-saffron-400 flex-shrink-0 animate-pulse" />
+                <span className="max-w-[70px] xs:max-w-[100px] sm:max-w-[180px] truncate font-semibold">
+                  {selectedLocation.city}
                 </span>
               </button>
 
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className="p-1.5 sm:p-2 rounded-xl text-stone-600 hover:text-stone-900 dark:text-stone-300 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-stone-800 border border-transparent hover:border-stone-200 dark:hover:border-stone-700 transition-all"
+                className="p-1.5 sm:p-2 rounded-xl text-stone-600 hover:text-stone-900 dark:text-stone-300 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-stone-800 border border-transparent hover:border-stone-200 dark:border-stone-700 transition-all"
                 title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
                 aria-label="Toggle theme"
               >

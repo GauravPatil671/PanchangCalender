@@ -6,17 +6,17 @@ export default function FestivalDetailModal({ festival, isOpen, onClose }) {
   if (!isOpen || !festival) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 animate-in fade-in duration-200">
       <div 
-        className="relative w-full max-w-2xl bg-white dark:bg-stone-900 rounded-3xl shadow-2xl border border-stone-200 dark:border-stone-800 overflow-hidden flex flex-col max-h-[92vh]"
+        className="relative w-full max-w-2xl bg-white dark:bg-stone-900 rounded-3xl shadow-2xl border border-stone-200 dark:border-stone-800 overflow-hidden flex flex-col max-h-[94vh]"
         role="dialog"
         aria-modal="true"
       >
         {/* Header with Vedic Gradient */}
-        <div className="p-4 sm:p-6 bg-gradient-to-br from-vedic-saffron-600 via-amber-600 to-vedic-gold-500 text-white relative">
+        <div className="p-3.5 sm:p-6 bg-gradient-to-br from-vedic-saffron-600 via-amber-600 to-vedic-gold-500 text-white relative">
           <button
             onClick={onClose}
-            className="absolute top-3 right-3 sm:top-4 sm:right-4 p-2 rounded-xl bg-black/20 hover:bg-black/30 text-white transition-colors"
+            className="absolute top-3 right-3 sm:top-4 sm:right-4 p-1.5 sm:p-2 rounded-xl bg-black/20 hover:bg-black/30 text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -25,7 +25,7 @@ export default function FestivalDetailModal({ festival, isOpen, onClose }) {
             <span className="text-[10px] sm:text-xs uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-white/20 inline-block backdrop-blur-sm">
               {festival.category}
             </span>
-            <h3 className="text-xl sm:text-3xl font-bold font-serif">
+            <h3 className="text-lg sm:text-3xl font-bold font-serif">
               {festival.name}
             </h3>
             <div className="text-xs sm:text-sm font-devanagari opacity-95">
