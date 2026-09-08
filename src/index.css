@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: 245 98 33;
+    --color-gold: 212 162 17;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+}
+.dark ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(245, 98, 33, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 98, 33, 0.6);
+}
+
+/* Glassmorphism & Card styling */
+.vedic-card {
+  @apply bg-white/90 dark:bg-stone-900/90 backdrop-blur-md border border-stone-200/80 dark:border-stone-800/80 rounded-2xl shadow-soft-warm transition-all duration-200;
+}
+
+.vedic-card-hover {
+  @apply vedic-card hover:shadow-lg hover:border-vedic-saffron-300 dark:hover:border-vedic-saffron-700/60 hover:-translate-y-0.5;
+}
+
+.vedic-badge {
+  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.vedic-gradient-text {
+  @apply bg-gradient-to-r from-vedic-saffron-600 via-amber-600 to-vedic-gold-600 dark:from-vedic-saffron-400 dark:via-amber-400 dark:to-vedic-gold-400 bg-clip-text text-transparent;
+}
+
+.vedic-gradient-bg {
+  @apply bg-gradient-to-br from-vedic-saffron-500 via-amber-500 to-vedic-gold-500 text-white;
+}
