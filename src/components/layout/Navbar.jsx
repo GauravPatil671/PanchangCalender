@@ -82,42 +82,43 @@ export default function Navbar() {
             </nav>
 
             {/* Right Controls: Location & Theme & Mobile Toggle */}
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-1.5 sm:gap-3">
               
               {/* Location Badge Button */}
               <button
                 onClick={() => setIsSelectorOpen(true)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-vedic-sand/70 dark:bg-stone-800/90 border border-stone-300/70 dark:border-stone-700 text-stone-700 dark:text-stone-200 hover:border-vedic-saffron-400 dark:hover:border-vedic-saffron-500 text-xs sm:text-sm font-medium transition-all shadow-sm"
+                className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-vedic-sand/70 dark:bg-stone-800/90 border border-stone-300/70 dark:border-stone-700 text-stone-700 dark:text-stone-200 hover:border-vedic-saffron-400 dark:hover:border-vedic-saffron-500 text-xs sm:text-sm font-medium transition-all shadow-sm"
                 title="Change city or location"
                 aria-label="Select location"
               >
-                <MapPin className="w-4 h-4 text-vedic-saffron-600 dark:text-vedic-saffron-400 animate-pulse" />
-                <span className="max-w-[120px] sm:max-w-[180px] truncate">
-                  📍 {selectedLocation.city}, {selectedLocation.state}
+                <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vedic-saffron-600 dark:text-vedic-saffron-400 flex-shrink-0 animate-pulse" />
+                <span className="max-w-[85px] xs:max-w-[110px] sm:max-w-[180px] truncate">
+                  <span className="sm:hidden">📍 {selectedLocation.city}</span>
+                  <span className="hidden sm:inline">📍 {selectedLocation.city}, {selectedLocation.state}</span>
                 </span>
               </button>
 
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-xl text-stone-600 hover:text-stone-900 dark:text-stone-300 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-stone-800 border border-transparent hover:border-stone-200 dark:hover:border-stone-700 transition-all"
+                className="p-1.5 sm:p-2 rounded-xl text-stone-600 hover:text-stone-900 dark:text-stone-300 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-stone-800 border border-transparent hover:border-stone-200 dark:hover:border-stone-700 transition-all"
                 title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
                 aria-label="Toggle theme"
               >
                 {theme === 'dark' ? (
-                  <Sun className="w-5 h-5 text-amber-400" />
+                  <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
                 ) : (
-                  <Moon className="w-5 h-5 text-stone-600" />
+                  <Moon className="w-4 h-4 sm:w-5 sm:h-5 text-stone-600" />
                 )}
               </button>
 
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-2 rounded-xl text-stone-600 hover:text-stone-900 dark:text-stone-300 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-stone-800"
+                className="lg:hidden p-1.5 sm:p-2 rounded-xl text-stone-600 hover:text-stone-900 dark:text-stone-300 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-stone-800"
                 aria-label="Toggle mobile menu"
               >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {mobileMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
               </button>
             </div>
           </div>
@@ -125,7 +126,24 @@ export default function Navbar() {
 
         {/* Mobile Dropdown Drawer */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 px-4 pt-2 pb-6 space-y-1 shadow-xl animate-in slide-in-from-top-2 duration-200">
+          <div className="lg:hidden border-t border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 px-4 pt-3 pb-6 space-y-2 shadow-xl animate-in slide-in-from-top-2 duration-200">
+            {/* Quick Location Action in Mobile Drawer */}
+            <div className="p-3 bg-stone-50 dark:bg-stone-800/70 rounded-2xl border border-stone-200 dark:border-stone-700 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-xs text-stone-600 dark:text-stone-300">
+                <MapPin className="w-4 h-4 text-vedic-saffron-600" />
+                <span className="font-semibold">{selectedLocation.city}, {selectedLocation.state}</span>
+              </div>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setIsSelectorOpen(true);
+                }}
+                className="text-xs font-bold text-vedic-saffron-600 underline"
+              >
+                Change
+              </button>
+            </div>
+
             {navLinks.map((link) => {
               const active = isActive(link.path);
               const Icon = link.icon;
@@ -134,13 +152,13 @@ export default function Navbar() {
                   key={link.path}
                   to={link.path}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium ${
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium ${
                     active
                       ? 'text-vedic-saffron-600 dark:text-vedic-saffron-400 bg-vedic-saffron-50 dark:bg-vedic-saffron-950/50 font-semibold'
                       : 'text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800'
                   }`}
                 >
-                  <Icon className="w-5 h-5 opacity-80" />
+                  <Icon className="w-4 h-4 opacity-80" />
                   {link.name}
                 </Link>
               );

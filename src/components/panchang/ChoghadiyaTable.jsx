@@ -46,16 +46,16 @@ export default function ChoghadiyaTable({ choghadiya }) {
   };
 
   return (
-    <div className="vedic-card p-6 sm:p-8 space-y-6">
+    <div className="vedic-card p-4 sm:p-8 space-y-5 sm:space-y-6">
       
       {/* Header & Day/Night Toggle */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-stone-200/80 dark:border-stone-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 sm:pb-5 border-b border-stone-200/80 dark:border-stone-800">
         <div>
-          <h3 className="text-xl sm:text-2xl font-bold font-serif text-stone-900 dark:text-white flex items-center gap-2">
+          <h3 className="text-lg sm:text-2xl font-bold font-serif text-stone-900 dark:text-white flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-vedic-saffron-600 dark:text-vedic-saffron-400" />
             Choghadiya Muhurat (चौघड़िया)
           </h3>
-          <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
+          <p className="text-[11px] sm:text-xs text-stone-500 dark:text-stone-400 mt-0.5 sm:mt-1">
             Ancient 8-part division of day and night for traveling, business commencement, and auspicious deeds
           </p>
         </div>

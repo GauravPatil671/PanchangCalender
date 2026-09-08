@@ -66,16 +66,16 @@ export default function CalendarPage() {
       />
 
       {/* Quick Calendar Filters */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-stone-900 p-4 rounded-2xl border border-stone-200 dark:border-stone-800 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-stone-900 p-3.5 sm:p-4 rounded-2xl border border-stone-200 dark:border-stone-800 shadow-sm">
         <div className="flex items-center gap-2 text-xs font-bold text-stone-700 dark:text-stone-300">
           <Filter className="w-4 h-4 text-vedic-saffron-600" />
           <span>Filter View:</span>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-none -mx-1 px-1 sm:mx-0 sm:px-0">
           <button
             onClick={() => setActiveFilter('all')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
               activeFilter === 'all'
                 ? 'bg-vedic-saffron-600 text-white shadow-sm'
                 : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700'
@@ -85,7 +85,7 @@ export default function CalendarPage() {
           </button>
           <button
             onClick={() => setActiveFilter('festivals')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
               activeFilter === 'festivals'
                 ? 'bg-vedic-saffron-600 text-white shadow-sm'
                 : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700'
@@ -95,7 +95,7 @@ export default function CalendarPage() {
           </button>
           <button
             onClick={() => setActiveFilter('ekadashi')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
               activeFilter === 'ekadashi'
                 ? 'bg-purple-600 text-white shadow-sm'
                 : 'bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 hover:bg-purple-100'
@@ -105,7 +105,7 @@ export default function CalendarPage() {
           </button>
           <button
             onClick={() => setActiveFilter('purnima-amavasya')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
               activeFilter === 'purnima-amavasya'
                 ? 'bg-amber-600 text-white shadow-sm'
                 : 'bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 hover:bg-amber-100'

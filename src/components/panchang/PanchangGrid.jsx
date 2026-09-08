@@ -66,10 +66,10 @@ export default function PanchangGrid({ panchang }) {
       )}
 
       {/* Main 5 Limbs Detailed Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
         
         {/* 1. Tithi Detail Card */}
-        <div className="vedic-card p-6 space-y-4 relative overflow-hidden border-t-4 border-t-amber-500">
+        <div className="vedic-card p-4 sm:p-6 space-y-3 sm:space-y-4 relative overflow-hidden border-t-4 border-t-amber-500">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300">
@@ -115,7 +115,7 @@ export default function PanchangGrid({ panchang }) {
         </div>
 
         {/* 2. Nakshatra Detail Card */}
-        <div className="vedic-card p-6 space-y-4 relative overflow-hidden border-t-4 border-t-vedic-saffron-500">
+        <div className="vedic-card p-4 sm:p-6 space-y-3 sm:space-y-4 relative overflow-hidden border-t-4 border-t-vedic-saffron-500">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-vedic-saffron-100 dark:bg-vedic-saffron-950/60 text-vedic-saffron-700 dark:text-vedic-saffron-300">
@@ -161,7 +161,7 @@ export default function PanchangGrid({ panchang }) {
         </div>
 
         {/* 3. Yoga Detail Card */}
-        <div className="vedic-card p-6 space-y-4 relative overflow-hidden border-t-4 border-t-vedic-gold-500">
+        <div className="vedic-card p-4 sm:p-6 space-y-3 sm:space-y-4 relative overflow-hidden border-t-4 border-t-vedic-gold-500">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-vedic-gold-100 dark:bg-vedic-gold-950/60 text-vedic-gold-700 dark:text-vedic-gold-300">
@@ -203,7 +203,7 @@ export default function PanchangGrid({ panchang }) {
         </div>
 
         {/* 4. Karana Detail Card */}
-        <div className="vedic-card p-6 space-y-4 relative overflow-hidden border-t-4 border-t-emerald-500">
+        <div className="vedic-card p-4 sm:p-6 space-y-3 sm:space-y-4 relative overflow-hidden border-t-4 border-t-emerald-500">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300">
@@ -245,7 +245,7 @@ export default function PanchangGrid({ panchang }) {
         </div>
 
         {/* 5. Vara & Samvat Card */}
-        <div className="vedic-card p-6 space-y-4 relative overflow-hidden border-t-4 border-t-indigo-500">
+        <div className="vedic-card p-4 sm:p-6 space-y-3 sm:space-y-4 relative overflow-hidden border-t-4 border-t-indigo-500">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300">
@@ -279,7 +279,7 @@ export default function PanchangGrid({ panchang }) {
         </div>
 
         {/* 6. Vrat & Observances Today */}
-        <div className="vedic-card p-6 space-y-4 relative overflow-hidden border-t-4 border-t-rose-500">
+        <div className="vedic-card p-4 sm:p-6 space-y-3 sm:space-y-4 relative overflow-hidden border-t-4 border-t-rose-500">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300">

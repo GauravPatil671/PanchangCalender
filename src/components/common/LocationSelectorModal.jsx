@@ -31,21 +31,21 @@ export default function LocationSelectorModal() {
   if (!isSelectorOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200">
       <div 
-        className="relative w-full max-w-2xl bg-white dark:bg-stone-900 rounded-3xl shadow-2xl border border-stone-200 dark:border-stone-800 overflow-hidden flex flex-col max-h-[90vh]"
+        className="relative w-full max-w-2xl bg-white dark:bg-stone-900 rounded-3xl shadow-2xl border border-stone-200 dark:border-stone-800 overflow-hidden flex flex-col max-h-[92vh]"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
       >
         {/* Header */}
-        <div className="p-5 sm:p-6 border-b border-stone-100 dark:border-stone-800 flex items-center justify-between bg-gradient-to-r from-vedic-saffron-50/50 to-amber-50/30 dark:from-stone-900 dark:to-stone-900">
+        <div className="p-4 sm:p-6 border-b border-stone-100 dark:border-stone-800 flex items-center justify-between bg-gradient-to-r from-vedic-saffron-50/50 to-amber-50/30 dark:from-stone-900 dark:to-stone-900">
           <div>
-            <h3 id="modal-title" className="text-xl font-bold font-serif text-stone-900 dark:text-white flex items-center gap-2">
+            <h3 id="modal-title" className="text-lg sm:text-xl font-bold font-serif text-stone-900 dark:text-white flex items-center gap-2">
               <MapPin className="w-5 h-5 text-vedic-saffron-600 dark:text-vedic-saffron-400" />
               Select Location for Panchang
             </h3>
-            <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+            <p className="text-[11px] sm:text-xs text-stone-500 dark:text-stone-400 mt-0.5">
               Accurate sunrise, sunset, muhurats, and tithis depend on your geographical coordinates.
             </p>
           </div>

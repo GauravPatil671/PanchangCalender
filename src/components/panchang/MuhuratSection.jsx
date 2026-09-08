@@ -65,13 +65,13 @@ export default function MuhuratSection({ panchang }) {
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
         {muhuratList.map((item, idx) => {
           const Icon = item.icon;
           return (
             <div
               key={idx}
-              className="vedic-card p-6 space-y-3.5 relative overflow-hidden border-t-4 border-t-emerald-500 hover:shadow-lg transition-all"
+              className="vedic-card p-4 sm:p-6 space-y-3 sm:space-y-3.5 relative overflow-hidden border-t-4 border-t-emerald-500 hover:shadow-lg transition-all"
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-3">

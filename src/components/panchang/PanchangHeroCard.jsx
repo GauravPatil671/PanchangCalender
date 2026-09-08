@@ -33,20 +33,20 @@ export default function PanchangHeroCard({ panchang, onOpenLocationModal }) {
         ॐ
       </div>
 
-      <div className="relative p-6 sm:p-8 lg:p-10 space-y-8">
+      <div className="relative p-4 sm:p-8 lg:p-10 space-y-6 sm:space-y-8">
         
         {/* Top Header: Date, Location & Hindu Maas Context */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-stone-200/90 dark:border-stone-800">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6 pb-5 sm:pb-6 border-b border-stone-200/90 dark:border-stone-800">
           
           <div className="space-y-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-vedic-saffron-600 text-white text-xs font-bold uppercase tracking-wider shadow-sm">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-vedic-saffron-600 text-white text-[11px] sm:text-xs font-bold uppercase tracking-wider shadow-sm">
                 Daily Panchang
               </span>
-              <span className="text-xs font-medium text-stone-600 dark:text-stone-300 bg-stone-100 dark:bg-stone-800 px-3 py-1 rounded-full">
+              <span className="text-[11px] sm:text-xs font-medium text-stone-600 dark:text-stone-300 bg-stone-100 dark:bg-stone-800 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
                 दैनिक पञ्चाङ्गम्
               </span>
-              <span className="text-xs font-semibold text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/80 px-3 py-1 rounded-full">
+              <span className="text-[11px] sm:text-xs font-semibold text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/80 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
                 Vikram Samvat {panchang.samvat.vikram}
               </span>
             </div>

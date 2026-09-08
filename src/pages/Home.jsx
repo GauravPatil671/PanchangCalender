@@ -62,46 +62,46 @@ export default function Home() {
           />
 
           {/* Quick Jump Pills for Easy Navigation */}
-          <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
-            <span className="text-xs font-bold text-stone-500 uppercase mr-1">Quick Jump:</span>
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none justify-start sm:justify-center -mx-4 px-4 sm:mx-0 sm:px-0">
+            <span className="text-xs font-bold text-stone-500 uppercase mr-1 whitespace-nowrap">Quick Jump:</span>
             <button
               onClick={() => scrollToSection('five-limbs')}
-              className="px-3.5 py-1.5 rounded-full bg-amber-100 hover:bg-amber-200 dark:bg-amber-950/80 dark:hover:bg-amber-900 text-amber-900 dark:text-amber-200 text-xs font-semibold transition-all flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-full bg-amber-100 hover:bg-amber-200 dark:bg-amber-950/80 dark:hover:bg-amber-900 text-amber-900 dark:text-amber-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
             >
               <Compass className="w-3.5 h-3.5" />
               <span>5 Limbs (Tithi & Nakshatra)</span>
             </button>
             <button
               onClick={() => scrollToSection('shubh-muhurat')}
-              className="px-3.5 py-1.5 rounded-full bg-emerald-100 hover:bg-emerald-200 dark:bg-emerald-950/80 dark:hover:bg-emerald-900 text-emerald-900 dark:text-emerald-200 text-xs font-semibold transition-all flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-full bg-emerald-100 hover:bg-emerald-200 dark:bg-emerald-950/80 dark:hover:bg-emerald-900 text-emerald-900 dark:text-emerald-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
             >
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Shubh Muhurat</span>
             </button>
             <button
               onClick={() => scrollToSection('ashubh-kaal')}
-              className="px-3.5 py-1.5 rounded-full bg-rose-100 hover:bg-rose-200 dark:bg-rose-950/80 dark:hover:bg-rose-900 text-rose-900 dark:text-rose-200 text-xs font-semibold transition-all flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-full bg-rose-100 hover:bg-rose-200 dark:bg-rose-950/80 dark:hover:bg-rose-900 text-rose-900 dark:text-rose-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
             >
               <AlertTriangle className="w-3.5 h-3.5" />
               <span>Rahu Kalam & Inauspicious</span>
             </button>
             <button
               onClick={() => scrollToSection('choghadiya')}
-              className="px-3.5 py-1.5 rounded-full bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-950/80 dark:hover:bg-indigo-900 text-indigo-900 dark:text-indigo-200 text-xs font-semibold transition-all flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-full bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-950/80 dark:hover:bg-indigo-900 text-indigo-900 dark:text-indigo-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
             >
               <Clock className="w-3.5 h-3.5" />
               <span>Choghadiya</span>
             </button>
             <button
               onClick={() => scrollToSection('sun-moon')}
-              className="px-3.5 py-1.5 rounded-full bg-orange-100 hover:bg-orange-200 dark:bg-orange-950/80 dark:hover:bg-orange-900 text-orange-900 dark:text-orange-200 text-xs font-semibold transition-all flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-full bg-orange-100 hover:bg-orange-200 dark:bg-orange-950/80 dark:hover:bg-orange-900 text-orange-900 dark:text-orange-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
             >
               <Sun className="w-3.5 h-3.5" />
               <span>Sun & Moon</span>
             </button>
             <button
               onClick={() => scrollToSection('festivals')}
-              className="px-3.5 py-1.5 rounded-full bg-vedic-saffron-100 hover:bg-vedic-saffron-200 dark:bg-vedic-saffron-950/80 dark:hover:bg-vedic-saffron-900 text-vedic-saffron-900 dark:text-vedic-saffron-200 text-xs font-semibold transition-all flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-full bg-vedic-saffron-100 hover:bg-vedic-saffron-200 dark:bg-vedic-saffron-950/80 dark:hover:bg-vedic-saffron-900 text-vedic-saffron-900 dark:text-vedic-saffron-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Festivals</span>

@@ -50,33 +50,33 @@ export default function InauspiciousCard({ panchang }) {
   ];
 
   return (
-    <div className="vedic-card p-6 sm:p-7 border-t-4 border-t-rose-500 bg-gradient-to-br from-rose-500/5 via-white to-orange-500/5 dark:from-stone-900 dark:to-stone-900">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-stone-200/80 dark:border-stone-800">
+    <div className="vedic-card p-4 sm:p-7 border-t-4 border-t-rose-500 bg-gradient-to-br from-rose-500/5 via-white to-orange-500/5 dark:from-stone-900 dark:to-stone-900">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 sm:pb-5 border-b border-stone-200/80 dark:border-stone-800">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-rose-100 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400 flex items-center justify-center">
-            <AlertTriangle className="w-6 h-6" />
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-rose-100 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400 flex items-center justify-center flex-shrink-0">
+            <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div>
-            <h3 className="text-lg font-bold font-serif text-stone-900 dark:text-white">
+            <h3 className="text-base sm:text-lg font-bold font-serif text-stone-900 dark:text-white">
               Inauspicious Timings (अशुभ मुहूर्त / काल)
             </h3>
-            <p className="text-xs text-stone-500">
+            <p className="text-[11px] sm:text-xs text-stone-500">
               Windows to avoid starting important deals, purchases, or ceremonies
             </p>
           </div>
         </div>
-        <span className="text-xs px-3 py-1 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 font-bold self-start sm:self-auto">
+        <span className="text-[11px] sm:text-xs px-2.5 py-1 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 font-bold self-start sm:self-auto">
           ⚠️ Caution Recommended
         </span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4 pt-4 sm:pt-6">
         {items.map((it, idx) => {
           const Icon = it.icon;
           return (
             <div
               key={idx}
-              className="p-5 rounded-2xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 space-y-3 hover:border-rose-400 transition-colors shadow-sm"
+              className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 space-y-2.5 sm:space-y-3 hover:border-rose-400 transition-colors shadow-sm"
             >
               <div className="flex items-center justify-between">
                 <span className="text-sm font-bold text-stone-900 dark:text-white flex items-center gap-2">

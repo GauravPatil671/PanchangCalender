@@ -46,12 +46,12 @@ export default function MonthNavigation({ month, year, onMonthChange, onYearChan
       </div>
 
       {/* Controls */}
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         
         {/* Today Button */}
         <button
           onClick={onToday}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 text-xs font-semibold transition-all shadow-sm"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 text-xs font-semibold transition-all shadow-sm"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>Today</span>
@@ -61,7 +61,7 @@ export default function MonthNavigation({ month, year, onMonthChange, onYearChan
         <select
           value={month}
           onChange={(e) => onMonthChange(Number(e.target.value))}
-          className="px-3 py-2 rounded-xl bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-xs font-semibold text-stone-800 dark:text-stone-200 focus:outline-none focus:ring-2 focus:ring-vedic-saffron-500/50"
+          className="px-2.5 py-2 rounded-xl bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-xs font-semibold text-stone-800 dark:text-stone-200 focus:outline-none focus:ring-2 focus:ring-vedic-saffron-500/50 cursor-pointer"
         >
           {MONTH_NAMES.map((name, i) => (
             <option key={name} value={i + 1}>
@@ -74,7 +74,7 @@ export default function MonthNavigation({ month, year, onMonthChange, onYearChan
         <select
           value={year}
           onChange={(e) => onYearChange(Number(e.target.value))}
-          className="px-3 py-2 rounded-xl bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-xs font-semibold text-stone-800 dark:text-stone-200 focus:outline-none focus:ring-2 focus:ring-vedic-saffron-500/50"
+          className="px-2.5 py-2 rounded-xl bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-xs font-semibold text-stone-800 dark:text-stone-200 focus:outline-none focus:ring-2 focus:ring-vedic-saffron-500/50 cursor-pointer"
         >
           {[2024, 2025, 2026, 2027, 2028, 2029, 2030].map((y) => (
             <option key={y} value={y}>
@@ -84,7 +84,7 @@ export default function MonthNavigation({ month, year, onMonthChange, onYearChan
         </select>
 
         {/* Prev / Next Arrows */}
-        <div className="flex items-center gap-1 border-l border-stone-200 dark:border-stone-800 pl-2">
+        <div className="flex items-center gap-1">
           <button
             onClick={handlePrev}
             className="p-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-vedic-saffron-100 hover:text-vedic-saffron-700 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 transition-colors"
