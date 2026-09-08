@@ -6,16 +6,16 @@ export default function FestivalCard({ festival, onSelect }) {
   if (!festival) return null;
 
   return (
-    <div className="vedic-card p-6 flex flex-col justify-between space-y-4 hover:border-vedic-saffron-400 dark:hover:border-vedic-saffron-600 transition-all hover:shadow-lg group">
+    <div className="vedic-card p-6 flex flex-col justify-between space-y-4 hover:border-vedic-saffron-500 hover:shadow-lg transition-all group">
       
       {/* Top Header */}
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2">
-          <span className="vedic-badge bg-vedic-saffron-100 dark:bg-vedic-saffron-950 text-vedic-saffron-800 dark:text-vedic-saffron-300">
-            <Sparkles className="w-3 h-3" />
+          <span className="vedic-badge bg-vedic-saffron-100 dark:bg-vedic-saffron-950 text-vedic-saffron-800 dark:text-vedic-saffron-300 font-bold">
+            <Sparkles className="w-3.5 h-3.5" />
             {festival.category}
           </span>
-          <span className="text-xs text-stone-500 font-devanagari text-base">
+          <span className="text-sm text-stone-600 dark:text-stone-300 font-devanagari font-semibold">
             {festival.hindi}
           </span>
         </div>
@@ -30,8 +30,8 @@ export default function FestivalCard({ festival, onSelect }) {
           </span>
           {festival.date && (
             <>
-              <span>•</span>
-              <span className="font-medium text-stone-800 dark:text-stone-200">
+              <span className="text-stone-300 dark:text-stone-600">•</span>
+              <span className="font-bold text-stone-900 dark:text-white">
                 📅 {festival.date}
               </span>
             </>
@@ -40,28 +40,29 @@ export default function FestivalCard({ festival, onSelect }) {
       </div>
 
       {/* Description */}
-      <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed line-clamp-3">
+      <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed line-clamp-3">
         {festival.description}
       </p>
 
       {/* Deity & Muhurat Info */}
-      <div className="p-3 bg-stone-50 dark:bg-stone-800/50 rounded-2xl border border-stone-100 dark:border-stone-800 text-xs space-y-1">
-        <div className="flex items-center gap-1.5 text-stone-700 dark:text-stone-300">
-          <span className="font-semibold text-stone-900 dark:text-white">Deity:</span>
-          <span>{festival.deity}</span>
+      <div className="p-3.5 bg-stone-50 dark:bg-stone-800/60 rounded-2xl border border-stone-200/80 dark:border-stone-700/80 text-xs space-y-1.5">
+        <div className="flex items-center justify-between gap-1.5 text-stone-700 dark:text-stone-300">
+          <span className="font-semibold text-stone-500">Ruling Deity:</span>
+          <span className="font-bold text-stone-900 dark:text-white">{festival.deity}</span>
         </div>
         {festival.muhuratHint && (
-          <div className="text-[11px] text-amber-700 dark:text-amber-400 font-medium">
-            ✨ {festival.muhuratHint}
+          <div className="text-xs text-amber-800 dark:text-amber-300 font-semibold flex items-center gap-1">
+            <span>✨</span>
+            <span>{festival.muhuratHint}</span>
           </div>
         )}
       </div>
 
       {/* Action Buttons */}
-      <div className="pt-2 border-t border-stone-100 dark:border-stone-800 flex items-center justify-between">
+      <div className="pt-3 border-t border-stone-100 dark:border-stone-800 flex items-center justify-between">
         <button
           onClick={() => onSelect(festival)}
-          className="text-xs font-semibold text-vedic-saffron-600 dark:text-vedic-saffron-400 hover:underline inline-flex items-center gap-1"
+          className="text-xs font-bold text-vedic-saffron-600 dark:text-vedic-saffron-400 hover:underline inline-flex items-center gap-1.5"
         >
           <span>View Rituals & Vidhi</span>
           <ArrowRight className="w-3.5 h-3.5" />
@@ -70,7 +71,7 @@ export default function FestivalCard({ festival, onSelect }) {
         {festival.date && (
           <Link
             to={`/daily?date=${festival.date}`}
-            className="text-xs px-2.5 py-1 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 font-medium transition-colors"
+            className="text-xs px-3 py-1.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 font-bold transition-colors"
           >
             Day Panchang
           </Link>

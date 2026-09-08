@@ -2,11 +2,26 @@
 
 import { decimalHoursToTimeString } from '../utils/dateUtils';
 
+function parseDateAtNoon(date) {
+  if (!date) return new Date();
+  if (typeof date === 'string') {
+    const clean = date.split('T')[0];
+    const parts = clean.split('-').map(Number);
+    if (parts.length === 3 && !isNaN(parts[0])) {
+      return new Date(parts[0], parts[1] - 1, parts[2], 12, 0, 0);
+    }
+  }
+  if (date instanceof Date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0);
+  }
+  return new Date();
+}
+
 /**
  * Approximate Sunrise and Sunset using standard solar declination & hour angle calculation
  */
 export function calculateSunTimes(date, latitude, longitude) {
-  const d = typeof date === 'string' ? new Date(date) : date;
+  const d = parseDateAtNoon(date);
   const startOfYear = new Date(d.getFullYear(), 0, 1);
   const dayOfYear = Math.floor((d - startOfYear) / (1000 * 60 * 60 * 24)) + 1;
 
@@ -57,7 +72,7 @@ export function calculateSunTimes(date, latitude, longitude) {
  * Moon Phase Calculation (0 = Amavasya/New Moon, 0.5 = Purnima/Full Moon, 1 = Next New Moon)
  */
 export function getMoonPhaseAngle(date) {
-  const d = typeof date === 'string' ? new Date(date) : date;
+  const d = parseDateAtNoon(date);
   // Known reference new moon: Jan 11, 2024 11:57 UTC
   const refNewMoon = new Date('2024-01-11T11:57:00Z').getTime();
   const diffDays = (d.getTime() - refNewMoon) / (1000 * 60 * 60 * 24);

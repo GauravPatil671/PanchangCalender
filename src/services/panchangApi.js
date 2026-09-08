@@ -12,7 +12,7 @@ import {
   calculateChoghadiya,
   getMoonPhaseDetails
 } from './astronomicalCalc';
-import { generateDailyPanchangData, ALL_FESTIVALS } from './mockPanchangData';
+import { generateDailyPanchangData, ALL_FESTIVALS, FESTIVAL_CALENDAR_YEARS } from './mockPanchangData';
 import { formatDateYMD } from '../utils/dateUtils';
 
 const API_BASE_URL = import.meta.env.VITE_PANCHANG_API_URL || '';
@@ -154,20 +154,38 @@ export async function getFestivals(month = null, year = null) {
   if (month && year) {
     const monthlyData = await getMonthlyPanchang(month, year);
     const monthFestivals = [];
+    const seenFestivals = new Set();
     monthlyData.days.forEach(day => {
       if (day.festivals && day.festivals.length > 0) {
         day.festivals.forEach(fest => {
-          monthFestivals.push({
-            ...fest,
-            date: day.date,
-            tithiDisplay: day.tithi.name
-          });
+          if (!seenFestivals.has(fest.id)) {
+            seenFestivals.add(fest.id);
+            monthFestivals.push({
+              ...fest,
+              date: day.date,
+              tithiDisplay: day.tithi.name
+            });
+          }
         });
       }
     });
     return monthFestivals;
   }
 
-  // Return full festival master list with computed upcoming dates
-  return ALL_FESTIVALS;
+  // Return full festival master list with computed dates
+  const currentYear = new Date().getFullYear();
+  const yearEntries = Object.entries(FESTIVAL_CALENDAR_YEARS);
+
+  return ALL_FESTIVALS.map(f => {
+    let date = null;
+    const foundEntry = yearEntries.find(([dStr, ids]) => ids.includes(f.id) && dStr.startsWith(String(currentYear)))
+      || yearEntries.find(([dStr, ids]) => ids.includes(f.id) && dStr.startsWith(String(currentYear + 1)));
+    if (foundEntry) {
+      date = foundEntry[0];
+    }
+    return {
+      ...f,
+      date
+    };
+  });
 }

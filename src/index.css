@@ -30,15 +30,19 @@
 
 /* Glassmorphism & Card styling */
 .vedic-card {
-  @apply bg-white/90 dark:bg-stone-900/90 backdrop-blur-md border border-stone-200/80 dark:border-stone-800/80 rounded-2xl shadow-soft-warm transition-all duration-200;
+  @apply bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl shadow-soft-warm transition-all duration-200;
 }
 
 .vedic-card-hover {
-  @apply vedic-card hover:shadow-lg hover:border-vedic-saffron-300 dark:hover:border-vedic-saffron-700/60 hover:-translate-y-0.5;
+  @apply vedic-card hover:shadow-lg hover:border-vedic-saffron-400 dark:hover:border-vedic-saffron-600 hover:-translate-y-0.5;
 }
 
 .vedic-badge {
-  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium;
+  @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wide;
+}
+
+.vedic-pill-button {
+  @apply inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all;
 }
 
 .vedic-gradient-text {
@@ -47,4 +51,9 @@
 
 .vedic-gradient-bg {
   @apply bg-gradient-to-br from-vedic-saffron-500 via-amber-500 to-vedic-gold-500 text-white;
+}
+
+/* Clear section header label styling */
+.vedic-section-title {
+  @apply text-xl sm:text-2xl font-bold font-serif text-stone-900 dark:text-white tracking-tight flex items-center gap-2;
 }

@@ -4,7 +4,7 @@ import { isSameDay, getTodayDateString } from '../../utils/dateUtils';
 
 const WEEKDAYS = ['Sun (रवि)', 'Mon (सोम)', 'Tue (मंगल)', 'Wed (बुध)', 'Thu (गुरु)', 'Fri (शुक्र)', 'Sat (शनि)'];
 
-export default function MonthView({ monthData, selectedDate, onSelectDate }) {
+export default function MonthView({ monthData, selectedDate, onSelectDate, filter = 'all' }) {
   if (!monthData || !monthData.days) return null;
 
   const todayStr = getTodayDateString();
@@ -16,112 +16,147 @@ export default function MonthView({ monthData, selectedDate, onSelectDate }) {
   const leadingBlanks = Array.from({ length: startDayOfWeek }, (_, i) => i);
 
   return (
-    <div className="vedic-card overflow-hidden">
+    <div className="space-y-4">
       
-      {/* Weekday Header */}
-      <div className="grid grid-cols-7 border-b border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-800/80 text-center">
-        {WEEKDAYS.map((w, idx) => (
-          <div
-            key={w}
-            className={`py-3 px-1 text-xs sm:text-sm font-bold font-serif ${
-              idx === 0
-                ? 'text-rose-600 dark:text-rose-400'
-                : 'text-stone-700 dark:text-stone-300'
-            }`}
-          >
-            <span className="hidden sm:inline">{w}</span>
-            <span className="sm:hidden">{w.split(' ')[0]}</span>
-          </div>
-        ))}
+      {/* Calendar Legend */}
+      <div className="flex flex-wrap items-center justify-between gap-3 text-xs bg-stone-50 dark:bg-stone-800/60 p-3.5 rounded-2xl border border-stone-200/80 dark:border-stone-700/80">
+        <span className="font-bold text-stone-900 dark:text-white uppercase tracking-wider text-[11px]">
+          Calendar Symbols:
+        </span>
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="flex items-center gap-1">
+            <span className="text-sm">🌕</span> <strong>Purnima</strong> (Full Moon)
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="text-sm">🌑</span> <strong>Amavasya</strong> (New Moon)
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 font-bold text-[10px]">एका</span>
+            <strong>Ekadashi</strong> (Fasting)
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-2.5 h-2.5 rounded-full bg-vedic-saffron-500" />
+            <strong>Festival</strong>
+          </span>
+        </div>
       </div>
 
-      {/* Days Grid */}
-      <div className="grid grid-cols-7 auto-rows-fr divide-x divide-y divide-stone-200/60 dark:divide-stone-800/60">
+      {/* Main Grid Card */}
+      <div className="vedic-card overflow-hidden">
         
-        {/* Leading blanks for offset */}
-        {leadingBlanks.map((b) => (
-          <div key={`blank-${b}`} className="min-h-[90px] sm:min-h-[120px] bg-stone-50/40 dark:bg-stone-900/40" />
-        ))}
-
-        {/* Days of Month */}
-        {monthData.days.map((day) => {
-          const isToday = isSameDay(day.date, todayStr);
-          const isSelected = selectedDate && isSameDay(day.date, selectedDate);
-          const hasFestivals = day.festivals && day.festivals.length > 0;
-          const isEkadashi = day.isEkadashi;
-          const isPurnima = day.isPurnima;
-          const isAmavasya = day.isAmavasya;
-
-          return (
-            <button
-              key={day.date}
-              onClick={() => onSelectDate(day.date)}
-              className={`min-h-[90px] sm:min-h-[120px] p-2 text-left flex flex-col justify-between transition-all group relative ${
-                isSelected
-                  ? 'bg-vedic-saffron-50/80 dark:bg-vedic-saffron-950/40 ring-2 ring-vedic-saffron-500 z-10'
-                  : 'hover:bg-amber-50/40 dark:hover:bg-stone-800/50'
-              } ${isToday ? 'bg-amber-50/70 dark:bg-amber-950/20' : ''}`}
+        {/* Weekday Header */}
+        <div className="grid grid-cols-7 border-b border-stone-200 dark:border-stone-800 bg-stone-100/80 dark:bg-stone-800 text-center">
+          {WEEKDAYS.map((w, idx) => (
+            <div
+              key={w}
+              className={`py-3.5 px-1 text-xs sm:text-sm font-bold font-serif ${
+                idx === 0
+                  ? 'text-rose-600 dark:text-rose-400'
+                  : 'text-stone-800 dark:text-stone-200'
+              }`}
             >
-              {/* Top row: Gregorian Day Number & Vedic Badge */}
-              <div className="flex items-start justify-between w-full">
-                <span
-                  className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold ${
-                    isToday
-                      ? 'bg-vedic-saffron-600 text-white shadow-sm'
-                      : 'text-stone-800 dark:text-stone-100 group-hover:text-vedic-saffron-600'
-                  }`}
-                >
-                  {day.dayNumber}
-                </span>
+              <span className="hidden sm:inline">{w}</span>
+              <span className="sm:hidden">{w.split(' ')[0]}</span>
+            </div>
+          ))}
+        </div>
 
-                {/* Lunar Marker Icons */}
-                <div className="flex items-center gap-1">
-                  {isPurnima && (
-                    <span className="p-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400" title="Purnima (Full Moon)">
-                      🌕
-                    </span>
-                  )}
-                  {isAmavasya && (
-                    <span className="p-0.5 rounded-full bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-400" title="Amavasya (New Moon)">
-                      🌑
-                    </span>
-                  )}
-                  {isEkadashi && (
-                    <span className="text-[10px] px-1 py-0.2 rounded bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-bold" title="Ekadashi Vrat">
-                      एका
-                    </span>
-                  )}
-                </div>
-              </div>
+        {/* Days Grid */}
+        <div className="grid grid-cols-7 auto-rows-fr divide-x divide-y divide-stone-200/70 dark:divide-stone-800">
+          
+          {/* Leading blanks for offset */}
+          {leadingBlanks.map((b) => (
+            <div key={`blank-${b}`} className="min-h-[100px] sm:min-h-[125px] bg-stone-50/50 dark:bg-stone-900/50" />
+          ))}
 
-              {/* Middle: Tithi Name & Paksha */}
-              <div className="space-y-0.5 my-1">
-                <div className="text-[11px] sm:text-xs font-semibold text-stone-700 dark:text-stone-300 truncate">
-                  {day.tithi.hindi || day.tithi.name}
-                </div>
-                <div className="text-[10px] text-stone-400 dark:text-stone-500 truncate hidden sm:block">
-                  {day.nakshatra.name}
-                </div>
-              </div>
+          {/* Days of Month */}
+          {monthData.days.map((day) => {
+            const isToday = isSameDay(day.date, todayStr);
+            const isSelected = selectedDate && isSameDay(day.date, selectedDate);
+            const hasFestivals = day.festivals && day.festivals.length > 0;
+            const isEkadashi = day.isEkadashi;
+            const isPurnima = day.isPurnima;
+            const isAmavasya = day.isAmavasya;
 
-              {/* Bottom: Festival or Vrat Tag */}
-              <div className="w-full truncate space-y-1">
-                {hasFestivals && (
-                  <div className="text-[10px] px-1.5 py-0.5 rounded-lg bg-vedic-saffron-500 text-white font-medium truncate flex items-center gap-1 shadow-sm">
-                    <Sparkles className="w-2.5 h-2.5 flex-shrink-0" />
-                    <span className="truncate">{day.festivals[0].name}</span>
+            // Filter check
+            let isDimmed = false;
+            if (filter === 'festivals' && !hasFestivals) isDimmed = true;
+            if (filter === 'ekadashi' && !isEkadashi) isDimmed = true;
+            if (filter === 'purnima-amavasya' && !isPurnima && !isAmavasya) isDimmed = true;
+
+            return (
+              <button
+                key={day.date}
+                onClick={() => onSelectDate(day.date)}
+                className={`min-h-[100px] sm:min-h-[125px] p-2.5 text-left flex flex-col justify-between transition-all group relative ${
+                  isDimmed ? 'opacity-30' : 'opacity-100'
+                } ${
+                  isSelected
+                    ? 'bg-vedic-saffron-50 dark:bg-vedic-saffron-950/40 ring-2 ring-vedic-saffron-500 z-10'
+                    : 'hover:bg-amber-50/50 dark:hover:bg-stone-800/60'
+                } ${isToday ? 'bg-amber-50/90 dark:bg-amber-950/30' : ''}`}
+              >
+                {/* Top row: Gregorian Day Number & Lunar Badges */}
+                <div className="flex items-start justify-between w-full">
+                  <span
+                    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-extrabold ${
+                      isToday
+                        ? 'bg-vedic-saffron-600 text-white shadow-md'
+                        : 'text-stone-900 dark:text-stone-100 group-hover:text-vedic-saffron-600'
+                    }`}
+                  >
+                    {day.dayNumber}
+                  </span>
+
+                  {/* Lunar Marker Icons */}
+                  <div className="flex items-center gap-1">
+                    {isPurnima && (
+                      <span className="text-base" title="Purnima (Full Moon)">
+                        🌕
+                      </span>
+                    )}
+                    {isAmavasya && (
+                      <span className="text-base" title="Amavasya (New Moon)">
+                        🌑
+                      </span>
+                    )}
+                    {isEkadashi && (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 font-bold" title="Ekadashi Vrat">
+                        एका
+                      </span>
+                    )}
                   </div>
-                )}
-                {!hasFestivals && day.vrats && day.vrats.length > 0 && (
-                  <div className="text-[9px] sm:text-[10px] px-1 py-0.2 rounded bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 font-medium truncate">
-                    {day.vrats[0]}
-                  </div>
-                )}
-              </div>
-            </button>
-          );
-        })}
+                </div>
 
+                {/* Middle: Tithi Name in bold & Devanagari */}
+                <div className="space-y-0.5 my-1">
+                  <div className="text-xs sm:text-sm font-bold text-stone-800 dark:text-stone-200 truncate font-devanagari">
+                    {day.tithi.hindi || day.tithi.name}
+                  </div>
+                  <div className="text-[11px] text-stone-500 dark:text-stone-400 truncate hidden sm:block">
+                    {day.nakshatra.name}
+                  </div>
+                </div>
+
+                {/* Bottom: Festival Tag */}
+                <div className="w-full truncate space-y-1">
+                  {hasFestivals && (
+                    <div className="text-[10px] sm:text-[11px] px-2 py-0.5 rounded-lg bg-vedic-saffron-600 text-white font-semibold truncate flex items-center gap-1 shadow-sm">
+                      <Sparkles className="w-3 h-3 flex-shrink-0" />
+                      <span className="truncate">{day.festivals[0].name}</span>
+                    </div>
+                  )}
+                  {!hasFestivals && day.vrats && day.vrats.length > 0 && (
+                    <div className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-medium truncate">
+                      {day.vrats[0]}
+                    </div>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+
+        </div>
       </div>
     </div>
   );
