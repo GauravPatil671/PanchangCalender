@@ -66,6 +66,12 @@ export default function Footer() {
                   Choghadiya & Shubh Muhurat
                 </Link>
               </li>
+              <li>
+                <Link to="/celestial-simulation" className="hover:text-vedic-saffron-600 dark:hover:text-vedic-saffron-400 transition-colors font-semibold text-vedic-saffron-600 dark:text-vedic-saffron-400 flex items-center gap-1">
+                  <Sparkles className="w-3 h-3" />
+                  3D Celestial Simulation
+                </Link>
+              </li>
             </ul>
           </div>
 

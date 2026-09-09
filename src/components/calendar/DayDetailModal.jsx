@@ -30,7 +30,9 @@ export default function DayDetailModal({ dateStr, isOpen, onClose }) {
 
   if (!isOpen || !dateStr) return null;
 
-  const dateObj = new Date(dateStr);
+  // Parse as local time (not UTC) to avoid off-by-one in UTC+ timezones like IST
+  const [dy, dm, dd] = (dateStr || '').split('-').map(Number);
+  const dateObj = (dy && dm && dd) ? new Date(dy, dm - 1, dd) : new Date(dateStr);
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 animate-in fade-in duration-200">

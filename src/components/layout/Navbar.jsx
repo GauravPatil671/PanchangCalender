@@ -10,7 +10,8 @@ import {
   Sparkles, 
   Clock, 
   Info,
-  Compass
+  Compass,
+  Orbit
 } from 'lucide-react';
 import { useLocationContext } from '../../context/LocationContext';
 import { useThemeContext } from '../../context/ThemeContext';
@@ -28,6 +29,7 @@ export default function Navbar() {
     { name: 'Calendar', path: '/calendar', icon: CalendarIcon },
     { name: 'Festivals', path: '/festivals', icon: Sparkles },
     { name: 'Muhurat & Choghadiya', path: '/muhurat', icon: Clock },
+    { name: 'Celestial 3D', path: '/celestial-simulation', icon: Orbit, isSpecial: true },
     { name: 'About Panchang', path: '/about', icon: Info },
   ];
 

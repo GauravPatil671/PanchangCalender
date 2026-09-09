@@ -9,7 +9,9 @@ export default function MonthView({ monthData, selectedDate, onSelectDate, filte
 
   const todayStr = getTodayDateString();
   const firstDayStr = monthData.days[0]?.date;
-  const firstDayDate = new Date(firstDayStr);
+  // Parse as local time (not UTC) to avoid off-by-one day in IST and other UTC+ timezones
+  const [fyear, fmonth, fday] = (firstDayStr || '').split('-').map(Number);
+  const firstDayDate = (fyear && fmonth && fday) ? new Date(fyear, fmonth - 1, fday) : new Date();
   const startDayOfWeek = firstDayDate.getDay(); // 0 = Sun .. 6 = Sat
 
   // Empty leading cells

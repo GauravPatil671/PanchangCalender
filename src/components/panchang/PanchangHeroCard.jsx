@@ -21,7 +21,9 @@ export default function PanchangHeroCard({ panchang, onOpenLocationModal }) {
 
   if (!panchang) return null;
 
-  const dateObj = new Date(panchang.date);
+  // Parse date string as local time (not UTC) to avoid off-by-one day in UTC+ timezones like IST
+  const [pyear, pmon, pday] = (panchang.date || '').split('-').map(Number);
+  const dateObj = (pyear && pmon && pday) ? new Date(pyear, pmon - 1, pday) : new Date(panchang.date);
   const dayName = formatDayOfWeek(dateObj);
   const dateFormatted = formatDateDisplay(dateObj);
 

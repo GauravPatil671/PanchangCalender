@@ -66,3 +66,49 @@
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
+/* ============================================================
+   Custom Animation Utilities
+   (used by Navbar dropdown, modals, 404 page, sun icon)
+   ============================================================ */
+
+/* Slow spin for decorative elements (compass on 404, sun icon) */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+/* Animate-in: lightweight entry animations for dropdowns & modals */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes zoom-in-95 {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes slide-in-from-top-2 {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+  animation-fill-mode: both;
+  animation-duration: 200ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+.fade-in {
+  animation-name: fade-in;
+}
+.zoom-in-95 {
+  animation-name: zoom-in-95;
+}
+.slide-in-from-top-2 {
+  animation-name: slide-in-from-top-2;
+}
+.duration-200 {
+  animation-duration: 200ms;
+}
