@@ -69,47 +69,61 @@ export default function PanchangGrid({ panchang }) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
         
         {/* 1. Tithi Detail Card */}
-        <div className="vedic-card p-4 sm:p-6 space-y-3 sm:space-y-4 relative overflow-hidden border-t-4 border-t-amber-500">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300">
-                <Moon className="w-5 h-5" />
+        <div className="vedic-card p-4 sm:p-6 space-y-3 sm:space-y-4 relative overflow-hidden border-t-4 border-t-amber-500 flex flex-col justify-between">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300">
+                  <Moon className="w-5 h-5" aria-hidden="true" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-stone-900 dark:text-white font-serif">
+                    1. Tithi (सूर्योदयकालीन तिथि)
+                  </h3>
+                  <span className="text-xs text-stone-500">Udayatithi (Sunrise Phase)</span>
+                </div>
               </div>
+              <span className="vedic-badge bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300">
+                {panchang.paksha}
+              </span>
+            </div>
+
+            <div className="space-y-3 pt-2 border-t border-stone-100 dark:border-stone-800">
               <div>
-                <h3 className="text-base font-bold text-stone-900 dark:text-white font-serif">
-                  1. Tithi (तिथि)
-                </h3>
-                <span className="text-xs text-stone-500">Lunar Day Angle</span>
+                <div className="text-2xl font-bold font-serif text-stone-900 dark:text-white">
+                  {panchang.tithi.name}
+                </div>
+                <div className="text-sm font-devanagari text-amber-700 dark:text-amber-400 font-semibold">
+                  {panchang.tithi.hindi}
+                </div>
               </div>
-            </div>
-            <span className="vedic-badge bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300">
-              {panchang.paksha} Paksha
-            </span>
-          </div>
 
-          <div className="space-y-3 pt-2 border-t border-stone-100 dark:border-stone-800">
-            <div>
-              <div className="text-2xl font-bold font-serif text-stone-900 dark:text-white">
-                {panchang.tithi.name}
+              <div className="space-y-1.5 text-xs text-stone-600 dark:text-stone-300 bg-stone-50 dark:bg-stone-800/50 p-3 rounded-xl">
+                <div className="flex justify-between">
+                  <span className="text-stone-500">Sunrise Tithi Ends:</span>
+                  <strong className="text-stone-900 dark:text-white">{panchang.tithi.endTime}</strong>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-stone-500">Presiding Deity:</span>
+                  <strong className="text-stone-900 dark:text-white">{panchang.tithi.deity}</strong>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-stone-500">Tithi Nature:</span>
+                  <strong className="text-stone-900 dark:text-white">{panchang.tithi.nature}</strong>
+                </div>
               </div>
-              <div className="text-sm font-devanagari text-amber-700 dark:text-amber-400 font-semibold">
-                {panchang.tithi.hindi}
-              </div>
-            </div>
 
-            <div className="space-y-1.5 text-xs text-stone-600 dark:text-stone-300 bg-stone-50 dark:bg-stone-800/50 p-3 rounded-xl">
-              <div className="flex justify-between">
-                <span className="text-stone-500">Ending Time:</span>
-                <strong className="text-stone-900 dark:text-white">{panchang.tithi.endTime}</strong>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-stone-500">Presiding Deity:</span>
-                <strong className="text-stone-900 dark:text-white">{panchang.tithi.deity}</strong>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-stone-500">Tithi Nature:</span>
-                <strong className="text-stone-900 dark:text-white">{panchang.tithi.nature}</strong>
-              </div>
+              {panchang.hasSunriseTithiEnded && panchang.currentTithi && !panchang.currentTithi.isSameAsSunrise && (
+                <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-[11px] text-amber-950 dark:text-amber-200">
+                  <div className="font-semibold text-amber-800 dark:text-amber-300 flex items-center justify-between">
+                    <span>Current Tithi: {panchang.currentTithi.fullTithiName}</span>
+                    <span>Ends: {panchang.currentTithi.endsAt}</span>
+                  </div>
+                  <p className="text-[10px] text-stone-500 dark:text-stone-400 mt-0.5">
+                    Transition occurred after sunrise; current real-time phase active now.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

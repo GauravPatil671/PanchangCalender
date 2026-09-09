@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 import { formatDateDisplay, formatDayOfWeek } from '../../utils/dateUtils';
 import { useLocationContext } from '../../context/LocationContext';
 
-export default function PanchangHeroCard({ panchang, onOpenLocationModal }) {
+export default function PanchangHeroCard({ panchang, onOpenLocationModal, headingLevel = 'h1' }) {
   const { selectedLocation } = useLocationContext();
 
   if (!panchang) return null;
@@ -26,12 +26,13 @@ export default function PanchangHeroCard({ panchang, onOpenLocationModal }) {
   const dateObj = (pyear && pmon && pday) ? new Date(pyear, pmon - 1, pday) : new Date(panchang.date);
   const dayName = formatDayOfWeek(dateObj);
   const dateFormatted = formatDateDisplay(dateObj);
+  const HeadingTag = headingLevel === 'h2' ? 'h2' : 'h1';
 
   return (
     <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white via-amber-50/30 to-orange-50/40 dark:from-stone-900 dark:via-stone-900 dark:to-stone-950 border border-stone-200 dark:border-stone-800 shadow-xl transition-all">
       
       {/* Decorative Accent Symbol */}
-      <div className="absolute top-3 right-5 text-8xl font-serif font-bold text-stone-900/[0.03] dark:text-white/[0.04] pointer-events-none select-none">
+      <div className="absolute top-3 right-5 text-8xl font-serif font-bold text-stone-900/[0.03] dark:text-white/[0.04] pointer-events-none select-none" aria-hidden="true">
         ॐ
       </div>
 
@@ -53,17 +54,17 @@ export default function PanchangHeroCard({ panchang, onOpenLocationModal }) {
               </span>
             </div>
             
-            <h1 className="text-xl xs:text-2xl sm:text-4xl font-extrabold font-serif text-stone-900 dark:text-white tracking-tight">
+            <HeadingTag className="text-xl xs:text-2xl sm:text-4xl font-extrabold font-serif text-stone-900 dark:text-white tracking-tight">
               {dateFormatted}
-            </h1>
+            </HeadingTag>
             
             <div className="flex flex-wrap items-center gap-1.5 text-xs sm:text-base text-stone-700 dark:text-stone-300">
               <span className="font-bold text-vedic-saffron-700 dark:text-vedic-saffron-400">{dayName}</span>
-              <span className="text-stone-300 dark:text-stone-600">•</span>
+              <span className="text-stone-300 dark:text-stone-600" aria-hidden="true">•</span>
               <span className="font-medium">{panchang.month.purnimanta} Maas</span>
-              <span className="text-stone-300 dark:text-stone-600">•</span>
+              <span className="text-stone-300 dark:text-stone-600" aria-hidden="true">•</span>
               <span className="font-medium text-amber-800 dark:text-amber-300">{panchang.paksha} ({panchang.pakshaHindi})</span>
-              <span className="text-stone-300 dark:text-stone-600 hidden xs:inline">•</span>
+              <span className="text-stone-300 dark:text-stone-600 hidden xs:inline" aria-hidden="true">•</span>
               <span className="text-[11px] text-stone-500 dark:text-stone-400 hidden xs:inline">{panchang.samvat.ritu} Ritu</span>
             </div>
           </div>
@@ -72,12 +73,13 @@ export default function PanchangHeroCard({ panchang, onOpenLocationModal }) {
           <div className="flex flex-col sm:flex-row items-start lg:items-end gap-2 self-start lg:self-auto w-full sm:w-auto">
             <button
               onClick={onOpenLocationModal}
-              className="group flex items-center justify-between sm:justify-start w-full sm:w-auto gap-2 px-3 py-2 rounded-2xl bg-white dark:bg-stone-800/90 border border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 hover:border-vedic-saffron-500 dark:hover:border-vedic-saffron-400 shadow-sm transition-all text-xs sm:text-sm font-semibold"
+              className="group flex items-center justify-between sm:justify-start w-full sm:w-auto gap-2 px-3 py-2 rounded-2xl bg-white dark:bg-stone-800/90 border border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 hover:border-vedic-saffron-500 dark:hover:border-vedic-saffron-400 shadow-sm transition-all text-xs sm:text-sm font-semibold min-h-[44px]"
               title="Click to calculate for your city"
+              aria-label={`Location: ${selectedLocation.city}, ${selectedLocation.state}. Click to change.`}
             >
               <div className="flex items-center gap-2">
                 <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-vedic-saffron-100 dark:bg-vedic-saffron-950/80 flex items-center justify-center text-vedic-saffron-600 dark:text-vedic-saffron-400 group-hover:scale-110 transition-transform">
-                  <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5" aria-hidden="true" />
                 </div>
                 <div className="text-left">
                   <div className="text-[10px] text-stone-500 dark:text-stone-400 font-normal leading-tight">Location</div>
@@ -100,53 +102,72 @@ export default function PanchangHeroCard({ panchang, onOpenLocationModal }) {
             <span className="font-bold uppercase tracking-wider text-stone-700 dark:text-stone-300">
               Essential Daily Highlights (मुख्य पंचांग बिंदु)
             </span>
-            <span>Accurate for local sunrise</span>
+            <span>Udayatithi (Sunrise) Based</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             
             {/* 1. Tithi Card */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-stone-800 border-2 border-amber-200/80 dark:border-amber-900/50 shadow-sm hover:shadow-md transition-shadow space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 flex items-center gap-1.5">
-                  <Moon className="w-4 h-4 text-amber-600" />
-                  Tithi (तिथि)
-                </span>
-                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300">
-                  {panchang.paksha}
-                </span>
-              </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-bold font-serif text-stone-900 dark:text-white">
-                  {panchang.tithi.name}
+            <div className="p-5 rounded-2xl bg-white dark:bg-stone-800 border-2 border-amber-200/80 dark:border-amber-900/50 shadow-sm hover:shadow-md transition-shadow space-y-2 flex flex-col justify-between">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 flex items-center gap-1.5">
+                    <Moon className="w-4 h-4 text-amber-600" aria-hidden="true" />
+                    Tithi at Sunrise
+                  </span>
+                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300">
+                    {panchang.paksha}
+                  </span>
                 </div>
-                <div className="text-sm font-devanagari text-stone-600 dark:text-stone-300">
-                  {panchang.tithi.hindi}
+                <div>
+                  <div className="text-xl sm:text-2xl font-bold font-serif text-stone-900 dark:text-white">
+                    {panchang.tithi.name}
+                  </div>
+                  <div className="text-sm font-devanagari text-stone-600 dark:text-stone-300">
+                    {panchang.tithi.hindi} <span className="text-xs text-stone-500 font-sans font-normal">(सूर्योदयकालीन)</span>
+                  </div>
                 </div>
               </div>
-              <div className="pt-2 border-t border-stone-100 dark:border-stone-700 text-xs text-stone-600 dark:text-stone-300 flex items-center justify-between">
-                <span>Ends: <strong>{panchang.tithi.endTime}</strong></span>
-                <span className="text-stone-500 text-[11px]">Deity: {panchang.tithi.deity}</span>
+
+              <div className="space-y-1.5 pt-2 border-t border-stone-100 dark:border-stone-700 text-xs">
+                <div className="text-stone-600 dark:text-stone-300 flex items-center justify-between">
+                  <span>Ends: <strong>{panchang.tithi.endTime}</strong></span>
+                  <span className="text-stone-500 text-[11px]">Deity: {panchang.tithi.deity}</span>
+                </div>
+
+                {/* If Current Tithi differs or current time is past sunrise Tithi, display live status */}
+                {panchang.hasSunriseTithiEnded && panchang.currentTithi && !panchang.currentTithi.isSameAsSunrise && (
+                  <div className="mt-1 pt-1.5 border-t border-dashed border-amber-300 dark:border-amber-800/80 bg-amber-50/80 dark:bg-amber-950/40 p-2 rounded-xl text-[11px] text-amber-950 dark:text-amber-200">
+                    <span className="font-semibold block text-amber-800 dark:text-amber-300">
+                      ⚡ Current Tithi: {panchang.currentTithi.fullTithiName}
+                    </span>
+                    <span className="text-stone-500 dark:text-stone-400 text-[10px]">
+                      Ends: {panchang.currentTithi.endsAt}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
             {/* 2. Nakshatra Card */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-stone-800 border-2 border-orange-200/80 dark:border-orange-900/50 shadow-sm hover:shadow-md transition-shadow space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-vedic-saffron-700 dark:text-vedic-saffron-400 flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4 text-vedic-saffron-600" />
-                  Nakshatra (नक्षत्र)
-                </span>
-                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-orange-100 dark:bg-orange-950 text-orange-800 dark:text-orange-300">
-                  {panchang.moonSign} Rashi
-                </span>
-              </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-bold font-serif text-stone-900 dark:text-white">
-                  {panchang.nakshatra.name}
+            <div className="p-5 rounded-2xl bg-white dark:bg-stone-800 border-2 border-orange-200/80 dark:border-orange-900/50 shadow-sm hover:shadow-md transition-shadow space-y-2 flex flex-col justify-between">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-wider text-vedic-saffron-700 dark:text-vedic-saffron-400 flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-vedic-saffron-600" aria-hidden="true" />
+                    Nakshatra (नक्षत्र)
+                  </span>
+                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-orange-100 dark:bg-orange-950 text-orange-800 dark:text-orange-300">
+                    {panchang.moonSign} Rashi
+                  </span>
                 </div>
-                <div className="text-sm font-devanagari text-stone-600 dark:text-stone-300">
-                  {panchang.nakshatra.hindi}
+                <div>
+                  <div className="text-xl sm:text-2xl font-bold font-serif text-stone-900 dark:text-white">
+                    {panchang.nakshatra.name}
+                  </div>
+                  <div className="text-sm font-devanagari text-stone-600 dark:text-stone-300">
+                    {panchang.nakshatra.hindi}
+                  </div>
                 </div>
               </div>
               <div className="pt-2 border-t border-stone-100 dark:border-stone-700 text-xs text-stone-600 dark:text-stone-300 flex items-center justify-between">

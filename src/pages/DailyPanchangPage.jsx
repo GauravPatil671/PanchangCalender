@@ -158,6 +158,7 @@ export default function DailyPanchangPage() {
           <div className="space-y-6">
             <PanchangHeroCard
               panchang={panchang}
+              headingLevel="h2"
               onOpenLocationModal={() => setIsSelectorOpen(true)}
             />
 

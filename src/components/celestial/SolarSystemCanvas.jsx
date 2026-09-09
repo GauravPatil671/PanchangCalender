@@ -21,7 +21,8 @@ export default function SolarSystemCanvas({
   showAxis = true,
   cameraPreset = 'isometric',
   onSelectObject,
-  selectedObject
+  selectedObject,
+  onError
 }) {
   const mountRef = useRef(null);
   const sceneRef = useRef(null);
@@ -80,19 +81,16 @@ export default function SolarSystemCanvas({
     const container = mountRef.current;
     if (!container) return;
 
-    // Check WebGL support before attempting to create renderer
-    const testCanvas = document.createElement('canvas');
-    const gl = testCanvas.getContext('webgl2') || testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl');
-    if (!gl) {
-      container.innerHTML = `
-        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#94a3b8;gap:12px;text-align:center;padding:24px;">
-          <div style="font-size:48px;">🌌</div>
-          <div style="font-size:16px;font-weight:600;color:#e2e8f0;">WebGL Not Supported</div>
-          <div style="font-size:13px;max-width:300px;line-height:1.5;">
-            Your browser or device does not support WebGL, which is required for the 3D simulation.
-            Please try a modern browser like Chrome, Firefox, or Safari.
-          </div>
-        </div>`;
+    try {
+      // Check WebGL support before attempting to create renderer
+      const testCanvas = document.createElement('canvas');
+      const gl = testCanvas.getContext('webgl2') || testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl');
+      if (!gl) {
+        if (onError) onError('WebGL Not Supported');
+        return;
+      }
+    } catch (e) {
+      if (onError) onError(e.message || 'WebGL Initialization Failed');
       return;
     }
 

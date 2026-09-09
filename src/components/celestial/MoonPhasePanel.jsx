@@ -31,9 +31,9 @@ export default function MoonPhasePanel({ tithiData, lunarData }) {
             <Moon className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-sm font-bold font-serif text-white">
+            <h3 className="text-sm font-bold font-serif text-white">
               Current Moon Phase & Chandra
-            </h4>
+            </h3>
             <span className="text-[10px] text-stone-400">
               Synodic Month: ~29.53 Days • Sidereal: ~27.32 Days
             </span>

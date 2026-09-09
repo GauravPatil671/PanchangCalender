@@ -1,4 +1,5 @@
 // Comprehensive Vedic Reference Data & High-Precision Panchang Engine
+import { getPanchangTithiState, formatTithiTime } from '../astronomy/tithiCalculations.js';
 
 export const TITHI_NAMES = [
   { id: 1, name: 'Pratipada', hindi: 'प्रतिपदा', deity: 'Agni', nature: 'Auspicious (Nanda)' },
@@ -905,7 +906,19 @@ export function generateDailyPanchangData(date, latitude = 19.0760, longitude = 
   const sunriseDecimal = solarNoonHours - hourAngleHours;
   const sunsetDecimal = solarNoonHours + hourAngleHours;
 
-  // Tithi Display Names
+  // Astronomical Tithi State (Sunrise Udayatithi & Current Tithi)
+  const sunriseHoursInt = Math.floor(sunriseDecimal);
+  const sunriseMinutesInt = Math.round((sunriseDecimal % 1) * 60);
+  const sunriseDateObj = new Date(d.getFullYear(), d.getMonth(), d.getDate(), sunriseHoursInt, sunriseMinutesInt, 0);
+  const tithiState = getPanchangTithiState(d, sunriseDateObj);
+
+  // Dynamic Nakshatra end time based on lunar orbital velocity (~13.176°/day ~ 0.549°/hr)
+  const nakshatraDegreesRemaining = (360 / 27) - (astro.moonNirayanaLong % (360 / 27));
+  const nakshatraRemainingHours = nakshatraDegreesRemaining / 0.549;
+  const nakshatraEndDateObj = new Date(d.getTime() + nakshatraRemainingHours * 3600 * 1000);
+  const nakshatraEndTime = formatTithiTime(nakshatraEndDateObj, d);
+
+  // Tithi Display Names (from Sunrise Udayatithi)
   const tithiDef = tithiIndex === 14 
     ? TITHI_NAMES.find(t => t.id === 15) 
     : (tithiIndex === 29 ? TITHI_NAMES.find(t => t.id === 30) : TITHI_NAMES.find(t => t.id === tithiNumber));
@@ -999,15 +1012,20 @@ export function generateDailyPanchangData(date, latitude = 19.0760, longitude = 
       number: tithiNumber,
       deity: tithiDef.deity,
       nature: tithiDef.nature,
-      endTime: '08:45 PM (Full Day)'
+      endTime: tithiState.sunriseTithi.endsAt,
+      label: 'Tithi at Sunrise',
+      labelHindi: 'सूर्योदयकालीन तिथि'
     },
+    sunriseTithi: tithiState.sunriseTithi,
+    currentTithi: tithiState.currentTithi,
+    hasSunriseTithiEnded: tithiState.hasSunriseTithiEnded,
     nakshatra: {
       name: nakshatra.name,
       hindi: nakshatra.hindi,
       lord: nakshatra.lord,
       deity: nakshatra.deity,
       sign: nakshatra.sign,
-      endTime: '11:15 PM'
+      endTime: nakshatraEndTime
     },
     yoga: {
       name: yoga,

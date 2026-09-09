@@ -29,14 +29,14 @@ export default function EclipsePanel({ eclipseData, onJumpToDate }) {
             <ShieldAlert className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-sm font-bold font-serif text-white flex items-center gap-2">
+            <h3 className="text-sm font-bold font-serif text-white flex items-center gap-2">
               Eclipse Alignment (Grahan / ग्रहण)
               {isEclipse && (
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-950 text-rose-300 border border-rose-800 font-sans font-bold">
                   ACTIVE
                 </span>
               )}
-            </h4>
+            </h3>
             <span className="text-[10px] text-stone-400">
               Syzygy + Rahu/Ketu Node Alignment Check
             </span>

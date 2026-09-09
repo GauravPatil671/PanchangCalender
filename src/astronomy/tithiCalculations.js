@@ -150,3 +150,155 @@ export function getTithiDetails(date) {
     lunar
   };
 }
+
+/**
+ * Format a Date object to a user-friendly 12-hour time string with optional relative day prefix.
+ */
+export function formatTithiTime(dateObj, baseDate = new Date()) {
+  if (!dateObj || !(dateObj instanceof Date) || isNaN(dateObj.getTime())) {
+    return '11:59 PM';
+  }
+  let hours = dateObj.getHours();
+  const minutes = dateObj.getMinutes();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  const hoursStr = String(hours).padStart(2, '0');
+  const minutesStr = String(minutes).padStart(2, '0');
+  const timeStr = `${hoursStr}:${minutesStr} ${ampm}`;
+
+  // Check if it crosses into next day relative to baseDate
+  const baseDay = baseDate.getDate();
+  const targetDay = dateObj.getDate();
+  if (targetDay !== baseDay) {
+    const diffDays = Math.round((new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate()) - 
+      new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate())) / (1000 * 60 * 60 * 24));
+    if (diffDays === 1) {
+      return `Next Day ${timeStr}`;
+    }
+  }
+  return timeStr;
+}
+
+/**
+ * Computes exact start and end times for the Tithi active at referenceDate.
+ * Uses fast bisection search against astronomical ephemeris (within 1 minute precision).
+ */
+export function calculateTithiBoundary(referenceDate) {
+  const d = referenceDate instanceof Date ? referenceDate : new Date(referenceDate);
+  const currentDetails = getTithiDetails(d);
+  const targetIndex = currentDetails.tithiIndex;
+
+  // Search forward for Tithi End Time
+  const tLow = d.getTime();
+  const tHigh = d.getTime() + 36 * 3600 * 1000;
+  let bracketLow = tLow;
+  let bracketHigh = tHigh;
+  let crossingFound = false;
+
+  for (let t = tLow; t <= tHigh; t += 30 * 60 * 1000) {
+    const idx = getTithiDetails(new Date(t)).tithiIndex;
+    if (idx !== targetIndex) {
+      bracketLow = t - 30 * 60 * 1000;
+      bracketHigh = t;
+      crossingFound = true;
+      break;
+    }
+  }
+
+  let exactEndTime = new Date(bracketHigh);
+  if (crossingFound) {
+    let low = bracketLow;
+    let high = bracketHigh;
+    while (high - low > 30000) {
+      const mid = Math.floor((low + high) / 2);
+      const midIdx = getTithiDetails(new Date(mid)).tithiIndex;
+      if (midIdx === targetIndex) {
+        low = mid;
+      } else {
+        high = mid;
+      }
+    }
+    exactEndTime = new Date(high);
+  }
+
+  // Search backward for Tithi Start Time
+  const startLow = d.getTime() - 36 * 3600 * 1000;
+  let startBracketLow = startLow;
+  let startBracketHigh = d.getTime();
+  let startCrossingFound = false;
+
+  for (let t = d.getTime(); t >= startLow; t -= 30 * 60 * 1000) {
+    const idx = getTithiDetails(new Date(t)).tithiIndex;
+    if (idx !== targetIndex) {
+      startBracketLow = t;
+      startBracketHigh = t + 30 * 60 * 1000;
+      startCrossingFound = true;
+      break;
+    }
+  }
+
+  let exactStartTime = new Date(startBracketLow);
+  if (startCrossingFound) {
+    let low = startBracketLow;
+    let high = startBracketHigh;
+    while (high - low > 30000) {
+      const mid = Math.floor((low + high) / 2);
+      const midIdx = getTithiDetails(new Date(mid)).tithiIndex;
+      if (midIdx === targetIndex) {
+        high = mid;
+      } else {
+        low = mid;
+      }
+    }
+    exactStartTime = new Date(high);
+  }
+
+  return {
+    ...currentDetails,
+    startTime: exactStartTime,
+    endTime: exactEndTime,
+    endTimeFormatted: formatTithiTime(exactEndTime, d),
+    startTimeFormatted: formatTithiTime(exactStartTime, d)
+  };
+}
+
+/**
+ * Calculates complete Vedic Tithi State distinguishing between:
+ * 1. Sunrise Tithi (सूर्योदयकालीन तिथि / Udayatithi) - Primary for Hindu ritual day & vrat
+ * 2. Real-time Current Tithi (वर्तमान तिथि) - Active at the specified moment
+ */
+export function getPanchangTithiState(targetDate, sunriseDate = null) {
+  const now = targetDate instanceof Date ? targetDate : new Date(targetDate);
+  const sunrise = sunriseDate instanceof Date 
+    ? sunriseDate 
+    : new Date(now.getFullYear(), now.getMonth(), now.getDate(), 6, 0, 0);
+
+  // Udayatithi: Tithi prevailing at sunrise
+  const sunriseTithiDetails = calculateTithiBoundary(sunrise);
+
+  // Real-time instantaneous Tithi
+  const currentTithiDetails = calculateTithiBoundary(now);
+
+  // Has the sunrise Tithi ended relative to the given time?
+  const hasSunriseTithiEnded = now.getTime() >= sunriseTithiDetails.endTime.getTime();
+
+  return {
+    sunriseTithi: {
+      ...sunriseTithiDetails,
+      label: 'Tithi at Sunrise',
+      labelHindi: 'सूर्योदयकालीन तिथि (उदयतिथि)',
+      endsAt: sunriseTithiDetails.endTimeFormatted,
+      isCurrentlyActive: !hasSunriseTithiEnded
+    },
+    currentTithi: {
+      ...currentTithiDetails,
+      label: 'Current Tithi',
+      labelHindi: 'वर्तमान तिथि',
+      endsAt: currentTithiDetails.endTimeFormatted,
+      isSameAsSunrise: sunriseTithiDetails.tithiIndex === currentTithiDetails.tithiIndex
+    },
+    hasSunriseTithiEnded
+  };
+}
+

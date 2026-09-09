@@ -12,6 +12,16 @@ export default function DayDetailModal({ dateStr, isOpen, onClose }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
     if (!isOpen || !dateStr) return;
     let isMounted = true;
     setLoading(true);
@@ -35,11 +45,16 @@ export default function DayDetailModal({ dateStr, isOpen, onClose }) {
   const dateObj = (dy && dm && dd) ? new Date(dy, dm - 1, dd) : new Date(dateStr);
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 animate-in fade-in duration-200">
+    <div 
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 animate-in fade-in duration-200"
+      onClick={onClose}
+    >
       <div 
         className="relative w-full max-w-2xl bg-white dark:bg-stone-900 rounded-3xl shadow-2xl border border-stone-200 dark:border-stone-800 overflow-hidden max-h-[94vh] flex flex-col"
         role="dialog"
         aria-modal="true"
+        aria-labelledby="day-modal-title"
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="p-3.5 sm:p-6 border-b border-stone-100 dark:border-stone-800 flex items-center justify-between bg-gradient-to-r from-vedic-saffron-50/50 to-amber-50/40 dark:from-stone-900 dark:to-stone-900">
@@ -47,7 +62,7 @@ export default function DayDetailModal({ dateStr, isOpen, onClose }) {
             <span className="text-[10px] sm:text-xs uppercase font-bold tracking-wider text-vedic-saffron-600 dark:text-vedic-saffron-400">
               Panchang Details
             </span>
-            <h3 className="text-base sm:text-2xl font-bold font-serif text-stone-900 dark:text-white">
+            <h3 id="day-modal-title" className="text-base sm:text-2xl font-bold font-serif text-stone-900 dark:text-white">
               {formatDateDisplay(dateObj)}
             </h3>
             <p className="text-[10px] sm:text-xs text-stone-500">
@@ -56,9 +71,10 @@ export default function DayDetailModal({ dateStr, isOpen, onClose }) {
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 sm:p-2 rounded-xl text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800"
+            aria-label="Close day details"
+            className="p-2 rounded-xl text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
 

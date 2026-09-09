@@ -17,6 +17,16 @@ export default function LocationSelectorModal() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedState, setSelectedState] = useState('All');
 
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && isSelectorOpen) {
+        setIsSelectorOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isSelectorOpen, setIsSelectorOpen]);
+
   const filteredCities = useMemo(() => {
     return POPULAR_CITIES.filter((city) => {
       const matchesSearch = 
@@ -31,18 +41,22 @@ export default function LocationSelectorModal() {
   if (!isSelectorOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 animate-in fade-in duration-200">
+    <div 
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 animate-in fade-in duration-200"
+      onClick={() => setIsSelectorOpen(false)}
+    >
       <div 
         className="relative w-full max-w-2xl bg-white dark:bg-stone-900 rounded-3xl shadow-2xl border border-stone-200 dark:border-stone-800 overflow-hidden flex flex-col max-h-[94vh]"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="p-3.5 sm:p-6 border-b border-stone-100 dark:border-stone-800 flex items-center justify-between bg-gradient-to-r from-vedic-saffron-50/50 to-amber-50/30 dark:from-stone-900 dark:to-stone-900">
           <div>
             <h3 id="modal-title" className="text-base sm:text-xl font-bold font-serif text-stone-900 dark:text-white flex items-center gap-1.5 sm:gap-2">
-              <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-vedic-saffron-600 dark:text-vedic-saffron-400" />
+              <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-vedic-saffron-600 dark:text-vedic-saffron-400" aria-hidden="true" />
               Select Location
             </h3>
             <p className="text-[10px] sm:text-xs text-stone-500 dark:text-stone-400 mt-0.5">
@@ -51,10 +65,10 @@ export default function LocationSelectorModal() {
           </div>
           <button
             onClick={() => setIsSelectorOpen(false)}
-            className="p-1.5 sm:p-2 rounded-xl text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
-            aria-label="Close modal"
+            aria-label="Close location selector modal"
+            className="p-2 rounded-xl text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
 

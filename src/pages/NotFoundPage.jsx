@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Compass, Home, ArrowLeft } from 'lucide-react';
+import { updatePageSeo } from '../utils/seoUtils';
 
 export default function NotFoundPage() {
+  useEffect(() => {
+    updatePageSeo(
+      'Page Not Found',
+      'The requested page on Hindu Panchang Calendar could not be found.'
+    );
+  }, []);
   return (
     <div className="max-w-xl mx-auto px-4 py-24 text-center space-y-6">
       <div className="w-16 h-16 rounded-3xl bg-vedic-saffron-100 dark:bg-vedic-saffron-950 text-vedic-saffron-600 dark:text-vedic-saffron-400 flex items-center justify-center mx-auto shadow-sm">

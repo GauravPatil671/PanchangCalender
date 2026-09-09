@@ -159,9 +159,9 @@ export default function AboutPage() {
             <Globe className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-xl font-bold font-serif text-stone-900 dark:text-white">
+            <h2 className="text-xl font-bold font-serif text-stone-900 dark:text-white">
               Why Location Matters in Panchang Calculations
-            </h3>
+            </h2>
             <p className="text-xs text-stone-500">The role of local Sunrise (Suryodaya)</p>
           </div>
         </div>

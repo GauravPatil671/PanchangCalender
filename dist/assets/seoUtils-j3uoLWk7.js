@@ -1,0 +1,1 @@
+function t(e,a){if(e?document.title=`${e} | Hindu Panchang Calendar`:document.title="Panchang Calendar – Daily Hindu Panchang & Festival Calendar",a){const n=document.querySelector('meta[name="description"]');n&&n.setAttribute("content",a)}}export{t as u};

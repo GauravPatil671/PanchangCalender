@@ -56,6 +56,20 @@ export default function CalendarPage() {
   return (
     <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-6 sm:py-12 space-y-6 sm:space-y-8">
       
+      {/* Page Header */}
+      <div className="text-center max-w-3xl mx-auto space-y-2">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-vedic-saffron-100 dark:bg-vedic-saffron-950/80 text-vedic-saffron-700 dark:text-vedic-saffron-300 text-xs font-semibold">
+          <CalendarIcon className="w-3.5 h-3.5" aria-hidden="true" />
+          <span>Vedic Monthly Almanac</span>
+        </div>
+        <h1 className="text-2xl sm:text-4xl font-extrabold font-serif text-stone-900 dark:text-white tracking-tight">
+          Hindu Panchang Calendar
+        </h1>
+        <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
+          Monthly lunar calendar featuring daily Tithis, Ekadashi fasts, Purnima, Amavasya, and major Hindu festivals.
+        </p>
+      </div>
+
       {/* Navigation Header */}
       <MonthNavigation
         month={currentMonth}

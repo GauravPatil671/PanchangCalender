@@ -11,12 +11,12 @@ import {
   calculateAuspiciousMuhurats,
   calculateChoghadiya,
   getMoonPhaseDetails
-} from './astronomicalCalc';
-import { generateDailyPanchangData, ALL_FESTIVALS, FESTIVAL_CALENDAR_YEARS } from './mockPanchangData';
-import { formatDateYMD } from '../utils/dateUtils';
+} from './astronomicalCalc.js';
+import { generateDailyPanchangData, ALL_FESTIVALS, FESTIVAL_CALENDAR_YEARS } from './mockPanchangData.js';
+import { formatDateYMD } from '../utils/dateUtils.js';
 
-const API_BASE_URL = import.meta.env.VITE_PANCHANG_API_URL || '';
-const API_KEY = import.meta.env.VITE_PANCHANG_API_KEY || '';
+const API_BASE_URL = typeof import.meta !== 'undefined' && import.meta.env?.VITE_PANCHANG_API_URL ? import.meta.env.VITE_PANCHANG_API_URL : '';
+const API_KEY = typeof import.meta !== 'undefined' && import.meta.env?.VITE_PANCHANG_API_KEY ? import.meta.env.VITE_PANCHANG_API_KEY : '';
 
 /**
  * Retrieve complete Daily Panchang data for a specific date and coordinates
@@ -59,6 +59,9 @@ export async function getDailyPanchang(dateStr, latitude = 19.0760, longitude = 
     paksha: rawPanchang.paksha,
     pakshaHindi: rawPanchang.pakshaHindi,
     tithi: rawPanchang.tithi,
+    sunriseTithi: rawPanchang.sunriseTithi,
+    currentTithi: rawPanchang.currentTithi,
+    hasSunriseTithiEnded: rawPanchang.hasSunriseTithiEnded,
     nakshatra: rawPanchang.nakshatra,
     yoga: rawPanchang.yoga,
     karana: rawPanchang.karana,

@@ -31,6 +31,19 @@ export default function Home() {
   const { data: panchang, loading, error, refetch } = usePanchang(new Date());
   const { setIsSelectorOpen } = useLocationContext();
   const [selectedFestival, setSelectedFestival] = useState(null);
+  const [collapsedSections, setCollapsedSections] = useState({
+    fiveLimbs: false,
+    choghadiya: false,
+    ashubh: false,
+    sunMoon: false
+  });
+
+  const toggleSection = (key) => {
+    setCollapsedSections(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }));
+  };
 
   useEffect(() => {
     updatePageSeo(
@@ -58,6 +71,7 @@ export default function Home() {
         <div className="space-y-6">
           <PanchangHeroCard
             panchang={panchang}
+            headingLevel="h1"
             onOpenLocationModal={() => setIsSelectorOpen(true)}
           />
 
@@ -66,44 +80,44 @@ export default function Home() {
             <span className="text-xs font-bold text-stone-500 uppercase mr-1 whitespace-nowrap">Quick Jump:</span>
             <button
               onClick={() => scrollToSection('five-limbs')}
-              className="px-3.5 py-1.5 rounded-full bg-amber-100 hover:bg-amber-200 dark:bg-amber-950/80 dark:hover:bg-amber-900 text-amber-900 dark:text-amber-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-full bg-amber-100 hover:bg-amber-200 dark:bg-amber-950/80 dark:hover:bg-amber-900 text-amber-900 dark:text-amber-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 min-h-[36px]"
             >
-              <Compass className="w-3.5 h-3.5" />
+              <Compass className="w-3.5 h-3.5" aria-hidden="true" />
               <span>5 Limbs (Tithi & Nakshatra)</span>
             </button>
             <button
               onClick={() => scrollToSection('shubh-muhurat')}
-              className="px-3.5 py-1.5 rounded-full bg-emerald-100 hover:bg-emerald-200 dark:bg-emerald-950/80 dark:hover:bg-emerald-900 text-emerald-900 dark:text-emerald-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-full bg-emerald-100 hover:bg-emerald-200 dark:bg-emerald-950/80 dark:hover:bg-emerald-900 text-emerald-900 dark:text-emerald-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 min-h-[36px]"
             >
-              <ShieldCheck className="w-3.5 h-3.5" />
+              <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Shubh Muhurat</span>
             </button>
             <button
               onClick={() => scrollToSection('ashubh-kaal')}
-              className="px-3.5 py-1.5 rounded-full bg-rose-100 hover:bg-rose-200 dark:bg-rose-950/80 dark:hover:bg-rose-900 text-rose-900 dark:text-rose-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-full bg-rose-100 hover:bg-rose-200 dark:bg-rose-950/80 dark:hover:bg-rose-900 text-rose-900 dark:text-rose-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 min-h-[36px]"
             >
-              <AlertTriangle className="w-3.5 h-3.5" />
+              <AlertTriangle className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Rahu Kalam & Inauspicious</span>
             </button>
             <button
               onClick={() => scrollToSection('choghadiya')}
-              className="px-3.5 py-1.5 rounded-full bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-950/80 dark:hover:bg-indigo-900 text-indigo-900 dark:text-indigo-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-full bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-950/80 dark:hover:bg-indigo-900 text-indigo-900 dark:text-indigo-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 min-h-[36px]"
             >
-              <Clock className="w-3.5 h-3.5" />
+              <Clock className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Choghadiya</span>
             </button>
             <button
               onClick={() => scrollToSection('sun-moon')}
-              className="px-3.5 py-1.5 rounded-full bg-orange-100 hover:bg-orange-200 dark:bg-orange-950/80 dark:hover:bg-orange-900 text-orange-900 dark:text-orange-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-full bg-orange-100 hover:bg-orange-200 dark:bg-orange-950/80 dark:hover:bg-orange-900 text-orange-900 dark:text-orange-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 min-h-[36px]"
             >
-              <Sun className="w-3.5 h-3.5" />
+              <Sun className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Sun & Moon</span>
             </button>
             <button
               onClick={() => scrollToSection('festivals')}
-              className="px-3.5 py-1.5 rounded-full bg-vedic-saffron-100 hover:bg-vedic-saffron-200 dark:bg-vedic-saffron-950/80 dark:hover:bg-vedic-saffron-900 text-vedic-saffron-900 dark:text-vedic-saffron-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-full bg-vedic-saffron-100 hover:bg-vedic-saffron-200 dark:bg-vedic-saffron-950/80 dark:hover:bg-vedic-saffron-900 text-vedic-saffron-900 dark:text-vedic-saffron-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 min-h-[36px]"
             >
-              <Sparkles className="w-3.5 h-3.5" />
+              <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Festivals</span>
             </button>
           </div>
@@ -121,8 +135,16 @@ export default function Home() {
               subtitle="Tithi, Nakshatra, Yoga, Karana, and Samvat for the current lunar day"
               icon={Compass}
               badge="5 Vedic Angas"
+              isCollapsible={true}
+              isCollapsed={collapsedSections.fiveLimbs}
+              onToggleCollapse={() => toggleSection('fiveLimbs')}
+              controlsId="five-limbs-content"
             />
-            <PanchangGrid panchang={panchang} />
+            {!collapsedSections.fiveLimbs && (
+              <div id="five-limbs-content" className="animate-in fade-in duration-200">
+                <PanchangGrid panchang={panchang} />
+              </div>
+            )}
           </section>
 
           {/* Section: Auspicious Muhurats */}
@@ -131,7 +153,7 @@ export default function Home() {
               <div className="space-y-1">
                 <div className="flex items-center gap-2.5">
                   <div className="p-2 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400">
-                    <ShieldCheck className="w-5 h-5" />
+                    <ShieldCheck className="w-5 h-5" aria-hidden="true" />
                   </div>
                   <h2 className="text-xl sm:text-2xl font-bold font-serif text-stone-900 dark:text-white tracking-tight flex items-center gap-2">
                     Auspicious Timings
@@ -146,10 +168,10 @@ export default function Home() {
               </div>
               <Link
                 to="/muhurat"
-                className="text-xs font-bold text-vedic-saffron-600 dark:text-vedic-saffron-400 hover:underline flex items-center gap-1"
+                className="text-xs font-bold text-vedic-saffron-600 dark:text-vedic-saffron-400 hover:underline flex items-center gap-1 min-h-[36px]"
               >
                 <span>Full Muhurat Hub</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
               </Link>
             </div>
             <MuhuratSection panchang={panchang} />
@@ -162,7 +184,21 @@ export default function Home() {
 
           {/* Section: Day & Night Choghadiya Table */}
           <section id="choghadiya" className="space-y-6 scroll-mt-24">
-            <ChoghadiyaTable choghadiya={panchang.choghadiya} />
+            <SectionHeader
+              title="Day & Night Choghadiya"
+              hindiTitle="दिन एवं रात का चौघड़िया"
+              subtitle="24-hour planetary time slots categorized by Vedic auspiciousness"
+              icon={Clock}
+              isCollapsible={true}
+              isCollapsed={collapsedSections.choghadiya}
+              onToggleCollapse={() => toggleSection('choghadiya')}
+              controlsId="choghadiya-content"
+            />
+            {!collapsedSections.choghadiya && (
+              <div id="choghadiya-content" className="animate-in fade-in duration-200">
+                <ChoghadiyaTable choghadiya={panchang.choghadiya} />
+              </div>
+            )}
           </section>
 
           {/* Section: Sun & Moon Timings */}
@@ -172,8 +208,16 @@ export default function Home() {
               hindiTitle="सूर्य एवं चन्द्र दर्शन"
               subtitle="Astronomical timings determined specifically for your selected location"
               icon={Sun}
+              isCollapsible={true}
+              isCollapsed={collapsedSections.sunMoon}
+              onToggleCollapse={() => toggleSection('sunMoon')}
+              controlsId="sun-moon-content"
             />
-            <SunMoonCard panchang={panchang} />
+            {!collapsedSections.sunMoon && (
+              <div id="sun-moon-content" className="animate-in fade-in duration-200">
+                <SunMoonCard panchang={panchang} />
+              </div>
+            )}
           </section>
 
           {/* Section: Upcoming Major Festivals */}

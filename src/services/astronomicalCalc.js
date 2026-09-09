@@ -1,6 +1,6 @@
 // Astronomical calculation utilities for Sun, Moon, Muhurat, and Choghadiya timings
 
-import { decimalHoursToTimeString } from '../utils/dateUtils';
+import { decimalHoursToTimeString } from '../utils/dateUtils.js';
 
 function parseDateAtNoon(date) {
   if (!date) return new Date();
