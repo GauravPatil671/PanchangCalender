@@ -7,7 +7,6 @@ import { checkEclipse } from '../astronomy/eclipseCalculations';
 import { getDailyPanchang } from '../services/panchangApi';
 import { updatePageSeo } from '../utils/seoUtils';
 import SolarSystemCanvas from '../components/celestial/SolarSystemCanvas';
-import SimulationFallback2D from '../components/celestial/SimulationFallback2D';
 import SimulationControls from '../components/celestial/SimulationControls';
 import TithiVisualization from '../components/celestial/TithiVisualization';
 import MoonPhasePanel from '../components/celestial/MoonPhasePanel';
@@ -38,7 +37,6 @@ export default function CelestialSimulation() {
   const [scaleMode, setScaleMode] = useState('educational');
   const [timeZone, setTimeZone] = useState('IST');
   const [selectedObject, setSelectedObject] = useState('Earth');
-  const [renderMode, setRenderMode] = useState('3d'); // '3d' | '2d'
 
   // Overlay Toggles
   const [showOrbits, setShowOrbits] = useState(true);
@@ -53,7 +51,7 @@ export default function CelestialSimulation() {
   useEffect(() => {
     updatePageSeo(
       'Interactive Sun–Earth–Moon Simulation',
-      'Interactive 3D and 2D celestial simulation illustrating solar and lunar orbits, Vedic Tithi angles, Moon phases, and eclipses.'
+      'Interactive 3D celestial simulation illustrating solar and lunar orbits, Vedic Tithi angles, Moon phases, and eclipses.'
     );
   }, []);
 
@@ -161,64 +159,28 @@ export default function CelestialSimulation() {
               Visualize orbital dynamics, lunar elongation angle (θ), Udayatithi, Moon illumination, and eclipses.
             </p>
           </div>
-
-          <div className="flex items-center gap-1 bg-stone-950 p-1 rounded-xl border border-stone-800 self-start sm:self-auto">
-            <button
-              onClick={() => setRenderMode('3d')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                renderMode === '3d'
-                  ? 'bg-vedic-saffron-600 text-white shadow-sm'
-                  : 'text-stone-400 hover:text-white'
-              }`}
-            >
-              <Eye className="w-3.5 h-3.5" aria-hidden="true" />
-              <span>3D WebGL</span>
-            </button>
-            <button
-              onClick={() => setRenderMode('2d')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                renderMode === '2d'
-                  ? 'bg-vedic-saffron-600 text-white shadow-sm'
-                  : 'text-stone-400 hover:text-white'
-              }`}
-            >
-              <Compass className="w-3.5 h-3.5" aria-hidden="true" />
-              <span>2D Diagram</span>
-            </button>
-          </div>
         </div>
       </div>
 
-      {/* 3D / 2D Simulation Hero Viewport */}
+      {/* 3D Simulation Hero Viewport */}
       <div className="relative w-full h-[52vh] xs:h-[60vh] sm:h-[70vh] md:h-[75vh] min-h-[340px] overflow-hidden border-b border-stone-800">
-        {renderMode === '3d' ? (
-          <SolarSystemCanvas
-            simulationDate={simulationDate}
-            solarData={solarData}
-            lunarData={lunarData}
-            tithiData={tithiData}
-            scaleMode={scaleMode}
-            showOrbits={showOrbits}
-            showAngleArc={showAngleArc}
-            showLabels={showLabels}
-            showAxis={showAxis}
-            cameraPreset={cameraPreset}
-            onSelectObject={(obj) => {
-              setSelectedObject(obj);
-              setActiveTab('info');
-            }}
-            selectedObject={selectedObject}
-            onError={() => setRenderMode('2d')}
-          />
-        ) : (
-          <SimulationFallback2D
-            simulationDate={simulationDate}
-            solarData={solarData}
-            lunarData={lunarData}
-            tithiData={tithiData}
-            onSwitchTo3D={() => setRenderMode('3d')}
-          />
-        )}
+        <SolarSystemCanvas
+          simulationDate={simulationDate}
+          solarData={solarData}
+          lunarData={lunarData}
+          tithiData={tithiData}
+          scaleMode={scaleMode}
+          showOrbits={showOrbits}
+          showAngleArc={showAngleArc}
+          showLabels={showLabels}
+          showAxis={showAxis}
+          cameraPreset={cameraPreset}
+          onSelectObject={(obj) => {
+            setSelectedObject(obj);
+            setActiveTab('info');
+          }}
+          selectedObject={selectedObject}
+        />
 
         {/* Top Slim Floating Date & Time Controls Bar */}
         <div className="absolute top-2 xs:top-3 inset-x-2 xs:inset-x-4 sm:inset-x-6 z-20 pointer-events-auto max-w-4xl mx-auto">

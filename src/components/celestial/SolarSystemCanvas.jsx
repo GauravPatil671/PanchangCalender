@@ -86,11 +86,11 @@ export default function SolarSystemCanvas({
       const testCanvas = document.createElement('canvas');
       const gl = testCanvas.getContext('webgl2') || testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl');
       if (!gl) {
-        if (onError) onError('WebGL Not Supported');
+        container.innerHTML = '<div class="flex items-center justify-center h-full text-stone-400 text-sm p-4">WebGL is required to render the 3D celestial simulation.</div>';
         return;
       }
     } catch (e) {
-      if (onError) onError(e.message || 'WebGL Initialization Failed');
+      container.innerHTML = '<div class="flex items-center justify-center h-full text-stone-400 text-sm p-4">Unable to initialize WebGL 3D context.</div>';
       return;
     }
 

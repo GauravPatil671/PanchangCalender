@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { LocationProvider } from './context/LocationContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { LanguageProvider } from './context/LanguageContext';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import LoadingSkeleton from './components/common/LoadingSkeleton';
@@ -58,9 +59,10 @@ class ErrorBoundary extends React.Component {
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <LocationProvider>
-        <Router>
+    <LanguageProvider>
+      <ThemeProvider>
+        <LocationProvider>
+          <Router>
           <div className="min-h-screen flex flex-col bg-vedic-cream dark:bg-stone-950 text-stone-800 dark:text-stone-100 transition-colors duration-200 selection:bg-vedic-saffron-500 selection:text-white">
             
             {/* Accessible Skip to Main Content Link */}
@@ -122,5 +124,6 @@ export default function App() {
         </Router>
       </LocationProvider>
     </ThemeProvider>
+    </LanguageProvider>
   );
 }

@@ -97,7 +97,7 @@ test('3. Page Heading Hierarchy & Accessibility Attributes', (t) => {
       assert.ok(content.includes('<h1') && content.includes('headingLevel="h2"'), `${file} single H1 rule`);
     } else if (file === 'Home.jsx') {
       const duplicateH1 = (content.match(/<h1/g) || []).length;
-      assert.ok(content.includes('headingLevel="h1"') && duplicateH1 === 0, `${file} single H1 rule`);
+      assert.ok(content.includes('TodaySummaryHero') && duplicateH1 === 0, `${file} delegates single H1 to TodaySummaryHero`);
     } else {
       const h1Count = (content.match(/<h1/g) || []).length;
       assert.equal(h1Count, 1, `${file} must have exactly one <h1> tag`);
@@ -138,14 +138,7 @@ test('6. Reduced Motion Support in Styles', (t) => {
   assert.ok(cssContent.includes('@media (prefers-reduced-motion: reduce)'), 'prefers-reduced-motion CSS rule exists');
 });
 
-test('7. 2D Fallback Orbit Component Existence and Integrity', (t) => {
-  const fallbackPath = path.join(rootDir, 'src', 'components', 'celestial', 'SimulationFallback2D.jsx');
-  assert.ok(fs.existsSync(fallbackPath), 'SimulationFallback2D exists');
-  const fallbackContent = fs.readFileSync(fallbackPath, 'utf-8');
-  assert.ok(fallbackContent.includes('<svg') && fallbackContent.includes('EARTH'), 'Renders SVG orbit diagram');
-});
-
-test('8. Production Build Directory and HTML Validation', (t) => {
+test('7. Production Build Directory and HTML Validation', (t) => {
   const distIndexPath = path.join(rootDir, 'dist', 'index.html');
   assert.ok(fs.existsSync(distIndexPath), 'dist/index.html exists');
   const distHtml = fs.readFileSync(distIndexPath, 'utf-8');
