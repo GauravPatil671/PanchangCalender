@@ -1,102 +1,105 @@
 import React from 'react';
 import { AlertTriangle, Clock, ShieldAlert, Ban, AlertCircle } from 'lucide-react';
 
+const ITEMS = [
+  {
+    name:  'Rahu Kalam',
+    hindi: 'राहु काल',
+    key:   'rahuKalam',
+    icon:  Ban,
+    severity: 'Avoid new undertakings',
+    desc: 'Ruled by shadow planet Rahu. Avoid starting auspicious work, buying assets, or beginning long journeys.',
+  },
+  {
+    name:  'Yamaganda',
+    hindi: 'यमगण्ड',
+    key:   'yamaganda',
+    icon:  ShieldAlert,
+    severity: 'Avoid crucial travels',
+    desc: 'Ruled by Yama. Avoid commencing major ventures or travel.',
+  },
+  {
+    name:  'Gulika Kalam',
+    hindi: 'गुलिक काल',
+    key:   'gulikaKalam',
+    icon:  Clock,
+    severity: 'Actions tend to repeat',
+    desc: "Ruled by Saturn's son Gulika. Deeds done here tend to repeat; avoid ominous activities.",
+  },
+  {
+    name:  'Dur Muhurat',
+    hindi: 'दुर्मुहूर्त',
+    key:   'durMuhurat',
+    icon:  AlertTriangle,
+    severity: 'Unfavorable window',
+    desc: 'Adverse astrological alignment. Avoid major religious rituals and new commencements.',
+  },
+  {
+    name:  'Varjyam',
+    hindi: 'वर्ज्यम्',
+    key:   'varjyam',
+    icon:  AlertCircle,
+    severity: 'Restricted period',
+    desc: 'Harmful period within the ruling Nakshatra. Routine tasks and prayers remain safe.',
+  },
+];
+
 export default function InauspiciousCard({ panchang }) {
-  if (!panchang || !panchang.inauspicious) return null;
-
-  const { inauspicious } = panchang;
-
-  const items = [
-    {
-      name: 'Rahu Kalam',
-      hindi: 'राहु काल',
-      time: inauspicious.rahuKalam,
-      icon: Ban,
-      severity: 'Avoid New Undertakings',
-      desc: 'Ruled by shadow planet Rahu. Avoid starting auspicious work, buying assets, or embarking on long journeys.'
-    },
-    {
-      name: 'Yamaganda',
-      hindi: 'यमगण्ड',
-      time: inauspicious.yamaganda,
-      icon: ShieldAlert,
-      severity: 'Avoid Crucial Travels',
-      desc: 'Ruled by Yama, the god of death and justice. Avoid commencing major new ventures or travel.'
-    },
-    {
-      name: 'Gulika Kalam',
-      hindi: 'गुलिक काल',
-      time: inauspicious.gulikaKalam,
-      icon: Clock,
-      severity: 'Repeats Actions',
-      desc: 'Ruled by Saturn\'s son Gulika. Deeds done in Gulika tend to repeat; avoid ominous or unwanted events.'
-    },
-    {
-      name: 'Dur Muhurat',
-      hindi: 'दुर्मुहूर्त',
-      time: inauspicious.durMuhurat,
-      icon: AlertTriangle,
-      severity: 'Unfavorable Window',
-      desc: 'Adverse astrological alignment. Avoid major religious rituals and commencement of ventures.'
-    },
-    {
-      name: 'Varjyam',
-      hindi: 'वर्ज्यम्',
-      time: inauspicious.varjyam,
-      icon: AlertCircle,
-      severity: 'Restricted Window',
-      desc: 'A harmful planetary period within the ruling Nakshatra. Routine tasks and prayers are safe.'
-    }
-  ];
+  if (!panchang?.inauspicious) return null;
 
   return (
-    <div className="vedic-card p-4 sm:p-7 border-t-4 border-t-rose-500 bg-gradient-to-br from-rose-500/5 via-white to-orange-500/5 dark:from-stone-900 dark:to-stone-900">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 sm:pb-5 border-b border-stone-200/80 dark:border-stone-800">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-rose-100 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400 flex items-center justify-center flex-shrink-0">
-            <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6" />
-          </div>
-          <div>
-            <h3 className="text-base sm:text-lg font-bold font-serif text-stone-900 dark:text-white">
-              Inauspicious Timings (अशुभ मुहूर्त / काल)
-            </h3>
-            <p className="text-[11px] sm:text-xs text-stone-500">
-              Windows to avoid starting important deals, purchases, or ceremonies
-            </p>
-          </div>
+    <div className="space-y-4">
+      {/* Header */}
+      <div className="flex items-center gap-3">
+        <div className="w-8 h-8 rounded-lg bg-stone-100 dark:bg-stone-800 text-rose-600 dark:text-rose-400 flex items-center justify-center flex-shrink-0">
+          <AlertTriangle className="w-4 h-4" aria-hidden="true" />
         </div>
-        <span className="text-[11px] sm:text-xs px-2.5 py-1 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 font-bold self-start sm:self-auto">
-          ⚠️ Caution Recommended
-        </span>
+        <div>
+          <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100 font-serif">
+            Inauspicious Timings
+            <span className="ml-1 text-stone-400 font-sans font-normal text-xs">अशुभ मुहूर्त</span>
+          </h3>
+          <p className="text-[10px] text-stone-400 dark:text-stone-500">
+            Avoid starting important deeds, purchases, or ceremonies in these windows.
+          </p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4 pt-4 sm:pt-6">
-        {items.map((it, idx) => {
-          const Icon = it.icon;
+      {/* Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+        {ITEMS.map((item) => {
+          const Icon = item.icon;
+          const time = panchang.inauspicious[item.key];
           return (
             <div
-              key={idx}
-              className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 space-y-2.5 sm:space-y-3 hover:border-rose-400 transition-colors shadow-sm"
+              key={item.key}
+              className="vedic-card accent-inauspicious p-4 space-y-3"
             >
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-bold text-stone-900 dark:text-white flex items-center gap-2">
-                  <Icon className="w-4 h-4 text-rose-600 dark:text-rose-400" />
-                  {it.name} <span className="text-xs text-stone-500 font-devanagari">({it.hindi})</span>
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 font-semibold">
-                  {it.severity}
-                </span>
+              {/* Name + time */}
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <Icon className="w-4 h-4 text-rose-600 dark:text-rose-400 flex-shrink-0" aria-hidden="true" />
+                  <div>
+                    <p className="text-sm font-semibold text-stone-900 dark:text-stone-100">{item.name}</p>
+                    <p className="text-[10px] font-devanagari text-stone-400 dark:text-stone-500">{item.hindi}</p>
+                  </div>
+                </div>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200/60 dark:border-rose-900/40 flex items-center justify-between">
-                <span className="text-xs font-semibold text-rose-800 dark:text-rose-300 uppercase">Timing</span>
-                <span className="text-base font-extrabold text-stone-900 dark:text-white">
-                  {it.time}
-                </span>
+              {/* Time */}
+              <div className="flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-stone-400 flex-shrink-0" aria-hidden="true" />
+                <span className="panchang-value text-sm">{time || '—'}</span>
               </div>
 
-              <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed">
-                {it.desc}
+              {/* Severity tag */}
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-rose-600 dark:text-rose-400">
+                {item.severity}
+              </p>
+
+              {/* Description */}
+              <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed border-t border-stone-100 dark:border-vedic-nightBorder pt-2">
+                {item.desc}
               </p>
             </div>
           );

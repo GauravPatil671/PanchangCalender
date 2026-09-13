@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Sparkles } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import { formatDateDisplay, formatDayOfWeek } from '../../utils/dateUtils';
 import { useLocationContext } from '../../context/LocationContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -10,111 +10,113 @@ export default function TodaySummaryHero({ panchang }) {
 
   if (!panchang) return null;
 
-  // Parse local date cleanly to prevent timezone shifts
+  const isHi = language === 'hi';
+
+  // Parse date safely without timezone shift
   const [pyear, pmon, pday] = (panchang.date || '').split('-').map(Number);
-  const dateObj = (pyear && pmon && pday) ? new Date(pyear, pmon - 1, pday) : new Date(panchang.date);
-  const dayName = formatDayOfWeek(dateObj);
+  const dateObj = (pyear && pmon && pday)
+    ? new Date(pyear, pmon - 1, pday)
+    : new Date(panchang.date);
+  const dayName       = formatDayOfWeek(dateObj);
   const dateFormatted = formatDateDisplay(dateObj);
 
-  // Localized or canonical names
-  const isHi = language === 'hi';
-  const sunriseTithiName = isHi 
-    ? (panchang.sunriseTithi?.hindi ? `${panchang.pakshaHindi || ''} ${panchang.sunriseTithi.hindi}` : panchang.tithi?.hindi || panchang.tithi?.name)
+  // Tithi names
+  const sunriseTithiName = isHi
+    ? (panchang.sunriseTithi?.hindi
+        ? `${panchang.pakshaHindi || ''} ${panchang.sunriseTithi.hindi}`
+        : panchang.tithi?.hindi || panchang.tithi?.name)
     : (panchang.sunriseTithi?.name || panchang.tithi?.name || 'Tithi');
-  
-  const currentTithiName = isHi 
-    ? (panchang.currentTithi?.hindi ? `${panchang.pakshaHindi || ''} ${panchang.currentTithi.hindi}` : panchang.tithi?.hindi || panchang.tithi?.name)
-    : (panchang.currentTithi?.name || panchang.tithi?.name || 'Tithi');
-  
-  const pakshaDisplay = isHi ? panchang.pakshaHindi : panchang.paksha;
-  const endTime = panchang.sunriseTithi?.endTimeFormatted || panchang.tithi?.endTimeFormatted;
 
+  const currentTithiName = isHi
+    ? (panchang.currentTithi?.hindi
+        ? `${panchang.pakshaHindi || ''} ${panchang.currentTithi.hindi}`
+        : panchang.tithi?.hindi || panchang.tithi?.name)
+    : (panchang.currentTithi?.name || panchang.tithi?.name || 'Tithi');
+
+  const pakshaDisplay = isHi ? panchang.pakshaHindi : panchang.paksha;
+  const endTime       = panchang.sunriseTithi?.endTimeFormatted || panchang.tithi?.endTimeFormatted;
+
+  // Plain-language status sentence
   let statusSentence = '';
   if (panchang.hasSunriseTithiEnded && currentTithiName !== sunriseTithiName) {
     statusSentence = t('hero.statusActive', {
       sunriseTithi: sunriseTithiName,
-      time: endTime || '',
-      currentTithi: currentTithiName
+      time:         endTime || '',
+      currentTithi: currentTithiName,
     });
   } else if (endTime) {
-    statusSentence = t('hero.statusUntil', {
-      tithi: sunriseTithiName,
-      time: endTime
-    });
+    statusSentence = t('hero.statusUntil', { tithi: sunriseTithiName, time: endTime });
   } else {
-    statusSentence = t('hero.statusSimple', {
-      tithi: sunriseTithiName,
-      paksha: pakshaDisplay
-    });
+    statusSentence = t('hero.statusSimple', { tithi: sunriseTithiName, paksha: pakshaDisplay });
   }
 
   return (
-    <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white via-amber-50/40 to-orange-50/30 dark:from-stone-900 dark:via-stone-900 dark:to-stone-950 border border-stone-200/90 dark:border-stone-800 shadow-sm transition-all p-5 sm:p-8">
-      
-      {/* Subtle Background Watermark */}
-      <div 
-        className="absolute top-2 right-4 text-7xl sm:text-8xl font-serif font-bold text-stone-900/[0.03] dark:text-white/[0.03] pointer-events-none select-none"
-        aria-hidden="true"
-      >
-        ॐ
-      </div>
+    <section
+      className="relative overflow-hidden rounded-xl bg-white dark:bg-vedic-nightCard border border-stone-200 dark:border-vedic-nightBorder shadow-card-sm vedic-watermark"
+      aria-label="Today's Panchang Summary"
+    >
+      <div className="relative px-5 py-6 sm:px-8 sm:py-8 space-y-5">
 
-      <div className="relative space-y-4">
-        
-        {/* Top Meta Badges & City */}
+        {/* ── Top meta row ── */}
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-vedic-saffron-600 text-white text-[11px] font-bold uppercase tracking-wider shadow-sm">
+
+          {/* Badges */}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="panchang-label text-vedic-saffron-700 dark:text-vedic-saffron-400">
               {t('hero.badge')}
             </span>
-            <span className="text-[11px] font-semibold text-amber-800 dark:text-amber-300 bg-amber-100/80 dark:bg-amber-950/80 px-2.5 py-0.5 rounded-full border border-amber-200/50 dark:border-amber-900/40">
-              {t('hero.samvatPrefix')} {panchang.samvat?.vikram}
-            </span>
+            {panchang.samvat?.vikram && (
+              <span className="panchang-label text-stone-400 dark:text-stone-600">
+                {t('hero.samvatPrefix')}&nbsp;{panchang.samvat.vikram}
+              </span>
+            )}
           </div>
 
-          {/* Single clean location indicator */}
+          {/* City selector */}
           <button
             onClick={() => setIsSelectorOpen(true)}
-            className="inline-flex items-center gap-1 text-xs text-stone-600 dark:text-stone-300 hover:text-vedic-saffron-600 dark:hover:text-vedic-saffron-400 font-medium transition-colors min-h-[36px]"
-            title={t('nav.changeCityTitle')}
+            className="inline-flex items-center gap-1 text-xs text-stone-500 dark:text-stone-400 hover:text-vedic-saffron-700 dark:hover:text-vedic-saffron-400 font-medium transition-colors min-h-[36px]"
             aria-label={`${t('nav.location')}: ${selectedLocation.city}. ${t('nav.change')}.`}
           >
-            <MapPin className="w-3.5 h-3.5 text-vedic-saffron-600 dark:text-vedic-saffron-400" aria-hidden="true" />
-            <span className="font-semibold underline decoration-dotted underline-offset-2">{selectedLocation.city}</span>
+            <MapPin className="w-3 h-3 flex-shrink-0" aria-hidden="true" />
+            <span>{selectedLocation.city}</span>
           </button>
         </div>
 
-        {/* Date & Day Headline (Single H1) */}
+        {/* ── Date headline ── */}
         <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-serif text-stone-900 dark:text-white tracking-tight">
+          <h1 className="font-serif font-bold text-3xl sm:text-4xl text-stone-900 dark:text-stone-50 tracking-tight leading-none">
             {dateFormatted}
           </h1>
-          <p className="text-sm sm:text-base text-stone-600 dark:text-stone-300 flex flex-wrap items-center gap-1.5 font-medium">
-            <span className="font-bold text-vedic-saffron-700 dark:text-vedic-saffron-400">{dayName}</span>
-            <span className="text-stone-300 dark:text-stone-700" aria-hidden="true">•</span>
+          <p className="text-sm text-stone-500 dark:text-stone-400 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+            <span className="font-semibold text-stone-700 dark:text-stone-300">{dayName}</span>
+            <span aria-hidden="true" className="text-stone-300 dark:text-stone-700">·</span>
             <span>{panchang.month?.purnimanta} {t('hero.maas')}</span>
-            <span className="text-stone-300 dark:text-stone-700" aria-hidden="true">•</span>
-            <span className="text-amber-700 dark:text-amber-400">{pakshaDisplay}</span>
+            <span aria-hidden="true" className="text-stone-300 dark:text-stone-700">·</span>
+            <span className="text-vedic-gold-700 dark:text-vedic-gold-400">{pakshaDisplay}</span>
             {panchang.samvat?.ritu && (
               <>
-                <span className="text-stone-300 dark:text-stone-700 hidden xs:inline" aria-hidden="true">•</span>
-                <span className="text-stone-500 dark:text-stone-400 hidden xs:inline text-xs">{panchang.samvat.ritu} {t('hero.ritu')}</span>
+                <span aria-hidden="true" className="text-stone-300 dark:text-stone-700 hidden xs:inline">·</span>
+                <span className="hidden xs:inline text-stone-400 dark:text-stone-500">
+                  {panchang.samvat.ritu} {t('hero.ritu')}
+                </span>
               </>
             )}
           </p>
         </div>
 
-        {/* Plain-Language Daily Status Banner */}
-        <div className="p-3.5 sm:p-4 rounded-2xl bg-amber-500/10 dark:bg-amber-500/5 border border-amber-200/80 dark:border-amber-900/40 text-stone-800 dark:text-stone-200 text-sm sm:text-base font-medium flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-400 flex items-center justify-center flex-shrink-0">
-            <Sparkles className="w-4 h-4" aria-hidden="true" />
-          </div>
-          <p className="leading-snug">
+        {/* ── Status line ── */}
+        <div
+          className="flex items-start gap-3 pl-4 border-l-4 border-l-vedic-gold-500 dark:border-l-vedic-gold-600"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <p className="text-sm sm:text-base text-stone-700 dark:text-stone-300 leading-snug font-medium">
             {statusSentence}
           </p>
         </div>
 
       </div>
-    </div>
+    </section>
   );
 }

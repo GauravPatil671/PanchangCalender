@@ -2,126 +2,215 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   CSS Custom Properties — Design Tokens
+   ============================================================ */
 @layer base {
   :root {
-    --color-primary: 245 98 33;
-    --color-gold: 212 162 17;
+    --color-primary:  214 68 20;   /* saffron-700 */
+    --color-gold:     183 128 12;  /* gold-600 */
+    --color-surface:  250 247 242; /* vedic-cream */
+    --color-card:     255 255 255;
+    --color-border:   228 220 210;
+    --color-text:     28 25 23;
+    --color-muted:    120 113 108; /* stone-500 */
+    --radius-card:    16px;
+    --transition-ui:  150ms cubic-bezier(0.4, 0, 0.2, 1);
   }
-}
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.04);
-}
-.dark ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.04);
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(245, 98, 33, 0.3);
-  border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(245, 98, 33, 0.6);
-}
+  .dark {
+    --color-surface:  12 10 9;
+    --color-card:     24 21 18;
+    --color-border:   44 38 32;
+    --color-text:     245 240 232;
+    --color-muted:    168 162 158;
+  }
 
-/* Glassmorphism & Card styling */
-.vedic-card {
-  @apply bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl shadow-soft-warm transition-all duration-200;
-}
+  /* Base typography */
+  body {
+    @apply font-sans antialiased;
+    font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  }
 
-.vedic-card-hover {
-  @apply vedic-card hover:shadow-lg hover:border-vedic-saffron-400 dark:hover:border-vedic-saffron-600 hover:-translate-y-0.5;
-}
-
-.vedic-badge {
-  @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wide;
-}
-
-.vedic-pill-button {
-  @apply inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all;
-}
-
-.vedic-gradient-text {
-  @apply bg-gradient-to-r from-vedic-saffron-600 via-amber-600 to-vedic-gold-600 dark:from-vedic-saffron-400 dark:via-amber-400 dark:to-vedic-gold-400 bg-clip-text text-transparent;
-}
-
-.vedic-gradient-bg {
-  @apply bg-gradient-to-br from-vedic-saffron-500 via-amber-500 to-vedic-gold-500 text-white;
-}
-
-/* Clear section header label styling */
-.vedic-section-title {
-  @apply text-xl sm:text-2xl font-bold font-serif text-stone-900 dark:text-white tracking-tight flex items-center gap-2;
-}
-
-/* Hide scrollbar for Chrome, Safari, Opera, Edge, Firefox on touch bars */
-.scrollbar-none {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
+  /* Consistent focus ring — saffron for brand */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-vedic-saffron-500 ring-offset-2 ring-offset-vedic-cream dark:ring-offset-stone-950;
+  }
 }
 
 /* ============================================================
-   Custom Animation Utilities
-   (used by Navbar dropdown, modals, 404 page, sun icon)
+   Component Utilities
    ============================================================ */
+@layer components {
 
-/* Slow spin for decorative elements (compass on 404, sun icon) */
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-.animate-spin-slow {
-  animation: spin-slow 8s linear infinite;
-}
+  /* Primary card — flat warm surface, no glow */
+  .vedic-card {
+    @apply bg-white dark:bg-vedic-nightCard
+           border border-stone-200 dark:border-vedic-nightBorder
+           rounded-xl shadow-card-sm
+           transition-all duration-150;
+  }
 
-/* Animate-in: lightweight entry animations for dropdowns & modals */
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes zoom-in-95 {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-@keyframes slide-in-from-top-2 {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+  .vedic-card-hover {
+    @apply vedic-card hover:shadow-card-md hover:border-stone-300 dark:hover:border-stone-700;
+  }
 
-.animate-in {
-  animation-fill-mode: both;
-  animation-duration: 200ms;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-}
-.fade-in {
-  animation-name: fade-in;
-}
-.zoom-in-95 {
-  animation-name: zoom-in-95;
-}
-.slide-in-from-top-2 {
-  animation-name: slide-in-from-top-2;
-}
-.duration-200 {
-  animation-duration: 200ms;
-}
+  /* Badge / pill */
+  .vedic-badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5
+           rounded-full text-[11px] font-semibold tracking-wide;
+  }
 
-/* Reduced motion preference support for accessibility */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  ::before,
-  ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  /* Semantic status dot */
+  .status-dot-active {
+    @apply w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block flex-shrink-0;
+  }
+  .status-dot-upcoming {
+    @apply w-1.5 h-1.5 rounded-full bg-amber-500 inline-block flex-shrink-0;
+  }
+  .status-dot-caution {
+    @apply w-1.5 h-1.5 rounded-full bg-rose-600 inline-block flex-shrink-0;
+  }
+
+  /* Panchang label — small uppercase caption */
+  .panchang-label {
+    @apply text-[10px] font-bold uppercase tracking-widest
+           text-stone-500 dark:text-stone-400;
+  }
+
+  /* Panchang primary value — serif bold */
+  .panchang-value {
+    @apply font-serif font-bold text-stone-900 dark:text-stone-50 leading-tight;
+  }
+
+  /* Left-border accent for semantic cards */
+  .accent-auspicious {
+    @apply border-l-4 border-l-emerald-600 dark:border-l-emerald-500;
+  }
+  .accent-inauspicious {
+    @apply border-l-4 border-l-rose-700 dark:border-l-rose-500;
+  }
+  .accent-gold {
+    @apply border-l-4 border-l-vedic-gold-600 dark:border-l-vedic-gold-500;
+  }
+
+  /* Section divider label */
+  .section-divider-label {
+    @apply text-[10px] font-bold uppercase tracking-widest text-stone-400 dark:text-stone-500
+           flex items-center gap-3
+           before:flex-1 before:h-px before:bg-stone-200 dark:before:bg-stone-800
+           after:flex-1 after:h-px after:bg-stone-200 dark:after:bg-stone-800;
+  }
+
+  /* Button variants */
+  .btn-ghost {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+           text-xs font-medium text-stone-600 dark:text-stone-300
+           hover:bg-stone-100 dark:hover:bg-stone-800
+           hover:text-stone-900 dark:hover:text-stone-100
+           transition-colors duration-150;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-1.5 px-4 py-2 rounded-lg
+           text-xs font-semibold
+           bg-vedic-saffron-600 hover:bg-vedic-saffron-700
+           text-white shadow-card-sm
+           transition-colors duration-150;
+  }
+
+  /* Gradient text — kept for logo only */
+  .vedic-gradient-text {
+    @apply bg-gradient-to-r from-vedic-gold-600 to-vedic-saffron-600
+           dark:from-vedic-gold-400 dark:to-vedic-saffron-400
+           bg-clip-text text-transparent;
+  }
+
+  /* Legacy compat */
+  .vedic-gradient-bg {
+    @apply bg-vedic-saffron-600 text-white;
+  }
+  .vedic-pill-button {
+    @apply inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all;
+  }
+  .vedic-section-title {
+    @apply text-xl sm:text-2xl font-bold font-serif text-stone-900 dark:text-white tracking-tight;
   }
 }
 
+/* ============================================================
+   Scrollbar
+   ============================================================ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(183, 128, 12, 0.20); /* gold-600 at 20% */
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(183, 128, 12, 0.45);
+}
+.dark ::-webkit-scrollbar-thumb { background: rgba(183, 128, 12, 0.15); }
+
+/* Hide scrollbar utility */
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
+/* ============================================================
+   Vedic watermark — pure CSS, no images
+   Used as a background repeat on hero/page sections
+   ============================================================ */
+.vedic-watermark {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Ctext x='40' y='55' font-family='serif' font-size='40' text-anchor='middle' fill='%231c1917' fill-opacity='0.018'%3Eॐ%3C/text%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 80px 80px;
+}
+.dark .vedic-watermark {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Ctext x='40' y='55' font-family='serif' font-size='40' text-anchor='middle' fill='%23f5f0e8' fill-opacity='0.025'%3Eॐ%3C/text%3E%3C/svg%3E");
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.animate-spin-slow { animation: spin-slow 12s linear infinite; }
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes zoom-in-95 {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes slide-in-from-top-2 {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-in-from-bottom-2 {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in { animation-fill-mode: both; }
+.fade-in             { animation-name: fade-in; }
+.zoom-in-95          { animation-name: zoom-in-95; }
+.slide-in-from-top-2 { animation-name: slide-in-from-top-2; }
+.slide-in-from-bottom-2 { animation-name: slide-in-from-bottom-2; }
+.duration-150 { animation-duration: 150ms; animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
+.duration-200 { animation-duration: 200ms; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration:       0.01ms !important;
+    animation-iteration-count: 1     !important;
+    transition-duration:      0.01ms !important;
+    scroll-behavior:          auto   !important;
+  }
+}

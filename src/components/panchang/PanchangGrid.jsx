@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { Sparkles, Moon, Sun, Shield, Award, Compass, Heart, Info, ChevronDown, ChevronUp, CheckCircle2 } from 'lucide-react';
+import {
+  Moon, Sun, Shield, Award, Compass, Heart,
+  ChevronDown, ChevronUp, CheckCircle2, Sparkles,
+} from 'lucide-react';
 
 export default function PanchangGrid({ panchang }) {
   const [showGuide, setShowGuide] = useState(false);
@@ -7,320 +10,273 @@ export default function PanchangGrid({ panchang }) {
   if (!panchang) return null;
 
   return (
-    <div className="space-y-6">
-      
-      {/* Quick Explainer Bar for Beginners */}
-      <div className="bg-amber-500/10 dark:bg-stone-800/80 border border-amber-300/60 dark:border-amber-900/50 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center flex-shrink-0 shadow-sm">
-            <Info className="w-5 h-5" />
-          </div>
-          <div>
-            <h4 className="text-sm font-bold text-stone-900 dark:text-white">
-              Understanding the 5 Limbs (पंच-अंग)
-            </h4>
-            <p className="text-xs text-stone-600 dark:text-stone-300">
-              In Vedic astrology, every day is governed by 5 celestial coordinates that harmonize solar and lunar energy.
-            </p>
-          </div>
-        </div>
+    <div className="space-y-5">
 
+      {/* Collapsible beginner guide — inline link, not a banner */}
+      <div>
         <button
           onClick={() => setShowGuide(!showGuide)}
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white dark:bg-stone-700 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-600 text-xs font-semibold hover:border-amber-400 self-start sm:self-auto transition-colors"
+          className="inline-flex items-center gap-1 text-xs text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 underline underline-offset-2 transition-colors min-h-[32px]"
+          aria-expanded={showGuide}
         >
-          <span>{showGuide ? 'Hide Guide' : 'Read Quick Guide'}</span>
-          {showGuide ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+          {showGuide
+            ? <><ChevronUp className="w-3.5 h-3.5" aria-hidden="true" /> Hide guide</>
+            : <><ChevronDown className="w-3.5 h-3.5" aria-hidden="true" /> What are the Five Limbs?</>
+          }
         </button>
+
+        {showGuide && (
+          <div className="mt-3 p-4 rounded-xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200 dark:border-vedic-nightBorder space-y-3 animate-in fade-in duration-150">
+            <p className="text-xs font-semibold text-stone-700 dark:text-stone-300">
+              In Vedic tradition, every day is governed by five celestial coordinates (पञ्च-अंग) that align human activity with cosmic rhythms.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2">
+              {[
+                { n: '1', label: 'Tithi (तिथि)',     color: 'text-amber-700 dark:text-amber-400',            desc: 'Lunar phase day. Governs mental state and spiritual energy.' },
+                { n: '2', label: 'Vara (वार)',        color: 'text-orange-700 dark:text-orange-400',          desc: 'Solar weekday. Governs physical vitality and longevity.' },
+                { n: '3', label: 'Nakshatra (नक्षत्र)', color: 'text-vedic-saffron-700 dark:text-vedic-saffron-400', desc: 'Lunar constellation. Governs karmic tendencies.' },
+                { n: '4', label: 'Yoga (योग)',        color: 'text-vedic-gold-700 dark:text-vedic-gold-400', desc: 'Sun-Moon angular sum. Governs health and harmony.' },
+                { n: '5', label: 'Karana (करण)',      color: 'text-emerald-700 dark:text-emerald-400',       desc: 'Half-Tithi. Governs worldly success in commerce.' },
+              ].map((item) => (
+                <div key={item.n} className="p-2.5 rounded-lg bg-white dark:bg-stone-900 border border-stone-200 dark:border-vedic-nightBorder space-y-1">
+                  <p className={`text-[11px] font-bold ${item.color}`}>{item.n}. {item.label}</p>
+                  <p className="text-[10px] text-stone-500 dark:text-stone-400 leading-snug">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Expandable Beginner Guide */}
-      {showGuide && (
-        <div className="p-5 rounded-2xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 space-y-4 animate-in fade-in duration-200 text-xs text-stone-700 dark:text-stone-300">
-          <h5 className="font-bold text-stone-900 dark:text-white text-sm font-serif">
-            Why are these 5 coordinates calculated daily?
-          </h5>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-            <div className="p-3 bg-stone-50 dark:bg-stone-900/60 rounded-xl border border-stone-200 dark:border-stone-800 space-y-1">
-              <span className="font-bold text-amber-700 dark:text-amber-400">1. Tithi (तिथि)</span>
-              <p className="text-[11px] text-stone-600 dark:text-stone-400">Lunar phase day. Governs mental state, spiritual energy, and auspiciousness for fasts.</p>
-            </div>
-            <div className="p-3 bg-stone-50 dark:bg-stone-900/60 rounded-xl border border-stone-200 dark:border-stone-800 space-y-1">
-              <span className="font-bold text-orange-700 dark:text-orange-400">2. Vara (वार)</span>
-              <p className="text-[11px] text-stone-600 dark:text-stone-400">Solar weekday. Governs physical vitality, longevity (Ayushya), and bodily vigor.</p>
-            </div>
-            <div className="p-3 bg-stone-50 dark:bg-stone-900/60 rounded-xl border border-stone-200 dark:border-stone-800 space-y-1">
-              <span className="font-bold text-vedic-saffron-700 dark:text-vedic-saffron-400">3. Nakshatra (नक्षत्र)</span>
-              <p className="text-[11px] text-stone-600 dark:text-stone-400">Lunar constellation. Governs karmic tendencies, temperament, and auspicious actions.</p>
-            </div>
-            <div className="p-3 bg-stone-50 dark:bg-stone-900/60 rounded-xl border border-stone-200 dark:border-stone-800 space-y-1">
-              <span className="font-bold text-vedic-gold-700 dark:text-vedic-gold-400">4. Yoga (योग)</span>
-              <p className="text-[11px] text-stone-600 dark:text-stone-400">Sun-Moon angular sum. Governs overall health, harmony, and relationship balance.</p>
-            </div>
-            <div className="p-3 bg-stone-50 dark:bg-stone-900/60 rounded-xl border border-stone-200 dark:border-stone-800 space-y-1">
-              <span className="font-bold text-emerald-700 dark:text-emerald-400">5. Karana (करण)</span>
-              <p className="text-[11px] text-stone-600 dark:text-stone-400">Half-Tithi division. Governs worldly success in contracts, journeys, and commerce.</p>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* ── 6 Detail Cards ── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-      {/* Main 5 Limbs Detailed Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-        
-        {/* 1. Tithi Detail Card */}
-        <div className="vedic-card p-4 sm:p-6 space-y-3 sm:space-y-4 relative overflow-hidden border-t-4 border-t-amber-500 flex flex-col justify-between">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300">
-                  <Moon className="w-5 h-5" aria-hidden="true" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-stone-900 dark:text-white font-serif">
-                    1. Tithi (सूर्योदयकालीन तिथि)
-                  </h3>
-                  <span className="text-xs text-stone-500">Udayatithi (Sunrise Phase)</span>
-                </div>
-              </div>
-              <span className="vedic-badge bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300">
-                {panchang.paksha}
-              </span>
-            </div>
-
-            <div className="space-y-3 pt-2 border-t border-stone-100 dark:border-stone-800">
-              <div>
-                <div className="text-2xl font-bold font-serif text-stone-900 dark:text-white">
-                  {panchang.tithi.name}
-                </div>
-                <div className="text-sm font-devanagari text-amber-700 dark:text-amber-400 font-semibold">
-                  {panchang.tithi.hindi}
-                </div>
-              </div>
-
-              <div className="space-y-1.5 text-xs text-stone-600 dark:text-stone-300 bg-stone-50 dark:bg-stone-800/50 p-3 rounded-xl">
-                <div className="flex justify-between">
-                  <span className="text-stone-500">Sunrise Tithi Ends:</span>
-                  <strong className="text-stone-900 dark:text-white">{panchang.tithi.endTime}</strong>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-stone-500">Presiding Deity:</span>
-                  <strong className="text-stone-900 dark:text-white">{panchang.tithi.deity}</strong>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-stone-500">Tithi Nature:</span>
-                  <strong className="text-stone-900 dark:text-white">{panchang.tithi.nature}</strong>
-                </div>
-              </div>
-
-              {panchang.hasSunriseTithiEnded && panchang.currentTithi && !panchang.currentTithi.isSameAsSunrise && (
-                <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-[11px] text-amber-950 dark:text-amber-200">
-                  <div className="font-semibold text-amber-800 dark:text-amber-300 flex items-center justify-between">
-                    <span>Current Tithi: {panchang.currentTithi.fullTithiName}</span>
-                    <span>Ends: {panchang.currentTithi.endsAt}</span>
-                  </div>
-                  <p className="text-[10px] text-stone-500 dark:text-stone-400 mt-0.5">
-                    Transition occurred after sunrise; current real-time phase active now.
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* 2. Nakshatra Detail Card */}
-        <div className="vedic-card p-4 sm:p-6 space-y-3 sm:space-y-4 relative overflow-hidden border-t-4 border-t-vedic-saffron-500">
+        {/* 1. Tithi */}
+        <div className="vedic-card p-4 sm:p-5 space-y-3 flex flex-col">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-vedic-saffron-100 dark:bg-vedic-saffron-950/60 text-vedic-saffron-700 dark:text-vedic-saffron-300">
-                <Sparkles className="w-5 h-5" />
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-stone-100 dark:bg-stone-800 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0">
+                <Moon className="w-4 h-4" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-stone-900 dark:text-white font-serif">
-                  2. Nakshatra (नक्षत्र)
+                <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100 font-serif">
+                  1. Tithi
+                  <span className="ml-1 text-stone-400 dark:text-stone-600 font-sans font-normal text-xs">तिथि</span>
                 </h3>
-                <span className="text-xs text-stone-500">Lunar Mansion (13°20')</span>
+                <span className="text-[10px] text-stone-400 dark:text-stone-500">Lunar Day</span>
               </div>
             </div>
-            <span className="vedic-badge bg-vedic-saffron-100 dark:bg-vedic-saffron-950 text-vedic-saffron-800 dark:text-vedic-saffron-300">
+            <span className="vedic-badge bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 text-[10px]">
+              {panchang.paksha}
+            </span>
+          </div>
+
+          <div className="flex-1 space-y-3 pt-2 border-t border-stone-100 dark:border-vedic-nightBorder">
+            <div>
+              <p className="panchang-value text-xl">{panchang.tithi.name}</p>
+              <p className="text-sm font-devanagari text-vedic-gold-700 dark:text-vedic-gold-400 font-semibold">{panchang.tithi.hindi}</p>
+            </div>
+            <dl className="space-y-1.5 text-xs">
+              <div className="flex justify-between">
+                <dt className="text-stone-400 dark:text-stone-500">Ends at</dt>
+                <dd className="font-semibold text-stone-800 dark:text-stone-200">{panchang.tithi.endTime}</dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="text-stone-400 dark:text-stone-500">Deity</dt>
+                <dd className="font-semibold text-stone-800 dark:text-stone-200">{panchang.tithi.deity}</dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="text-stone-400 dark:text-stone-500">Nature</dt>
+                <dd className="font-semibold text-stone-800 dark:text-stone-200">{panchang.tithi.nature}</dd>
+              </div>
+            </dl>
+            {panchang.hasSunriseTithiEnded && panchang.currentTithi && !panchang.currentTithi.isSameAsSunrise && (
+              <div className="p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-900/40 text-[11px]">
+                <div className="flex items-center justify-between font-semibold text-amber-800 dark:text-amber-300">
+                  <span>Current: {panchang.currentTithi.fullTithiName}</span>
+                  <span>Ends {panchang.currentTithi.endsAt}</span>
+                </div>
+                <p className="text-[10px] text-stone-500 dark:text-stone-400 mt-0.5">
+                  Tithi changed after sunrise.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* 2. Nakshatra */}
+        <div className="vedic-card p-4 sm:p-5 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-stone-100 dark:bg-stone-800 text-vedic-saffron-600 dark:text-vedic-saffron-400 flex items-center justify-center flex-shrink-0">
+                <Sparkles className="w-4 h-4" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100 font-serif">
+                  2. Nakshatra
+                  <span className="ml-1 text-stone-400 dark:text-stone-600 font-sans font-normal text-xs">नक्षत्र</span>
+                </h3>
+                <span className="text-[10px] text-stone-400 dark:text-stone-500">Lunar Mansion (13°20')</span>
+              </div>
+            </div>
+            <span className="vedic-badge bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 text-[10px]">
               Lord: {panchang.nakshatra.lord}
             </span>
           </div>
-
-          <div className="space-y-3 pt-2 border-t border-stone-100 dark:border-stone-800">
+          <div className="space-y-3 pt-2 border-t border-stone-100 dark:border-vedic-nightBorder">
             <div>
-              <div className="text-2xl font-bold font-serif text-stone-900 dark:text-white">
-                {panchang.nakshatra.name}
-              </div>
-              <div className="text-sm font-devanagari text-vedic-saffron-700 dark:text-vedic-saffron-400 font-semibold">
-                {panchang.nakshatra.hindi}
-              </div>
+              <p className="panchang-value text-xl">{panchang.nakshatra.name}</p>
+              <p className="text-sm font-devanagari text-vedic-saffron-700 dark:text-vedic-saffron-400 font-semibold">{panchang.nakshatra.hindi}</p>
             </div>
-
-            <div className="space-y-1.5 text-xs text-stone-600 dark:text-stone-300 bg-stone-50 dark:bg-stone-800/50 p-3 rounded-xl">
+            <dl className="space-y-1.5 text-xs">
               <div className="flex justify-between">
-                <span className="text-stone-500">Ending Time:</span>
-                <strong className="text-stone-900 dark:text-white">{panchang.nakshatra.endTime}</strong>
+                <dt className="text-stone-400 dark:text-stone-500">Ends at</dt>
+                <dd className="font-semibold text-stone-800 dark:text-stone-200">{panchang.nakshatra.endTime}</dd>
               </div>
               <div className="flex justify-between">
-                <span className="text-stone-500">Ruling Deity:</span>
-                <strong className="text-stone-900 dark:text-white">{panchang.nakshatra.deity}</strong>
+                <dt className="text-stone-400 dark:text-stone-500">Deity</dt>
+                <dd className="font-semibold text-stone-800 dark:text-stone-200">{panchang.nakshatra.deity}</dd>
               </div>
               <div className="flex justify-between">
-                <span className="text-stone-500">Zodiac Sign:</span>
-                <strong className="text-stone-900 dark:text-white">{panchang.nakshatra.sign} ({panchang.moonSign})</strong>
+                <dt className="text-stone-400 dark:text-stone-500">Zodiac</dt>
+                <dd className="font-semibold text-stone-800 dark:text-stone-200">{panchang.nakshatra.sign} ({panchang.moonSign})</dd>
               </div>
-            </div>
+            </dl>
           </div>
         </div>
 
-        {/* 3. Yoga Detail Card */}
-        <div className="vedic-card p-4 sm:p-6 space-y-3 sm:space-y-4 relative overflow-hidden border-t-4 border-t-vedic-gold-500">
+        {/* 3. Yoga */}
+        <div className="vedic-card p-4 sm:p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-vedic-gold-100 dark:bg-vedic-gold-950/60 text-vedic-gold-700 dark:text-vedic-gold-300">
-                <Compass className="w-5 h-5" />
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-stone-100 dark:bg-stone-800 text-vedic-gold-600 dark:text-vedic-gold-400 flex items-center justify-center flex-shrink-0">
+                <Compass className="w-4 h-4" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-stone-900 dark:text-white font-serif">
-                  3. Yoga (योग)
+                <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100 font-serif">
+                  3. Yoga
+                  <span className="ml-1 text-stone-400 dark:text-stone-600 font-sans font-normal text-xs">योग</span>
                 </h3>
-                <span className="text-xs text-stone-500">Solilunar Sum Angle</span>
+                <span className="text-[10px] text-stone-400 dark:text-stone-500">Solilunar Sum Angle</span>
               </div>
             </div>
-            <span className="vedic-badge bg-vedic-gold-100 dark:bg-vedic-gold-950 text-vedic-gold-800 dark:text-vedic-gold-300">
-              Auspicious
+            <span className="vedic-badge bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 text-[10px]">
+              1 of 27
             </span>
           </div>
-
-          <div className="space-y-3 pt-2 border-t border-stone-100 dark:border-stone-800">
+          <div className="space-y-3 pt-2 border-t border-stone-100 dark:border-vedic-nightBorder">
             <div>
-              <div className="text-2xl font-bold font-serif text-stone-900 dark:text-white">
-                {panchang.yoga.name}
-              </div>
-              <div className="text-xs text-stone-500">
-                One of 27 Sacred Astrological Yogas
-              </div>
+              <p className="panchang-value text-xl">{panchang.yoga.name}</p>
+              <p className="text-xs text-stone-400 dark:text-stone-500">Astrological Yoga</p>
             </div>
-
-            <div className="space-y-1.5 text-xs text-stone-600 dark:text-stone-300 bg-stone-50 dark:bg-stone-800/50 p-3 rounded-xl">
+            <dl className="space-y-1.5 text-xs">
               <div className="flex justify-between">
-                <span className="text-stone-500">Vedic Influence:</span>
-                <strong className="text-stone-900 dark:text-white">Harmonious & Peaceful</strong>
+                <dt className="text-stone-400 dark:text-stone-500">Influence</dt>
+                <dd className="font-semibold text-stone-800 dark:text-stone-200">Harmonious & Peaceful</dd>
               </div>
               <div className="flex justify-between">
-                <span className="text-stone-500">Significance:</span>
-                <span className="text-stone-800 dark:text-stone-200">Fosters health, spiritual focus & calm</span>
+                <dt className="text-stone-400 dark:text-stone-500">Significance</dt>
+                <dd className="font-semibold text-stone-800 dark:text-stone-200">Health & spiritual focus</dd>
               </div>
-            </div>
+            </dl>
           </div>
         </div>
 
-        {/* 4. Karana Detail Card */}
-        <div className="vedic-card p-4 sm:p-6 space-y-3 sm:space-y-4 relative overflow-hidden border-t-4 border-t-emerald-500">
+        {/* 4. Karana */}
+        <div className="vedic-card p-4 sm:p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300">
-                <Shield className="w-5 h-5" />
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-stone-100 dark:bg-stone-800 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">
+                <Shield className="w-4 h-4" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-stone-900 dark:text-white font-serif">
-                  4. Karana (करण)
+                <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100 font-serif">
+                  4. Karana
+                  <span className="ml-1 text-stone-400 dark:text-stone-600 font-sans font-normal text-xs">करण</span>
                 </h3>
-                <span className="text-xs text-stone-500">Half-Tithi Duration</span>
+                <span className="text-[10px] text-stone-400 dark:text-stone-500">Half-Tithi Duration</span>
               </div>
             </div>
-            <span className="vedic-badge bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">
-              Action Success
+            <span className="vedic-badge bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 text-[10px]">
+              Action
             </span>
           </div>
-
-          <div className="space-y-3 pt-2 border-t border-stone-100 dark:border-stone-800">
+          <div className="space-y-3 pt-2 border-t border-stone-100 dark:border-vedic-nightBorder">
             <div>
-              <div className="text-2xl font-bold font-serif text-stone-900 dark:text-white">
-                {panchang.karana.name}
-              </div>
-              <div className="text-xs text-stone-500">
-                Movable (Chara) Karana
-              </div>
+              <p className="panchang-value text-xl">{panchang.karana.name}</p>
+              <p className="text-xs text-stone-400 dark:text-stone-500">Movable (Chara) Karana</p>
             </div>
-
-            <div className="space-y-1.5 text-xs text-stone-600 dark:text-stone-300 bg-stone-50 dark:bg-stone-800/50 p-3 rounded-xl">
+            <dl className="space-y-1.5 text-xs">
               <div className="flex justify-between">
-                <span className="text-stone-500">Classification:</span>
-                <strong className="text-stone-900 dark:text-white">Chara (Dynamic)</strong>
+                <dt className="text-stone-400 dark:text-stone-500">Type</dt>
+                <dd className="font-semibold text-stone-800 dark:text-stone-200">Chara (Dynamic)</dd>
               </div>
               <div className="flex justify-between">
-                <span className="text-stone-500">Recommended For:</span>
-                <span className="text-stone-800 dark:text-stone-200">Travel, learning, commercial trade</span>
+                <dt className="text-stone-400 dark:text-stone-500">Good for</dt>
+                <dd className="font-semibold text-stone-800 dark:text-stone-200">Travel, learning, trade</dd>
               </div>
-            </div>
+            </dl>
           </div>
         </div>
 
-        {/* 5. Vara & Samvat Card */}
-        <div className="vedic-card p-4 sm:p-6 space-y-3 sm:space-y-4 relative overflow-hidden border-t-4 border-t-indigo-500">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300">
-                <Award className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-stone-900 dark:text-white font-serif">
-                  5. Vara & Samvat (संवत)
-                </h3>
-                <span className="text-xs text-stone-500">Solar Day & Historical Era</span>
-              </div>
+        {/* 5. Vara & Samvat */}
+        <div className="vedic-card p-4 sm:p-5 space-y-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-stone-100 dark:bg-stone-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">
+              <Award className="w-4 h-4" aria-hidden="true" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100 font-serif">
+                5. Vara & Samvat
+                <span className="ml-1 text-stone-400 dark:text-stone-600 font-sans font-normal text-xs">वार · संवत</span>
+              </h3>
+              <span className="text-[10px] text-stone-400 dark:text-stone-500">Solar Day & Era</span>
             </div>
           </div>
-
-          <div className="space-y-3 pt-2 border-t border-stone-100 dark:border-stone-800">
-            <div className="space-y-1.5 text-xs text-stone-600 dark:text-stone-300 bg-stone-50 dark:bg-stone-800/50 p-3 rounded-xl">
-              <div className="flex justify-between py-1 border-b border-stone-200/60 dark:border-stone-700/60">
-                <span className="text-stone-500">Vikram Samvat:</span>
-                <strong className="text-stone-900 dark:text-white">{panchang.samvat.vikram}</strong>
-              </div>
-              <div className="flex justify-between py-1 border-b border-stone-200/60 dark:border-stone-700/60">
-                <span className="text-stone-500">Shaka Samvat:</span>
-                <strong className="text-stone-900 dark:text-white">{panchang.samvat.shaka}</strong>
-              </div>
-              <div className="flex justify-between py-1">
-                <span className="text-stone-500">Ayanam & Season:</span>
-                <strong className="text-stone-900 dark:text-white">{panchang.samvat.ayanam} • {panchang.samvat.ritu}</strong>
-              </div>
+          <dl className="space-y-1.5 text-xs pt-2 border-t border-stone-100 dark:border-vedic-nightBorder">
+            <div className="flex justify-between py-1 border-b border-stone-100 dark:border-vedic-nightBorder">
+              <dt className="text-stone-400 dark:text-stone-500">Vikram Samvat</dt>
+              <dd className="font-semibold text-stone-800 dark:text-stone-200">{panchang.samvat.vikram}</dd>
             </div>
-          </div>
+            <div className="flex justify-between py-1 border-b border-stone-100 dark:border-vedic-nightBorder">
+              <dt className="text-stone-400 dark:text-stone-500">Shaka Samvat</dt>
+              <dd className="font-semibold text-stone-800 dark:text-stone-200">{panchang.samvat.shaka}</dd>
+            </div>
+            <div className="flex justify-between py-1">
+              <dt className="text-stone-400 dark:text-stone-500">Ayanam · Season</dt>
+              <dd className="font-semibold text-stone-800 dark:text-stone-200">{panchang.samvat.ayanam} · {panchang.samvat.ritu}</dd>
+            </div>
+          </dl>
         </div>
 
-        {/* 6. Vrat & Observances Today */}
-        <div className="vedic-card p-4 sm:p-6 space-y-3 sm:space-y-4 relative overflow-hidden border-t-4 border-t-rose-500">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300">
-                <Heart className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-stone-900 dark:text-white font-serif">
-                  Vrat & Observance (व्रत)
-                </h3>
-                <span className="text-xs text-stone-500">Daily Fasting Schedule</span>
-              </div>
+        {/* 6. Vrat & Observances */}
+        <div className="vedic-card p-4 sm:p-5 space-y-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-stone-100 dark:bg-stone-800 text-rose-600 dark:text-rose-400 flex items-center justify-center flex-shrink-0">
+              <Heart className="w-4 h-4" aria-hidden="true" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100 font-serif">
+                Vrat & Observance
+                <span className="ml-1 text-stone-400 dark:text-stone-600 font-sans font-normal text-xs">व्रत</span>
+              </h3>
+              <span className="text-[10px] text-stone-400 dark:text-stone-500">Fasting Schedule</span>
             </div>
           </div>
-
-          <div className="pt-2 border-t border-stone-100 dark:border-stone-800 space-y-2">
-            {panchang.vrats && panchang.vrats.length > 0 ? (
-              panchang.vrats.map((v, i) => (
-                <div key={i} className="flex items-center gap-2 text-xs font-bold text-rose-800 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/50 p-3 rounded-xl border border-rose-200/60 dark:border-rose-900/40">
-                  <CheckCircle2 className="w-4 h-4 text-rose-600 dark:text-rose-400 flex-shrink-0" />
-                  <span>{v}</span>
-                </div>
-              ))
-            ) : (
-              <div className="text-xs text-stone-500 dark:text-stone-400 bg-stone-50 dark:bg-stone-800/50 p-3 rounded-xl">
-                No obligatory major fasting for this lunar day. Regular daily prayer and Surya Namaskar recommended.
-              </div>
-            )}
+          <div className="pt-2 border-t border-stone-100 dark:border-vedic-nightBorder space-y-2">
+            {panchang.vrats?.length > 0
+              ? panchang.vrats.map((v, i) => (
+                  <div key={i} className="flex items-center gap-2 text-xs font-semibold text-stone-800 dark:text-stone-200 bg-rose-50 dark:bg-rose-950/30 p-2.5 rounded-lg border border-rose-200/60 dark:border-rose-900/40">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 flex-shrink-0" aria-hidden="true" />
+                    {v}
+                  </div>
+                ))
+              : (
+                  <p className="text-xs text-stone-400 dark:text-stone-500 leading-relaxed">
+                    No obligatory fasting today. Daily prayer and Surya Namaskar are recommended.
+                  </p>
+                )
+            }
           </div>
         </div>
 

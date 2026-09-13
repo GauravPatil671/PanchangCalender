@@ -3,31 +3,42 @@ import assert from 'node:assert/strict';
 import en from './locales/en.js';
 import hi from './locales/hi.js';
 
-test('1. Localization Dictionary Parity and Integrity', (t) => {
-  assert.ok(en.nav && hi.nav, 'Navigation dictionaries exist in both locales');
-  assert.ok(en.hero && hi.hero, 'Hero dictionaries exist in both locales');
-  assert.ok(en.cards && hi.cards, 'Decision cards dictionaries exist in both locales');
-  assert.ok(en.accordions && hi.accordions, 'Accordions dictionaries exist in both locales');
-  assert.ok(en.footer && hi.footer, 'Footer dictionaries exist in both locales');
+test('1. Localization Dictionary Parity and Integrity across all sections', (t) => {
+  const sections = [
+    'nav',
+    'hero',
+    'cards',
+    'accordions',
+    'daily',
+    'calendar',
+    'festivals',
+    'muhurat',
+    'simulation',
+    'about',
+    'locationModal',
+    'notFound',
+    'common',
+    'footer'
+  ];
 
-  // Verify key parity in nav
-  Object.keys(en.nav).forEach((k) => {
-    assert.ok(hi.nav[k] !== undefined, `Hindi nav has key: ${k}`);
-  });
+  sections.forEach((section) => {
+    assert.ok(en[section] && hi[section], `Section "${section}" exists in both en and hi`);
+    
+    // Check every key in en exists in hi
+    Object.keys(en[section]).forEach((k) => {
+      assert.ok(
+        hi[section][k] !== undefined,
+        `Hindi section "${section}" is missing key: "${k}"`
+      );
+    });
 
-  // Verify key parity in hero
-  Object.keys(en.hero).forEach((k) => {
-    assert.ok(hi.hero[k] !== undefined, `Hindi hero has key: ${k}`);
-  });
-
-  // Verify key parity in cards
-  Object.keys(en.cards).forEach((k) => {
-    assert.ok(hi.cards[k] !== undefined, `Hindi cards has key: ${k}`);
-  });
-
-  // Verify key parity in accordions
-  Object.keys(en.accordions).forEach((k) => {
-    assert.ok(hi.accordions[k] !== undefined, `Hindi accordions has key: ${k}`);
+    // Check every key in hi exists in en
+    Object.keys(hi[section]).forEach((k) => {
+      assert.ok(
+        en[section][k] !== undefined,
+        `English section "${section}" is missing key: "${k}"`
+      );
+    });
   });
 });
 

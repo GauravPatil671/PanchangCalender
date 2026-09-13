@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  MapPin, 
-  Sun, 
-  Moon, 
-  Menu, 
-  X, 
-  Calendar as CalendarIcon, 
-  Sparkles, 
-  Clock, 
-  Info, 
-  Compass, 
+import {
+  MapPin,
+  Sun,
+  Moon,
+  Menu,
+  X,
+  Globe,
+  Calendar as CalendarIcon,
+  Sparkles,
+  Clock,
+  Info,
+  Compass,
   Orbit,
-  Globe
+  ChevronRight,
 } from 'lucide-react';
 import { useLocationContext } from '../../context/LocationContext';
 import { useThemeContext } from '../../context/ThemeContext';
@@ -27,13 +28,13 @@ export default function Navbar() {
   const location = useLocation();
 
   const navLinks = [
-    { name: t('nav.todayPanchang'), path: '/', icon: Compass },
-    { name: t('nav.dailyPanchang'), path: '/daily', icon: Clock },
-    { name: t('nav.calendar'), path: '/calendar', icon: CalendarIcon },
-    { name: t('nav.festivals'), path: '/festivals', icon: Sparkles },
-    { name: t('nav.muhurat'), path: '/muhurat', icon: Clock },
-    { name: t('nav.simulation'), path: '/celestial-simulation', icon: Orbit, isSpecial: true },
-    { name: t('nav.about'), path: '/about', icon: Info },
+    { name: t('nav.todayPanchang'),  path: '/',                    icon: Compass },
+    { name: t('nav.dailyPanchang'),  path: '/daily',               icon: Clock },
+    { name: t('nav.calendar'),       path: '/calendar',            icon: CalendarIcon },
+    { name: t('nav.festivals'),      path: '/festivals',           icon: Sparkles },
+    { name: t('nav.muhurat'),        path: '/muhurat',             icon: Clock },
+    { name: t('nav.simulation'),     path: '/celestial-simulation',icon: Orbit },
+    { name: t('nav.about'),          path: '/about',               icon: Info },
   ];
 
   const isActive = (path) => {
@@ -42,108 +43,125 @@ export default function Navbar() {
     return false;
   };
 
-  // Close mobile drawer on Escape key
   React.useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && mobileMenuOpen) {
-        setMobileMenuOpen(false);
-      }
+      if (e.key === 'Escape' && mobileMenuOpen) setMobileMenuOpen(false);
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [mobileMenuOpen]);
 
+  // Lock body scroll when drawer is open
+  React.useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileMenuOpen]);
+
   return (
     <>
-      <header className="sticky top-0 z-40 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border-b border-stone-200/80 dark:border-stone-800/80 transition-colors shadow-sm">
-        <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14 sm:h-16 md:h-20">
-            
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 sm:gap-3 group flex-shrink-0 min-h-[44px]">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-vedic-saffron-600 via-amber-500 to-vedic-gold-400 flex items-center justify-center text-white shadow-md shadow-vedic-saffron-500/20 group-hover:scale-105 transition-transform">
-                <span className="text-base sm:text-xl font-bold font-serif" aria-hidden="true">ॐ</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-base sm:text-xl font-bold tracking-tight font-serif text-stone-900 dark:text-white flex items-center gap-1">
-                  Panchang
-                  <span className="text-[10px] sm:text-xs uppercase font-sans tracking-widest px-1.5 py-0.2 sm:px-2 sm:py-0.5 rounded-full bg-vedic-saffron-100 dark:bg-vedic-saffron-950/80 text-vedic-saffron-700 dark:text-vedic-saffron-400 font-semibold border border-vedic-saffron-200 dark:border-vedic-saffron-800 hidden xs:inline">
-                    पंचांग
-                  </span>
+      <header className="sticky top-0 z-40 bg-vedic-cream/98 dark:bg-vedic-night/98 backdrop-blur-sm border-b border-stone-200 dark:border-vedic-nightBorder transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14">
+
+            {/* ── Logo ── */}
+            <Link
+              to="/"
+              className="flex items-center gap-2.5 group flex-shrink-0 min-h-[44px]"
+              aria-label="Panchang Calendar — Home"
+            >
+              {/* OM glyph mark */}
+              <div className="w-8 h-8 rounded-lg border border-vedic-gold-300 dark:border-vedic-gold-800 bg-vedic-gold-50 dark:bg-vedic-gold-950/40 flex items-center justify-center flex-shrink-0 group-hover:border-vedic-gold-500 transition-colors">
+                <span className="text-lg font-serif font-bold text-vedic-gold-700 dark:text-vedic-gold-400 leading-none" aria-hidden="true">
+                  ॐ
                 </span>
-                <span className="text-[10px] sm:text-[11px] text-stone-500 dark:text-stone-400 tracking-wider hidden xs:block">
+              </div>
+              <div className="flex flex-col leading-tight">
+                <span className="text-base font-bold font-serif text-stone-900 dark:text-stone-50 tracking-tight">
+                  Panchang
+                </span>
+                <span className="text-[10px] font-sans text-stone-500 dark:text-stone-400 tracking-wider hidden xs:block">
                   Vedic Calendar
                 </span>
               </div>
             </Link>
 
-            {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-1 xl:gap-2" aria-label="Main Navigation">
+            {/* ── Desktop Navigation ── */}
+            <nav className="hidden lg:flex items-center gap-0.5" aria-label="Main Navigation">
               {navLinks.map((link) => {
                 const active = isActive(link.path);
                 return (
                   <Link
                     key={link.path}
                     to={link.path}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 min-h-[40px] ${
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors min-h-[40px] flex items-center ${
                       active
-                        ? 'text-vedic-saffron-600 dark:text-vedic-saffron-400 bg-vedic-saffron-50 dark:bg-vedic-saffron-950/40 font-semibold'
-                        : 'text-stone-600 hover:text-stone-900 dark:text-stone-300 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-stone-800/60'
+                        ? 'text-vedic-saffron-700 dark:text-vedic-saffron-400 font-semibold'
+                        : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800/60'
                     }`}
+                    aria-current={active ? 'page' : undefined}
                   >
-                    <span>{link.name}</span>
+                    {link.name}
                   </Link>
                 );
               })}
             </nav>
 
-            {/* Right Controls: Location & Desktop Language/Theme & Mobile Toggle */}
-            <div className="flex items-center gap-1.5 sm:gap-2.5">
-              
-              {/* Compact Location Selector Button */}
+            {/* ── Right Controls ── */}
+            <div className="flex items-center gap-2">
+
+              {/* Location */}
               <button
                 onClick={() => setIsSelectorOpen(true)}
-                className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-vedic-sand/70 dark:bg-stone-800/90 border border-stone-300/70 dark:border-stone-700 text-stone-700 dark:text-stone-200 hover:border-vedic-saffron-400 dark:hover:border-vedic-saffron-500 text-[11px] sm:text-sm font-medium transition-all shadow-sm min-h-[44px]"
-                title={t('nav.changeCityTitle')}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-stone-200 dark:border-vedic-nightBorder bg-white dark:bg-vedic-nightCard text-stone-700 dark:text-stone-300 hover:border-vedic-gold-500 dark:hover:border-vedic-gold-600 text-xs font-medium transition-colors min-h-[36px]"
                 aria-label={`${t('nav.location')}: ${selectedLocation.city}, ${selectedLocation.state}. ${t('nav.change')}.`}
               >
-                <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vedic-saffron-600 dark:text-vedic-saffron-400 flex-shrink-0 animate-pulse" aria-hidden="true" />
-                <span className="max-w-[85px] xs:max-w-[120px] sm:max-w-[180px] truncate font-semibold">
+                <MapPin className="w-3.5 h-3.5 text-vedic-saffron-600 dark:text-vedic-saffron-400 flex-shrink-0" aria-hidden="true" />
+                <span className="max-w-[100px] sm:max-w-[160px] truncate font-semibold">
                   {selectedLocation.city}
                 </span>
               </button>
 
-              {/* Desktop Language Selector Pill */}
-              <div className="hidden lg:flex items-center bg-stone-100 dark:bg-stone-800 p-0.5 rounded-xl border border-stone-200 dark:border-stone-700" role="group" aria-label={t('nav.language')}>
-                {supportedLanguages.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => setLanguage(lang.code)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all min-h-[34px] ${
-                      language === lang.code
-                        ? 'bg-white dark:bg-stone-700 text-vedic-saffron-600 dark:text-vedic-saffron-400 shadow-sm'
-                        : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
-                    }`}
-                    aria-pressed={language === lang.code}
-                    aria-label={`Select language ${lang.label}`}
-                  >
-                    {lang.nativeLabel}
-                  </button>
+              {/* Desktop Language toggle — text-only */}
+              <div
+                className="hidden lg:flex items-center gap-0 text-xs font-medium"
+                role="group"
+                aria-label={t('nav.language')}
+              >
+                {supportedLanguages.map((lang, i) => (
+                  <React.Fragment key={lang.code}>
+                    {i > 0 && (
+                      <span className="text-stone-300 dark:text-stone-700 px-0.5" aria-hidden="true">|</span>
+                    )}
+                    <button
+                      onClick={() => setLanguage(lang.code)}
+                      className={`px-1.5 py-1 rounded transition-colors min-h-[36px] ${
+                        language === lang.code
+                          ? 'text-vedic-saffron-700 dark:text-vedic-saffron-400 font-semibold'
+                          : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100'
+                      }`}
+                      aria-pressed={language === lang.code}
+                      aria-label={`Select language ${lang.label}`}
+                    >
+                      {lang.nativeLabel}
+                    </button>
+                  </React.Fragment>
                 ))}
               </div>
 
               {/* Desktop Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className="hidden lg:flex p-2.5 rounded-xl text-stone-600 hover:text-stone-900 dark:text-stone-300 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-stone-800 border border-transparent hover:border-stone-200 dark:border-stone-700 transition-all min-w-[44px] min-h-[44px] items-center justify-center"
-                title={theme === 'dark' ? t('nav.switchToLight') : t('nav.switchToDark')}
+                className="hidden lg:flex items-center justify-center w-9 h-9 rounded-lg border border-stone-200 dark:border-vedic-nightBorder bg-white dark:bg-vedic-nightCard text-stone-600 dark:text-stone-300 hover:border-stone-300 dark:hover:border-stone-600 hover:text-stone-900 dark:hover:text-stone-100 transition-colors"
                 aria-label={theme === 'dark' ? t('nav.switchToLight') : t('nav.switchToDark')}
               >
-                {theme === 'dark' ? (
-                  <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" aria-hidden="true" />
-                ) : (
-                  <Moon className="w-4 h-4 sm:w-5 sm:h-5 text-stone-600" aria-hidden="true" />
-                )}
+                {theme === 'dark'
+                  ? <Sun  className="w-4 h-4 text-amber-400" aria-hidden="true" />
+                  : <Moon className="w-4 h-4" aria-hidden="true" />
+                }
               </button>
 
               {/* Mobile Menu Button */}
@@ -152,106 +170,123 @@ export default function Navbar() {
                 aria-expanded={mobileMenuOpen}
                 aria-controls="mobile-nav-drawer"
                 aria-label={mobileMenuOpen ? t('nav.menuClose') : t('nav.menuOpen')}
-                className="lg:hidden p-2 rounded-xl text-stone-600 hover:text-stone-900 dark:text-stone-300 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-stone-800 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                className="lg:hidden flex items-center justify-center w-9 h-9 rounded-lg border border-stone-200 dark:border-vedic-nightBorder bg-white dark:bg-vedic-nightCard text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-stone-100 hover:border-stone-300 dark:hover:border-stone-600 transition-colors"
               >
-                {mobileMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />}
+                {mobileMenuOpen
+                  ? <X    className="w-5 h-5" aria-hidden="true" />
+                  : <Menu className="w-5 h-5" aria-hidden="true" />
+                }
               </button>
             </div>
           </div>
         </div>
+      </header>
 
-        {/* Mobile Dropdown Drawer */}
-        {mobileMenuOpen && (
+      {/* ── Mobile Drawer ── */}
+      {mobileMenuOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="lg:hidden fixed inset-0 z-40 bg-stone-900/40 backdrop-blur-sm"
+            aria-hidden="true"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+
+          {/* Panel */}
           <nav
             id="mobile-nav-drawer"
-            aria-label="Mobile Navigation Drawer"
-            className="lg:hidden border-t border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 px-4 pt-3 pb-6 space-y-2.5 shadow-xl animate-in slide-in-from-top-2 duration-200"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation menu"
+            className="lg:hidden fixed top-14 left-0 right-0 z-40 bg-vedic-cream dark:bg-vedic-night border-b border-stone-200 dark:border-vedic-nightBorder shadow-card-lg animate-in slide-in-from-top-2 duration-150 max-h-[calc(100vh-3.5rem)] overflow-y-auto"
           >
-            {/* Quick Location Action in Mobile Drawer */}
-            <div className="p-3 bg-stone-50 dark:bg-stone-800/70 rounded-2xl border border-stone-200 dark:border-stone-700 flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs text-stone-600 dark:text-stone-300 truncate mr-2">
-                <MapPin className="w-4 h-4 text-vedic-saffron-600 flex-shrink-0" aria-hidden="true" />
-                <span className="font-semibold truncate">{selectedLocation.city}, {selectedLocation.state}</span>
-              </div>
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setIsSelectorOpen(true);
-                }}
-                className="text-xs font-bold text-vedic-saffron-600 dark:text-vedic-saffron-400 underline min-h-[36px] px-2 flex-shrink-0 flex items-center"
-              >
-                {t('nav.change')}
-              </button>
-            </div>
+            <div className="px-4 py-4 space-y-1">
 
-            {/* Language Selector inside Mobile Drawer */}
-            <div className="p-3 bg-stone-50 dark:bg-stone-800/70 rounded-2xl border border-stone-200 dark:border-stone-700 flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs font-semibold text-stone-700 dark:text-stone-300">
-                <Globe className="w-4 h-4 text-vedic-saffron-600" aria-hidden="true" />
-                <span>{t('nav.language')}</span>
-              </div>
-              <div className="flex items-center gap-1 bg-stone-200/70 dark:bg-stone-900 p-1 rounded-xl">
-                {supportedLanguages.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => setLanguage(lang.code)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all min-h-[36px] ${
-                      language === lang.code
-                        ? 'bg-vedic-saffron-600 text-white shadow-sm'
-                        : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+              {/* Nav links */}
+              {navLinks.map((link) => {
+                const active = isActive(link.path);
+                const Icon = link.icon;
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    aria-current={active ? 'page' : undefined}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium min-h-[44px] transition-colors ${
+                      active
+                        ? 'text-vedic-saffron-700 dark:text-vedic-saffron-400 bg-vedic-saffron-50 dark:bg-vedic-saffron-950/30 font-semibold'
+                        : 'text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800/60'
                     }`}
                   >
-                    {lang.nativeLabel}
+                    <Icon className="w-4 h-4 flex-shrink-0 opacity-70" aria-hidden="true" />
+                    <span className="flex-1">{link.name}</span>
+                    {active && <ChevronRight className="w-3.5 h-3.5 opacity-40" aria-hidden="true" />}
+                  </Link>
+                );
+              })}
+
+              {/* Divider */}
+              <div className="pt-3 mt-3 border-t border-stone-200 dark:border-vedic-nightBorder space-y-3">
+
+                {/* Location row */}
+                <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-white dark:bg-vedic-nightCard border border-stone-200 dark:border-vedic-nightBorder">
+                  <div className="flex items-center gap-2 text-xs text-stone-600 dark:text-stone-300">
+                    <MapPin className="w-3.5 h-3.5 text-vedic-saffron-600 flex-shrink-0" aria-hidden="true" />
+                    <span className="font-semibold truncate max-w-[160px]">
+                      {selectedLocation.city}, {selectedLocation.state}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => { setMobileMenuOpen(false); setIsSelectorOpen(true); }}
+                    className="text-xs font-bold text-vedic-saffron-600 dark:text-vedic-saffron-400 hover:underline min-h-[36px] flex items-center px-1"
+                  >
+                    {t('nav.change')}
                   </button>
-                ))}
+                </div>
+
+                {/* Language + Theme row */}
+                <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-white dark:bg-vedic-nightCard border border-stone-200 dark:border-vedic-nightBorder">
+                  {/* Language */}
+                  <div className="flex items-center gap-2" role="group" aria-label={t('nav.language')}>
+                    <Globe className="w-3.5 h-3.5 text-stone-500" aria-hidden="true" />
+                    {supportedLanguages.map((lang, i) => (
+                      <React.Fragment key={lang.code}>
+                        {i > 0 && <span className="text-stone-300 dark:text-stone-700 text-xs" aria-hidden="true">|</span>}
+                        <button
+                          onClick={() => setLanguage(lang.code)}
+                          className={`text-xs font-semibold min-h-[36px] px-1 transition-colors ${
+                            language === lang.code
+                              ? 'text-vedic-saffron-700 dark:text-vedic-saffron-400'
+                              : 'text-stone-500 dark:text-stone-400'
+                          }`}
+                          aria-pressed={language === lang.code}
+                        >
+                          {lang.nativeLabel}
+                        </button>
+                      </React.Fragment>
+                    ))}
+                  </div>
+
+                  {/* Theme */}
+                  <button
+                    onClick={toggleTheme}
+                    className="flex items-center gap-1.5 text-xs font-semibold text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-stone-100 min-h-[36px] px-1 transition-colors"
+                    aria-label={theme === 'dark' ? t('nav.switchToLight') : t('nav.switchToDark')}
+                  >
+                    {theme === 'dark'
+                      ? <><Sun  className="w-3.5 h-3.5 text-amber-400" aria-hidden="true" /><span>{t('nav.light')}</span></>
+                      : <><Moon className="w-3.5 h-3.5" aria-hidden="true" /><span>{t('nav.dark')}</span></>
+                    }
+                  </button>
+                </div>
               </div>
             </div>
-
-            {/* Theme Toggle inside Mobile Drawer */}
-            <div className="p-3 bg-stone-50 dark:bg-stone-800/70 rounded-2xl border border-stone-200 dark:border-stone-700 flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs font-semibold text-stone-700 dark:text-stone-300">
-                {theme === 'dark' ? (
-                  <Moon className="w-4 h-4 text-amber-400" aria-hidden="true" />
-                ) : (
-                  <Sun className="w-4 h-4 text-amber-500" aria-hidden="true" />
-                )}
-                <span>{t('nav.theme')}</span>
-              </div>
-              <button
-                onClick={toggleTheme}
-                className="px-3 py-1.5 rounded-xl bg-white dark:bg-stone-700 border border-stone-200 dark:border-stone-600 text-xs font-semibold text-stone-800 dark:text-stone-100 shadow-sm min-h-[36px] flex items-center gap-1.5"
-              >
-                <span>{theme === 'dark' ? t('nav.dark') : t('nav.light')}</span>
-                <span className="text-[10px] text-stone-400">({theme === 'dark' ? t('nav.light') : t('nav.dark')})</span>
-              </button>
-            </div>
-
-            {navLinks.map((link) => {
-              const active = isActive(link.path);
-              const Icon = link.icon;
-              return (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium min-h-[44px] ${
-                    active
-                      ? 'text-vedic-saffron-600 dark:text-vedic-saffron-400 bg-vedic-saffron-50 dark:bg-vedic-saffron-950/50 font-semibold'
-                      : 'text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800'
-                  }`}
-                >
-                  <Icon className="w-4 h-4 opacity-80" aria-hidden="true" />
-                  {link.name}
-                </Link>
-              );
-            })}
           </nav>
-        )}
-      </header>
+        </>
+      )}
 
       {/* Global Location Selector Modal */}
       <LocationSelectorModal />
     </>
   );
 }
-

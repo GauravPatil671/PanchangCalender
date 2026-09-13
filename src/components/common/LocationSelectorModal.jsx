@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { X, Search, MapPin, Navigation, Check, Globe } from 'lucide-react';
 import { useLocationContext } from '../../context/LocationContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { POPULAR_CITIES, INDIAN_STATES } from '../../utils/locationsData';
 
 export default function LocationSelectorModal() {
@@ -14,8 +15,10 @@ export default function LocationSelectorModal() {
     geoError
   } = useLocationContext();
 
+  const { t, language } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedState, setSelectedState] = useState('All');
+  const isHi = language === 'hi';
 
   React.useEffect(() => {
     const handleKeyDown = (e) => {
@@ -57,15 +60,15 @@ export default function LocationSelectorModal() {
           <div>
             <h3 id="modal-title" className="text-base sm:text-xl font-bold font-serif text-stone-900 dark:text-white flex items-center gap-1.5 sm:gap-2">
               <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-vedic-saffron-600 dark:text-vedic-saffron-400" aria-hidden="true" />
-              Select Location
+              {t('locationModal.title')}
             </h3>
             <p className="text-[10px] sm:text-xs text-stone-500 dark:text-stone-400 mt-0.5">
-              Accurate timings depend on your coordinates.
+              {t('locationModal.subtitle')}
             </p>
           </div>
           <button
             onClick={() => setIsSelectorOpen(false)}
-            aria-label="Close location selector modal"
+            aria-label={isHi ? 'स्थान चयन बंद करें' : 'Close location selector modal'}
             className="p-2 rounded-xl text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
           >
             <X className="w-5 h-5" aria-hidden="true" />
@@ -75,7 +78,7 @@ export default function LocationSelectorModal() {
         {/* Current Location Badge & GPS Button */}
         <div className="px-5 sm:px-6 py-4 bg-vedic-sand/30 dark:bg-stone-800/40 border-b border-stone-100 dark:border-stone-800/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           <div className="text-xs text-stone-600 dark:text-stone-300 flex items-center gap-2">
-            <span className="font-semibold text-stone-900 dark:text-white">Active Location:</span>
+            <span className="font-semibold text-stone-900 dark:text-white">{isHi ? 'सक्रिय स्थान:' : 'Active Location:'}</span>
             <span className="px-2.5 py-1 rounded-full bg-vedic-saffron-100 dark:bg-vedic-saffron-950/80 text-vedic-saffron-800 dark:text-vedic-saffron-300 font-medium">
               📍 {selectedLocation.city}, {selectedLocation.state}, {selectedLocation.country}
             </span>
@@ -86,7 +89,7 @@ export default function LocationSelectorModal() {
             className="inline-flex items-center justify-center gap-2 px-3.5 py-1.5 rounded-xl bg-vedic-saffron-600 hover:bg-vedic-saffron-700 text-white text-xs font-semibold shadow-sm transition-all disabled:opacity-50"
           >
             <Navigation className={`w-3.5 h-3.5 ${isDetecting ? 'animate-spin' : ''}`} />
-            {isDetecting ? 'Detecting GPS...' : 'Use My GPS Location'}
+            {isDetecting ? t('locationModal.detecting') : t('locationModal.detectBtn')}
           </button>
         </div>
 
@@ -102,7 +105,7 @@ export default function LocationSelectorModal() {
             <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search Indian city or state (e.g. Mumbai, Varanasi, Pune)..."
+              placeholder={t('locationModal.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-stone-50 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700 text-stone-900 dark:text-white placeholder-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-vedic-saffron-500/50 focus:border-vedic-saffron-500"
@@ -113,7 +116,7 @@ export default function LocationSelectorModal() {
                 onClick={() => setSearchQuery('')}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 text-xs"
               >
-                Clear
+                {t('common.clear')}
               </button>
             )}
           </div>
@@ -121,7 +124,7 @@ export default function LocationSelectorModal() {
           {/* State Filter Pills */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 scrollbar-thin text-xs">
             <span className="text-stone-500 dark:text-stone-400 whitespace-nowrap pr-1 font-medium">
-              State:
+              {t('locationModal.stateLabel')}
             </span>
             <button
               onClick={() => setSelectedState('All')}
@@ -131,7 +134,7 @@ export default function LocationSelectorModal() {
                   : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200'
               }`}
             >
-              All India
+              {t('locationModal.allStates')}
             </button>
             {INDIAN_STATES.map((st) => (
               <button
@@ -154,8 +157,7 @@ export default function LocationSelectorModal() {
           {filteredCities.length === 0 ? (
             <div className="text-center py-12 text-stone-400">
               <Globe className="w-10 h-10 mx-auto mb-2 opacity-40" />
-              <p className="text-sm">No cities found matching "{searchQuery}".</p>
-              <p className="text-xs text-stone-500 mt-1">Try searching for a nearby district or state name.</p>
+              <p className="text-sm">{t('locationModal.noCityFound')}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pb-4">
@@ -176,7 +178,7 @@ export default function LocationSelectorModal() {
                         {city.city}
                         {city.isPopular && (
                           <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 font-normal">
-                            Popular
+                            {isHi ? 'प्रमुख' : 'Popular'}
                           </span>
                         )}
                       </div>
@@ -202,7 +204,7 @@ export default function LocationSelectorModal() {
             onClick={() => setIsSelectorOpen(false)}
             className="px-5 py-2 rounded-xl text-xs font-semibold text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-800 transition-colors"
           >
-            Done
+            {isHi ? 'पूर्ण' : 'Done'}
           </button>
         </div>
       </div>

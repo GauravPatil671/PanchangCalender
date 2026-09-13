@@ -3,11 +3,13 @@ import { X, Calendar as CalendarIcon, MapPin, Sparkles, Sun, Moon, Clock, ArrowR
 import { Link } from 'react-router-dom';
 import { getDailyPanchang } from '../../services/panchangApi';
 import { useLocationContext } from '../../context/LocationContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { formatDateDisplay, formatDayOfWeek } from '../../utils/dateUtils';
 import LoadingSkeleton from '../common/LoadingSkeleton';
 
 export default function DayDetailModal({ dateStr, isOpen, onClose }) {
   const { selectedLocation } = useLocationContext();
+  const { t, language } = useLanguage();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -40,6 +42,7 @@ export default function DayDetailModal({ dateStr, isOpen, onClose }) {
 
   if (!isOpen || !dateStr) return null;
 
+  const isHi = language === 'hi';
   // Parse as local time (not UTC) to avoid off-by-one in UTC+ timezones like IST
   const [dy, dm, dd] = (dateStr || '').split('-').map(Number);
   const dateObj = (dy && dm && dd) ? new Date(dy, dm - 1, dd) : new Date(dateStr);
@@ -60,7 +63,7 @@ export default function DayDetailModal({ dateStr, isOpen, onClose }) {
         <div className="p-3.5 sm:p-6 border-b border-stone-100 dark:border-stone-800 flex items-center justify-between bg-gradient-to-r from-vedic-saffron-50/50 to-amber-50/40 dark:from-stone-900 dark:to-stone-900">
           <div>
             <span className="text-[10px] sm:text-xs uppercase font-bold tracking-wider text-vedic-saffron-600 dark:text-vedic-saffron-400">
-              Panchang Details
+              {t('calendar.detailsTitle')}
             </span>
             <h3 id="day-modal-title" className="text-base sm:text-2xl font-bold font-serif text-stone-900 dark:text-white">
               {formatDateDisplay(dateObj)}
@@ -71,7 +74,7 @@ export default function DayDetailModal({ dateStr, isOpen, onClose }) {
           </div>
           <button
             onClick={onClose}
-            aria-label="Close day details"
+            aria-label={isHi ? 'विवरण बंद करें' : 'Close day details'}
             className="p-2 rounded-xl text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors"
           >
             <X className="w-5 h-5" aria-hidden="true" />
@@ -88,10 +91,10 @@ export default function DayDetailModal({ dateStr, isOpen, onClose }) {
               {data.festivals && data.festivals.length > 0 && (
                 <div className="p-4 rounded-2xl bg-gradient-to-r from-vedic-saffron-500 to-amber-500 text-white space-y-1">
                   <div className="text-xs font-semibold uppercase tracking-wider opacity-90">
-                    Festival / Celebration
+                    {isHi ? 'पर्व एवं उत्सव' : 'Festival / Celebration'}
                   </div>
                   <div className="text-lg font-bold font-serif">
-                    {data.festivals.map(f => f.name).join(', ')}
+                    {data.festivals.map(f => (isHi ? (f.hindi || f.name) : f.name)).join(', ')}
                   </div>
                   <p className="text-xs opacity-90">
                     {data.festivals[0]?.description}
@@ -102,46 +105,46 @@ export default function DayDetailModal({ dateStr, isOpen, onClose }) {
               {/* Five Limbs Summary */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div className="p-3 bg-stone-50 dark:bg-stone-800/60 rounded-2xl border border-stone-200/60 dark:border-stone-800">
-                  <span className="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-400">Tithi</span>
-                  <div className="text-sm font-bold text-stone-900 dark:text-white">{data.tithi.name}</div>
-                  <div className="text-[11px] text-stone-500">{data.paksha}</div>
+                  <span className="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-400">{isHi ? 'तिथि' : 'Tithi'}</span>
+                  <div className="text-sm font-bold text-stone-900 dark:text-white">{isHi ? (data.tithi.hindi || data.tithi.name) : data.tithi.name}</div>
+                  <div className="text-[11px] text-stone-500">{isHi ? data.pakshaHindi : data.paksha}</div>
                 </div>
 
                 <div className="p-3 bg-stone-50 dark:bg-stone-800/60 rounded-2xl border border-stone-200/60 dark:border-stone-800">
-                  <span className="text-[10px] uppercase font-bold text-vedic-saffron-700 dark:text-vedic-saffron-400">Nakshatra</span>
-                  <div className="text-sm font-bold text-stone-900 dark:text-white">{data.nakshatra.name}</div>
-                  <div className="text-[11px] text-stone-500">Lord: {data.nakshatra.lord}</div>
+                  <span className="text-[10px] uppercase font-bold text-vedic-saffron-700 dark:text-vedic-saffron-400">{isHi ? 'नक्षत्र' : 'Nakshatra'}</span>
+                  <div className="text-sm font-bold text-stone-900 dark:text-white">{isHi ? (data.nakshatra.hindi || data.nakshatra.name) : data.nakshatra.name}</div>
+                  <div className="text-[11px] text-stone-500">{t('common.lord')}: {data.nakshatra.lord}</div>
                 </div>
 
                 <div className="p-3 bg-stone-50 dark:bg-stone-800/60 rounded-2xl border border-stone-200/60 dark:border-stone-800">
-                  <span className="text-[10px] uppercase font-bold text-vedic-gold-700 dark:text-vedic-gold-400">Yoga</span>
-                  <div className="text-sm font-bold text-stone-900 dark:text-white">{data.yoga.name}</div>
-                  <div className="text-[11px] text-stone-500">Auspicious</div>
+                  <span className="text-[10px] uppercase font-bold text-vedic-gold-700 dark:text-vedic-gold-400">{isHi ? 'योग' : 'Yoga'}</span>
+                  <div className="text-sm font-bold text-stone-900 dark:text-white">{isHi ? (data.yoga.hindi || data.yoga.name) : data.yoga.name}</div>
+                  <div className="text-[11px] text-stone-500">{isHi ? 'शुभ' : 'Auspicious'}</div>
                 </div>
 
                 <div className="p-3 bg-stone-50 dark:bg-stone-800/60 rounded-2xl border border-stone-200/60 dark:border-stone-800">
-                  <span className="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-400">Karana</span>
+                  <span className="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-400">{isHi ? 'करण' : 'Karana'}</span>
                   <div className="text-sm font-bold text-stone-900 dark:text-white">{data.karana.name}</div>
-                  <div className="text-[11px] text-stone-500">Chara</div>
+                  <div className="text-[11px] text-stone-500">{isHi ? 'चर' : 'Chara'}</div>
                 </div>
               </div>
 
               {/* Sun & Moon */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-vedic-sand/30 dark:bg-stone-800/40 p-4 rounded-2xl text-xs">
                 <div>
-                  <span className="text-stone-500 block text-[10px]">Sunrise</span>
+                  <span className="text-stone-500 block text-[10px]">{t('common.sunrise')}</span>
                   <span className="font-bold text-amber-700 dark:text-amber-400 text-sm">{data.sunMoon.sunrise}</span>
                 </div>
                 <div>
-                  <span className="text-stone-500 block text-[10px]">Sunset</span>
+                  <span className="text-stone-500 block text-[10px]">{t('common.sunset')}</span>
                   <span className="font-bold text-orange-700 dark:text-orange-400 text-sm">{data.sunMoon.sunset}</span>
                 </div>
                 <div>
-                  <span className="text-stone-500 block text-[10px]">Moonrise</span>
+                  <span className="text-stone-500 block text-[10px]">{t('common.moonrise')}</span>
                   <span className="font-bold text-indigo-700 dark:text-indigo-400 text-sm">{data.sunMoon.moonrise}</span>
                 </div>
                 <div>
-                  <span className="text-stone-500 block text-[10px]">Moonset</span>
+                  <span className="text-stone-500 block text-[10px]">{t('common.moonset')}</span>
                   <span className="font-bold text-purple-700 dark:text-purple-400 text-sm">{data.sunMoon.moonset}</span>
                 </div>
               </div>
@@ -149,22 +152,22 @@ export default function DayDetailModal({ dateStr, isOpen, onClose }) {
               {/* Key Timings */}
               <div className="space-y-3">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-stone-900 dark:text-white">
-                  Auspicious & Inauspicious Timings
+                  {isHi ? 'शुभ एवं अशुभ काल' : 'Auspicious & Inauspicious Timings'}
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                   <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-900/40 space-y-1">
-                    <span className="font-bold text-emerald-800 dark:text-emerald-300">✨ Abhijit Muhurat:</span>
+                    <span className="font-bold text-emerald-800 dark:text-emerald-300">✨ {isHi ? 'अभिजित मुहूर्त:' : 'Abhijit Muhurat:'}</span>
                     <div className="font-bold text-stone-900 dark:text-white text-sm">{data.muhurat.abhijitMuhurat}</div>
                   </div>
                   <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200/60 dark:border-rose-900/40 space-y-1">
-                    <span className="font-bold text-rose-800 dark:text-rose-300">⚠️ Rahu Kalam:</span>
+                    <span className="font-bold text-rose-800 dark:text-rose-300">⚠️ {isHi ? 'राहु काल:' : 'Rahu Kalam:'}</span>
                     <div className="font-bold text-stone-900 dark:text-white text-sm">{data.inauspicious.rahuKalam}</div>
                   </div>
                 </div>
               </div>
             </>
           ) : (
-            <p className="text-center py-6 text-stone-500">Failed to load data.</p>
+            <p className="text-center py-6 text-stone-500">{isHi ? 'डेटा लोड करने में त्रुटि।' : 'Failed to load data.'}</p>
           )}
         </div>
 
@@ -175,14 +178,14 @@ export default function DayDetailModal({ dateStr, isOpen, onClose }) {
             onClick={onClose}
             className="inline-flex items-center gap-1 text-xs font-semibold text-vedic-saffron-600 dark:text-vedic-saffron-400 hover:underline"
           >
-            <span>Open Full Day Deep Dive</span>
+            <span>{t('calendar.viewFullDayPanchang')}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
           <button
             onClick={onClose}
             className="px-4 py-1.5 rounded-xl bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 text-xs font-semibold"
           >
-            Close
+            {isHi ? 'बंद करें' : 'Close'}
           </button>
         </div>
       </div>

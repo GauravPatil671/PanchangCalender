@@ -18,7 +18,7 @@ export default {
       colors: {
         vedic: {
           saffron: {
-            50: '#fff8f0',
+            50:  '#fff8f0',
             100: '#feeddb',
             200: '#fdd3b6',
             300: '#fbb387',
@@ -28,9 +28,10 @@ export default {
             700: '#bf3310',
             800: '#982914',
             900: '#7b2414',
+            950: '#3d0f06',
           },
           gold: {
-            50: '#fdfbe8',
+            50:  '#fdfbe8',
             100: '#faf5c5',
             200: '#f6ea8e',
             300: '#f0d94f',
@@ -40,9 +41,10 @@ export default {
             700: '#925c0d',
             800: '#794812',
             900: '#673c14',
+            950: '#3a1f06',
           },
           maroon: {
-            50: '#fdf2f2',
+            50:  '#fdf2f2',
             100: '#fae3e3',
             200: '#f6cbcb',
             300: '#efa8a8',
@@ -52,26 +54,51 @@ export default {
             700: '#9c2a2a',
             800: '#751a1a',
             900: '#5c1414',
+            950: '#300808',
           },
-          cream: '#FAF7F2',
-          sand: '#F3EDE2',
+          // Surface palette — warm ivory base
+          cream:     '#FAF7F2',
+          sand:      '#F3EDE2',
           parchment: '#EBE3D5',
-          charcoal: '#1C1917',
-          night: '#0C0A09',
-          nightCard: '#181512',
-          celestial: '#100e17',
+          linen:     '#F6F1E9',
+          // Dark surface palette
+          charcoal:   '#1C1917',
+          night:      '#0C0A09',
+          nightCard:  '#181512',
+          nightBorder:'#2C2620',
+          celestial:  '#100e17',
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        serif: ['Cinzel', 'Merriweather', 'serif'],
-        devanagari: ['Noto Sans Devanagari', 'sans-serif'],
+        sans:        ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        serif:       ['Cinzel', 'Merriweather', 'Georgia', 'serif'],
+        display:     ['Cinzel', 'serif'],
+        devanagari:  ['Noto Sans Devanagari', 'sans-serif'],
       },
       boxShadow: {
-        'soft-warm': '0 4px 20px -2px rgba(230, 81, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04)',
-        'glow-saffron': '0 0 15px rgba(245, 98, 33, 0.25)',
-        'glow-gold': '0 0 15px rgba(212, 162, 17, 0.3)',
-      }
+        // Flat, warm shadows — no glows
+        'card-sm':  '0 1px 4px 0 rgba(28,25,23,0.06), 0 1px 2px -1px rgba(28,25,23,0.04)',
+        'card-md':  '0 4px 16px -2px rgba(28,25,23,0.08), 0 2px 6px -2px rgba(28,25,23,0.04)',
+        'card-lg':  '0 8px 32px -4px rgba(28,25,23,0.10), 0 4px 8px -2px rgba(28,25,23,0.05)',
+        // Legacy compat — kept but not recommended
+        'soft-warm':   '0 4px 20px -2px rgba(230, 81, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04)',
+        'glow-saffron': '0 0 0 rgba(0,0,0,0)',
+        'glow-gold':    '0 0 0 rgba(0,0,0,0)',
+      },
+      borderRadius: {
+        'xs': '4px',
+        'sm': '6px',
+        DEFAULT: '8px',
+        'md': '10px',
+        'lg': '12px',
+        'xl': '16px',
+        '2xl': '20px',
+        '3xl': '24px',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '22': '5.5rem',
+      },
     },
   },
   plugins: [],

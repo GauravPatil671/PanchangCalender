@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import { Sun, Moon, Sparkles, CheckCircle2, XCircle, HelpCircle, Clock, ShieldCheck } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function ChoghadiyaTable({ choghadiya }) {
   const [activeTab, setActiveTab] = useState('day');
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'table'
+  const { t, language } = useLanguage();
 
   if (!choghadiya) return null;
 
   const { dayChoghadiya, nightChoghadiya } = choghadiya;
   const currentList = activeTab === 'day' ? dayChoghadiya : nightChoghadiya;
+  const isHi = language === 'hi';
 
   const getStatusBadge = (item) => {
     if (item.name === 'Amrit' || item.name === 'Shubh' || item.name === 'Labh') {
       return (
         <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">
           <CheckCircle2 className="w-3.5 h-3.5" />
-          Auspicious ({item.nature})
+          {t('choghadiya.auspiciousBadge')} ({item.nature})
         </span>
       );
     }
@@ -23,14 +25,14 @@ export default function ChoghadiyaTable({ choghadiya }) {
       return (
         <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300">
           <HelpCircle className="w-3.5 h-3.5" />
-          Neutral ({item.nature})
+          {t('choghadiya.neutralBadge')} ({item.nature})
         </span>
       );
     }
     return (
       <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300">
         <XCircle className="w-3.5 h-3.5" />
-        Inauspicious ({item.nature})
+        {t('choghadiya.inauspiciousBadge')} ({item.nature})
       </span>
     );
   };
@@ -53,14 +55,14 @@ export default function ChoghadiyaTable({ choghadiya }) {
         <div>
           <h3 className="text-lg sm:text-2xl font-bold font-serif text-stone-900 dark:text-white flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-vedic-saffron-600 dark:text-vedic-saffron-400" />
-            Choghadiya Muhurat (चौघड़िया)
+            {t('choghadiya.title')}
           </h3>
           <p className="text-[11px] sm:text-xs text-stone-500 dark:text-stone-400 mt-0.5 sm:mt-1">
-            Ancient 8-part division of day and night for traveling, business commencement, and auspicious deeds
+            {t('choghadiya.subtitle')}
           </p>
         </div>
 
-        {/* Tab & View Mode Buttons */}
+        {/* Tab Buttons */}
         <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
           <div className="flex items-center bg-stone-100 dark:bg-stone-800 p-1 rounded-2xl">
             <button
@@ -72,7 +74,7 @@ export default function ChoghadiyaTable({ choghadiya }) {
               }`}
             >
               <Sun className="w-4 h-4 text-amber-500" />
-              <span>Day (दिन)</span>
+              <span>{t('choghadiya.dayTab')}</span>
             </button>
             <button
               onClick={() => setActiveTab('night')}
@@ -83,7 +85,7 @@ export default function ChoghadiyaTable({ choghadiya }) {
               }`}
             >
               <Moon className="w-4 h-4 text-indigo-400" />
-              <span>Night (रात)</span>
+              <span>{t('choghadiya.nightTab')}</span>
             </button>
           </div>
         </div>
@@ -91,13 +93,13 @@ export default function ChoghadiyaTable({ choghadiya }) {
 
       {/* Legend */}
       <div className="flex flex-wrap items-center gap-4 text-xs text-stone-700 dark:text-stone-300 bg-stone-50 dark:bg-stone-800/50 p-4 rounded-2xl border border-stone-200/80 dark:border-stone-700/80">
-        <span className="font-bold text-stone-900 dark:text-white uppercase tracking-wider text-[11px]">Quality Guide:</span>
-        <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-emerald-500" /> <strong className="text-emerald-700 dark:text-emerald-300">Amrit / Shubh / Labh</strong> (Best / Auspicious)</span>
-        <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-amber-500" /> <strong className="text-amber-700 dark:text-amber-300">Chal</strong> (Neutral / Good for Transit)</span>
-        <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-rose-500" /> <strong className="text-rose-700 dark:text-rose-300">Rog / Kaal / Udveg</strong> (Inauspicious / Avoid)</span>
+        <span className="font-bold text-stone-900 dark:text-white uppercase tracking-wider text-[11px]">{t('choghadiya.qualityGuide')}</span>
+        <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-emerald-500" /> <strong className="text-emerald-700 dark:text-emerald-300">{t('choghadiya.bestAuspicious')}</strong></span>
+        <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-amber-500" /> <strong className="text-amber-700 dark:text-amber-300">{t('choghadiya.neutralTransit')}</strong></span>
+        <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-rose-500" /> <strong className="text-rose-700 dark:text-rose-300">{t('choghadiya.inauspiciousAvoid')}</strong></span>
       </div>
 
-      {/* Choghadiya Cards Grid (Superior Readability on All Screens) */}
+      {/* Choghadiya Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {currentList.map((item) => {
           return (
@@ -123,7 +125,7 @@ export default function ChoghadiyaTable({ choghadiya }) {
 
               <div className="p-2.5 rounded-xl bg-white/80 dark:bg-stone-900/80 border border-stone-200/60 dark:border-stone-800 space-y-1">
                 <span className="text-[11px] font-semibold text-stone-500 uppercase flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5" /> Timing Window
+                  <Clock className="w-3.5 h-3.5" /> {t('choghadiya.timingWindow')}
                 </span>
                 <div className="text-sm font-extrabold text-stone-900 dark:text-white">
                   {item.startTime} - {item.endTime}
@@ -131,13 +133,13 @@ export default function ChoghadiyaTable({ choghadiya }) {
               </div>
 
               <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed">
-                {item.name === 'Amrit' && 'Ideal for all auspicious works, medical treatments & sacred deeds.'}
-                {item.name === 'Shubh' && 'Best for weddings, religious ceremonies & new beginnings.'}
-                {item.name === 'Labh' && 'Best for business, profit-making deals & opening shops.'}
-                {item.name === 'Chal' && 'Suitable for travel, journeys & shifting movable assets.'}
-                {item.name === 'Udveg' && 'Government work only; avoid auspicious commencement.'}
-                {item.name === 'Kaal' && 'Mechanical or mining work; avoid auspicious rituals.'}
-                {item.name === 'Rog' && 'Combat or treatment; strictly avoid all new ventures.'}
+                {item.name === 'Amrit' && (isHi ? 'सभी मांगलिक कार्यों, औषधि सेवन एवं पूजा-अर्चना के लिए सर्वोत्तम।' : 'Ideal for all auspicious works, medical treatments & sacred deeds.')}
+                {item.name === 'Shubh' && (isHi ? 'विवाह, धार्मिक अनुष्ठान एवं नवीन कार्यों के शुभारंभ हेतु श्रेष्ठ।' : 'Best for weddings, religious ceremonies & new beginnings.')}
+                {item.name === 'Labh' && (isHi ? 'व्यापार, वित्तीय सौदों एवं नवीन प्रतिष्ठान खोलने के लिए शुभ।' : 'Best for business, profit-making deals & opening shops.')}
+                {item.name === 'Chal' && (isHi ? 'यात्रा, आवागमन एवं चल संपत्ति के कार्यों हेतु अनुकूल।' : 'Suitable for travel, journeys & shifting movable assets.')}
+                {item.name === 'Udveg' && (isHi ? 'केवल शासकीय कार्यों हेतु; मांगलिक कार्य वर्जित।' : 'Government work only; avoid auspicious commencement.')}
+                {item.name === 'Kaal' && (isHi ? 'मशीनरी एवं खनन कार्य हेतु; मांगलिक कार्य टालें।' : 'Mechanical or mining work; avoid auspicious rituals.')}
+                {item.name === 'Rog' && (isHi ? 'विवाद या चिकित्सा हेतु; नए शुभ कार्य पूर्णतः वर्जित।' : 'Combat or treatment; strictly avoid all new ventures.')}
               </p>
             </div>
           );

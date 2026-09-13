@@ -1,13 +1,22 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, RotateCcw } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
-const MONTH_NAMES = [
+const MONTH_NAMES_EN = [
   'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
+const MONTH_NAMES_HI = [
+  'जनवरी', 'फ़रवरी', 'मार्च', 'अप्रैल', 'मई', 'जून',
+  'जुलाई', 'अगस्त', 'सितंबर', 'अक्टूबर', 'नवंबर', 'दिसंबर'
+];
+
 export default function MonthNavigation({ month, year, onMonthChange, onYearChange, onToday }) {
-  const currentMonthName = MONTH_NAMES[month - 1];
+  const { t, language } = useLanguage();
+  const isHi = language === 'hi';
+  const monthNames = isHi ? MONTH_NAMES_HI : MONTH_NAMES_EN;
+  const currentMonthName = monthNames[month - 1];
 
   const handlePrev = () => {
     if (month === 1) {
@@ -40,7 +49,7 @@ export default function MonthNavigation({ month, year, onMonthChange, onYearChan
             {currentMonthName} {year}
           </h2>
           <p className="text-[11px] sm:text-xs text-stone-500 dark:text-stone-400">
-            Hindu Monthly Calendar & Festivals
+            {isHi ? 'मासिक हिंदू पंचांग एवं व्रत-त्योहार' : 'Hindu Monthly Calendar & Festivals'}
           </p>
         </div>
       </div>
@@ -54,7 +63,7 @@ export default function MonthNavigation({ month, year, onMonthChange, onYearChan
           className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 text-xs font-semibold transition-all shadow-sm"
         >
           <RotateCcw className="w-3.5 h-3.5" />
-          <span>Today</span>
+          <span>{t('common.today')}</span>
         </button>
 
         {/* Month Selector Dropdown */}
@@ -63,7 +72,7 @@ export default function MonthNavigation({ month, year, onMonthChange, onYearChan
           onChange={(e) => onMonthChange(Number(e.target.value))}
           className="px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-xl bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-xs font-semibold text-stone-800 dark:text-stone-200 focus:outline-none focus:ring-2 focus:ring-vedic-saffron-500/50 cursor-pointer"
         >
-          {MONTH_NAMES.map((name, i) => (
+          {monthNames.map((name, i) => (
             <option key={name} value={i + 1}>
               {name}
             </option>
@@ -88,16 +97,16 @@ export default function MonthNavigation({ month, year, onMonthChange, onYearChan
           <button
             onClick={handlePrev}
             className="p-1.5 sm:p-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-vedic-saffron-100 hover:text-vedic-saffron-700 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 transition-colors"
-            title="Previous Month"
-            aria-label="Previous Month"
+            title={isHi ? 'पिछला महीना' : 'Previous Month'}
+            aria-label={isHi ? 'पिछला महीना' : 'Previous Month'}
           >
             <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
           <button
             onClick={handleNext}
             className="p-1.5 sm:p-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-vedic-saffron-100 hover:text-vedic-saffron-700 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 transition-colors"
-            title="Next Month"
-            aria-label="Next Month"
+            title={isHi ? 'अगला महीना' : 'Next Month'}
+            aria-label={isHi ? 'अगला महीना' : 'Next Month'}
           >
             <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>

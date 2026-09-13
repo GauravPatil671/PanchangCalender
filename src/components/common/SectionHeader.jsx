@@ -1,5 +1,6 @@
 import React from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export function SectionHeader({
   title,
@@ -12,6 +13,8 @@ export function SectionHeader({
   onToggleCollapse,
   controlsId
 }) {
+  const { t } = useLanguage();
+
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 mb-6 border-b border-stone-200/80 dark:border-stone-800">
       <div className="space-y-1">
@@ -49,7 +52,7 @@ export function SectionHeader({
           aria-controls={controlsId}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 text-xs font-semibold transition-all self-start sm:self-auto min-h-[36px]"
         >
-          <span>{isCollapsed ? 'Show Section' : 'Collapse'}</span>
+          <span>{isCollapsed ? t('common.showSection') : t('common.collapse')}</span>
           {isCollapsed ? (
             <ChevronDown className="w-3.5 h-3.5" aria-hidden="true" />
           ) : (

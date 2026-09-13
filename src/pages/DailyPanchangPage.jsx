@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { usePanchang } from '../hooks/usePanchang';
 import { useLocationContext } from '../context/LocationContext';
+import { useLanguage } from '../context/LanguageContext';
 import { 
   formatDateYMD, 
   formatDateDisplay, 
@@ -43,6 +44,7 @@ export default function DailyPanchangPage() {
   });
 
   const { selectedLocation, setIsSelectorOpen } = useLocationContext();
+  const { t, language } = useLanguage();
   const { data: panchang, loading, error, refetch } = usePanchang(currentDate);
 
   useEffect(() => {
@@ -92,7 +94,7 @@ export default function DailyPanchangPage() {
         {/* Title */}
         <div className="space-y-0.5 sm:space-y-1">
           <span className="text-[10px] sm:text-xs uppercase font-bold tracking-wider text-vedic-saffron-600 dark:text-vedic-saffron-400">
-            Daily Panchang Ephemeris
+            {t('daily.ephemerisLabel')}
           </span>
           <h1 className="text-lg sm:text-3xl font-bold font-serif text-stone-900 dark:text-white flex flex-wrap items-center gap-1.5 sm:gap-2">
             <span>{formatDateDisplay(currentDate)}</span>
@@ -110,7 +112,7 @@ export default function DailyPanchangPage() {
             className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 text-xs font-bold transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>Today</span>
+            <span>{t('common.today')}</span>
           </button>
 
           {/* Date Picker Input */}
@@ -128,17 +130,17 @@ export default function DailyPanchangPage() {
             <button
               onClick={handlePrev}
               className="flex items-center gap-1 p-1.5 sm:px-3 sm:py-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-vedic-saffron-100 hover:text-vedic-saffron-700 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 text-xs font-bold transition-colors"
-              title="Previous Day"
+              title={t('daily.prev')}
             >
               <ChevronLeft className="w-4 h-4" />
-              <span className="hidden sm:inline">Prev</span>
+              <span className="hidden sm:inline">{t('daily.prev')}</span>
             </button>
             <button
               onClick={handleNext}
               className="flex items-center gap-1 p-1.5 sm:px-3 sm:py-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-vedic-saffron-100 hover:text-vedic-saffron-700 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 text-xs font-bold transition-colors"
-              title="Next Day"
+              title={t('daily.next')}
             >
-              <span className="hidden sm:inline">Next</span>
+              <span className="hidden sm:inline">{t('daily.next')}</span>
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
@@ -164,41 +166,41 @@ export default function DailyPanchangPage() {
 
             {/* Quick Jump Pills for Easy Navigation */}
             <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none justify-start sm:justify-center -mx-4 px-4 sm:mx-0 sm:px-0">
-              <span className="text-xs font-bold text-stone-500 uppercase mr-1 whitespace-nowrap">Jump to:</span>
+              <span className="text-xs font-bold text-stone-500 uppercase mr-1 whitespace-nowrap">{t('daily.jumpTo')}</span>
               <button
                 onClick={() => scrollToSection('daily-five-limbs')}
                 className="px-3.5 py-1.5 rounded-full bg-amber-100 hover:bg-amber-200 dark:bg-amber-950/80 dark:hover:bg-amber-900 text-amber-900 dark:text-amber-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
               >
                 <Compass className="w-3.5 h-3.5" />
-                <span>5 Limbs (Tithi & Nakshatra)</span>
+                <span>{t('daily.jumpLimbs')}</span>
               </button>
               <button
                 onClick={() => scrollToSection('daily-shubh-muhurat')}
                 className="px-3.5 py-1.5 rounded-full bg-emerald-100 hover:bg-emerald-200 dark:bg-emerald-950/80 dark:hover:bg-emerald-900 text-emerald-900 dark:text-emerald-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
               >
                 <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Shubh Muhurat</span>
+                <span>{t('daily.jumpMuhurat')}</span>
               </button>
               <button
                 onClick={() => scrollToSection('daily-ashubh-kaal')}
                 className="px-3.5 py-1.5 rounded-full bg-rose-100 hover:bg-rose-200 dark:bg-rose-950/80 dark:hover:bg-rose-900 text-rose-900 dark:text-rose-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
               >
                 <AlertTriangle className="w-3.5 h-3.5" />
-                <span>Rahu Kalam & Inauspicious</span>
+                <span>{t('daily.jumpRahu')}</span>
               </button>
               <button
                 onClick={() => scrollToSection('daily-choghadiya')}
                 className="px-3.5 py-1.5 rounded-full bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-950/80 dark:hover:bg-indigo-900 text-indigo-900 dark:text-indigo-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
               >
                 <Clock className="w-3.5 h-3.5" />
-                <span>Choghadiya</span>
+                <span>{t('accordions.choghadiyaTitle')}</span>
               </button>
               <button
                 onClick={() => scrollToSection('daily-sun-moon')}
                 className="px-3.5 py-1.5 rounded-full bg-orange-100 hover:bg-orange-200 dark:bg-orange-950/80 dark:hover:bg-orange-900 text-orange-900 dark:text-orange-200 text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5"
               >
                 <Sun className="w-3.5 h-3.5" />
-                <span>Sun & Moon</span>
+                <span>{t('accordions.sunMoonTitle')}</span>
               </button>
             </div>
           </div>
@@ -206,11 +208,11 @@ export default function DailyPanchangPage() {
           {/* Section: Panchang 5 Limbs */}
           <section id="daily-five-limbs" className="space-y-6 scroll-mt-24">
             <SectionHeader
-              title="Vedic Panchangam Limbs"
-              hindiTitle="पञ्चाङ्ग विवरण"
-              subtitle={`Detailed Tithi, Nakshatra, Yoga, Karana, Samvat and Vrat for ${formatDateDisplay(currentDate)}`}
+              title={t('daily.limbsTitle')}
+              hindiTitle={language === 'hi' ? '' : t('daily.limbsHindi')}
+              subtitle={t('daily.limbsSubtitle', { date: formatDateDisplay(currentDate) })}
               icon={Compass}
-              badge="5 Vedic Angas"
+              badge={language === 'hi' ? '5 वैदिक अंग' : '5 Vedic Angas'}
             />
             <PanchangGrid panchang={panchang} />
           </section>
@@ -218,9 +220,9 @@ export default function DailyPanchangPage() {
           {/* Section: Shubh Muhurat */}
           <section id="daily-shubh-muhurat" className="space-y-6 scroll-mt-24">
             <SectionHeader
-              title="Auspicious Timings & Shubh Muhurat"
-              hindiTitle="शुभ मुहूर्त"
-              subtitle="Beneficial celestial windows for auspicious rituals, new business, and travel"
+              title={t('daily.auspiciousTitle')}
+              hindiTitle={language === 'hi' ? '' : t('accordions.auspiciousHindi')}
+              subtitle={t('daily.auspiciousSubtitle')}
               icon={ShieldCheck}
             />
             <MuhuratSection panchang={panchang} />
@@ -239,9 +241,12 @@ export default function DailyPanchangPage() {
           {/* Section: Sun & Moon */}
           <section id="daily-sun-moon" className="space-y-6 scroll-mt-24">
             <SectionHeader
-              title="Sun & Moon Timings"
-              hindiTitle="सूर्य एवं चन्द्र दर्शन"
-              subtitle={`Timings computed for latitude ${selectedLocation.latitude.toFixed(2)}°, longitude ${selectedLocation.longitude.toFixed(2)}°`}
+              title={t('accordions.sunMoonTitle')}
+              hindiTitle={language === 'hi' ? '' : t('accordions.sunMoonHindi')}
+              subtitle={t('daily.sunMoonSubtitle', { 
+                lat: selectedLocation.latitude.toFixed(2), 
+                lng: selectedLocation.longitude.toFixed(2) 
+              })}
               icon={Sun}
             />
             <SunMoonCard panchang={panchang} />

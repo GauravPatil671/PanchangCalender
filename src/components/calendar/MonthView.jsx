@@ -1,11 +1,17 @@
 import React from 'react';
 import { Sparkles, Moon, Sun } from 'lucide-react';
 import { isSameDay, getTodayDateString } from '../../utils/dateUtils';
+import { useLanguage } from '../../context/LanguageContext';
 
-const WEEKDAYS = ['Sun (रवि)', 'Mon (सोम)', 'Tue (मंगल)', 'Wed (बुध)', 'Thu (गुरु)', 'Fri (शुक्र)', 'Sat (शनि)'];
+const WEEKDAYS_EN = ['Sun (रवि)', 'Mon (सोम)', 'Tue (मंगल)', 'Wed (बुध)', 'Thu (गुरु)', 'Fri (शुक्र)', 'Sat (शनि)'];
+const WEEKDAYS_HI = ['रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'];
 
 export default function MonthView({ monthData, selectedDate, onSelectDate, filter = 'all' }) {
+  const { t, language } = useLanguage();
   if (!monthData || !monthData.days) return null;
+
+  const isHi = language === 'hi';
+  const weekdays = isHi ? WEEKDAYS_HI : WEEKDAYS_EN;
 
   const todayStr = getTodayDateString();
   const firstDayStr = monthData.days[0]?.date;
@@ -23,22 +29,22 @@ export default function MonthView({ monthData, selectedDate, onSelectDate, filte
       {/* Calendar Legend */}
       <div className="flex flex-wrap items-center justify-between gap-3 text-xs bg-stone-50 dark:bg-stone-800/60 p-3.5 rounded-2xl border border-stone-200/80 dark:border-stone-700/80">
         <span className="font-bold text-stone-900 dark:text-white uppercase tracking-wider text-[11px]">
-          Calendar Symbols:
+          {t('calendar.symbolsTitle')}
         </span>
         <div className="flex flex-wrap items-center gap-3">
           <span className="flex items-center gap-1">
-            <span className="text-sm">🌕</span> <strong>Purnima</strong> (Full Moon)
+            <span className="text-sm">🌕</span> <strong>{t('calendar.purnimaLabel')}</strong> <span className="text-stone-500">{t('calendar.purnimaDesc')}</span>
           </span>
           <span className="flex items-center gap-1">
-            <span className="text-sm">🌑</span> <strong>Amavasya</strong> (New Moon)
+            <span className="text-sm">🌑</span> <strong>{t('calendar.amavasyaLabel')}</strong> <span className="text-stone-500">{t('calendar.amavasyaDesc')}</span>
           </span>
           <span className="flex items-center gap-1">
             <span className="px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 font-bold text-[10px]">एका</span>
-            <strong>Ekadashi</strong> (Fasting)
+            <strong>{t('calendar.ekadashiLabel')}</strong> <span className="text-stone-500">{t('calendar.ekadashiDesc')}</span>
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 rounded-full bg-vedic-saffron-500" />
-            <strong>Festival</strong>
+            <strong>{t('calendar.festivalLabel')}</strong>
           </span>
         </div>
       </div>
@@ -48,7 +54,7 @@ export default function MonthView({ monthData, selectedDate, onSelectDate, filte
         
         {/* Weekday Header */}
         <div className="grid grid-cols-7 border-b border-stone-200 dark:border-stone-800 bg-stone-100/80 dark:bg-stone-800 text-center">
-          {WEEKDAYS.map((w, idx) => (
+          {weekdays.map((w, idx) => (
             <div
               key={w}
               className={`py-1.5 sm:py-3.5 px-0.5 text-[9px] xs:text-[11px] sm:text-sm font-bold font-serif ${
@@ -87,6 +93,9 @@ export default function MonthView({ monthData, selectedDate, onSelectDate, filte
             if (filter === 'ekadashi' && !isEkadashi) isDimmed = true;
             if (filter === 'purnima-amavasya' && !isPurnima && !isAmavasya) isDimmed = true;
 
+            const tithiDisplay = isHi ? (day.tithi.hindi || day.tithi.name) : day.tithi.name;
+            const nakshatraDisplay = isHi ? (day.nakshatra.hindi || day.nakshatra.name) : day.nakshatra.name;
+
             return (
               <button
                 key={day.date}
@@ -114,17 +123,17 @@ export default function MonthView({ monthData, selectedDate, onSelectDate, filte
                   {/* Lunar Marker Icons */}
                   <div className="flex items-center gap-0.5">
                     {isPurnima && (
-                      <span className="text-[10px] xs:text-xs sm:text-base" title="Purnima (Full Moon)">
+                      <span className="text-[10px] xs:text-xs sm:text-base" title={t('calendar.purnimaLabel')}>
                         🌕
                       </span>
                     )}
                     {isAmavasya && (
-                      <span className="text-[10px] xs:text-xs sm:text-base" title="Amavasya (New Moon)">
+                      <span className="text-[10px] xs:text-xs sm:text-base" title={t('calendar.amavasyaLabel')}>
                         🌑
                       </span>
                     )}
                     {isEkadashi && (
-                      <span className="text-[7px] xs:text-[8px] sm:text-[10px] px-0.5 xs:px-1 py-0.2 sm:px-1.5 sm:py-0.5 rounded bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 font-bold leading-none" title="Ekadashi Vrat">
+                      <span className="text-[7px] xs:text-[8px] sm:text-[10px] px-0.5 xs:px-1 py-0.2 sm:px-1.5 sm:py-0.5 rounded bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 font-bold leading-none" title={t('calendar.ekadashiLabel')}>
                         ए
                       </span>
                     )}
@@ -134,10 +143,10 @@ export default function MonthView({ monthData, selectedDate, onSelectDate, filte
                 {/* Middle: Tithi Name in bold & Devanagari */}
                 <div className="space-y-0.5 my-0.5 sm:my-1 w-full overflow-hidden">
                   <div className="text-[8px] xs:text-[10px] sm:text-xs md:text-sm font-bold text-stone-800 dark:text-stone-200 truncate font-devanagari leading-tight">
-                    {day.tithi.hindi || day.tithi.name}
+                    {tithiDisplay}
                   </div>
                   <div className="text-[9px] sm:text-[11px] text-stone-500 dark:text-stone-400 truncate hidden sm:block">
-                    {day.nakshatra.name}
+                    {nakshatraDisplay}
                   </div>
                 </div>
 
@@ -146,7 +155,7 @@ export default function MonthView({ monthData, selectedDate, onSelectDate, filte
                   {hasFestivals && (
                     <div className="text-[7px] xs:text-[8px] sm:text-[10px] md:text-[11px] px-0.5 xs:px-1 sm:px-2 py-0.2 sm:py-0.5 rounded sm:rounded-lg bg-vedic-saffron-600 text-white font-semibold truncate flex items-center gap-0.5 sm:gap-1 shadow-sm leading-tight">
                       <Sparkles className="w-2 h-2 sm:w-3 sm:h-3 flex-shrink-0 hidden xs:inline" />
-                      <span className="truncate">{day.festivals[0].name}</span>
+                      <span className="truncate">{isHi ? (day.festivals[0].hindi || day.festivals[0].name) : day.festivals[0].name}</span>
                     </div>
                   )}
                   {!hasFestivals && day.vrats && day.vrats.length > 0 && (

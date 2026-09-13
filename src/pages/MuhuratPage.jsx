@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { usePanchang } from '../hooks/usePanchang';
 import { useLocationContext } from '../context/LocationContext';
+import { useLanguage } from '../context/LanguageContext';
 import { formatDateDisplay, getTodayDateString, formatDayOfWeek, getPrevDay, getNextDay } from '../utils/dateUtils';
 import { updatePageSeo } from '../utils/seoUtils';
 import MuhuratSection from '../components/panchang/MuhuratSection';
@@ -25,6 +26,7 @@ import SectionHeader from '../components/common/SectionHeader';
 export default function MuhuratPage() {
   const [currentDate, setCurrentDate] = useState(getTodayDateString());
   const { selectedLocation, setIsSelectorOpen } = useLocationContext();
+  const { t, language } = useLanguage();
   const { data: panchang, loading, error, refetch } = usePanchang(currentDate);
 
   useEffect(() => {
@@ -49,13 +51,13 @@ export default function MuhuratPage() {
       <div className="text-center max-w-3xl mx-auto space-y-2 sm:space-y-3">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-xs font-bold">
           <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-          <span>Vedic Auspicious Timing</span>
+          <span>{t('muhurat.badge')}</span>
         </div>
         <h1 className="text-2xl sm:text-4xl font-extrabold font-serif text-stone-900 dark:text-white tracking-tight">
-          Shubh Muhurat & Choghadiya
+          {t('muhurat.title')}
         </h1>
         <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
-          Find auspicious astrological windows for commencing new business ventures, Griha Pravesh, vehicle purchases, sacred rituals, and journeys.
+          {t('muhurat.desc')}
         </p>
       </div>
 
@@ -65,7 +67,7 @@ export default function MuhuratPage() {
         {/* Date Selector */}
         <div className="space-y-0.5 sm:space-y-1">
           <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-stone-500">
-            Selected Date:
+            {t('muhurat.selectedDate')}
           </div>
           <div className="text-lg sm:text-xl font-bold font-serif text-stone-900 dark:text-white flex flex-wrap items-center gap-1.5 sm:gap-2">
             <span>{formatDateDisplay(currentDate)}</span>
@@ -82,7 +84,7 @@ export default function MuhuratPage() {
             className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 text-xs font-bold transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>Today</span>
+            <span>{t('common.today')}</span>
           </button>
 
           <input
@@ -96,14 +98,14 @@ export default function MuhuratPage() {
             <button
               onClick={handlePrev}
               className="p-1.5 sm:p-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-vedic-saffron-100 hover:text-vedic-saffron-700 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 transition-colors"
-              title="Previous Day"
+              title={t('daily.prev')}
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={handleNext}
               className="p-1.5 sm:p-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-vedic-saffron-100 hover:text-vedic-saffron-700 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 transition-colors"
-              title="Next Day"
+              title={t('daily.next')}
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -131,9 +133,9 @@ export default function MuhuratPage() {
           {/* Section: Auspicious Muhurats */}
           <section className="space-y-6">
             <SectionHeader
-              title="Auspicious Muhurats"
-              hindiTitle="शुभ मुहूर्त"
-              subtitle={`Computed for ${formatDateDisplay(currentDate)} at ${selectedLocation.city}`}
+              title={t('muhurat.auspiciousTitle')}
+              hindiTitle={language === 'hi' ? '' : t('accordions.auspiciousHindi')}
+              subtitle={t('muhurat.auspiciousSubtitle', { date: formatDateDisplay(currentDate), city: selectedLocation.city })}
               icon={ShieldCheck}
             />
             <MuhuratSection panchang={panchang} />

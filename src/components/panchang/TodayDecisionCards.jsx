@@ -1,5 +1,5 @@
 import React from 'react';
-import { Moon, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { ShieldCheck, AlertTriangle, Clock } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 
 export default function TodayDecisionCards({ panchang }) {
@@ -8,107 +8,107 @@ export default function TodayDecisionCards({ panchang }) {
   if (!panchang) return null;
 
   const isHi = language === 'hi';
-  const tithiName = isHi 
-    ? (panchang.currentTithi?.hindi ? `${panchang.pakshaHindi || ''} ${panchang.currentTithi.hindi}` : panchang.tithi?.hindi || panchang.tithi?.name)
-    : (panchang.currentTithi?.name || panchang.tithi?.name || 'Tithi');
-  
-  const nakshatraName = isHi ? (panchang.nakshatra?.hindi || panchang.nakshatra?.name) : panchang.nakshatra?.name || 'Nakshatra';
-  const nakshatraEnd = panchang.nakshatra?.endTimeFormatted;
-  
-  // Single most relevant auspicious muhurat
-  const bestMuhuratName = panchang.muhurat?.abhijitMuhurat 
-    ? (isHi ? 'अभिजित मुहूर्त' : 'Abhijit Muhurat') 
+
+  // Best muhurat
+  const bestMuhuratName = panchang.muhurat?.abhijitMuhurat
+    ? (isHi ? 'अभिजित मुहूर्त' : 'Abhijit Muhurat')
     : (isHi ? 'ब्रह्म मुहूर्त' : 'Brahma Muhurat');
-  const bestMuhuratTime = panchang.muhurat?.abhijitMuhurat || panchang.muhurat?.brahmaMuhurat || '11:45 AM – 12:35 PM';
-  
+  const bestMuhuratTime = panchang.muhurat?.abhijitMuhurat
+    || panchang.muhurat?.brahmaMuhurat
+    || '—';
+
   // Rahu Kalam
-  const rahuKalamTime = panchang.inauspicious?.rahuKalam || 'Check local timings';
+  const rahuKalamTime = panchang.inauspicious?.rahuKalam || '—';
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-      
-      {/* 1. Current Tithi & Nakshatra Card (Neutral / Informative) */}
-      <div className="p-5 rounded-2xl bg-stone-50 dark:bg-stone-900/90 border border-stone-200 dark:border-stone-800 shadow-sm flex flex-col justify-between space-y-3">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-stone-400 flex items-center gap-1.5">
-              <Moon className="w-4 h-4 text-amber-600 dark:text-amber-400" aria-hidden="true" />
-              {t('cards.currentTithiTitle')}
-            </span>
-            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300">
-              {t('cards.activeNow')}
-            </span>
-          </div>
+    <div
+      className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+      role="region"
+      aria-label="Today's key timings"
+    >
 
-          <div>
-            <div className="text-lg sm:text-xl font-bold font-serif text-stone-900 dark:text-white">
-              {tithiName}
+      {/* ── Card 1: Best Time Today (Auspicious) ── */}
+      <div
+        className="vedic-card accent-auspicious p-5 flex flex-col gap-4"
+        role="region"
+        aria-label={t('cards.bestTimeTitle')}
+      >
+        {/* Header */}
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950/60 flex items-center justify-center flex-shrink-0">
+              <ShieldCheck className="w-4 h-4 text-emerald-700 dark:text-emerald-400" aria-hidden="true" />
             </div>
-            <div className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 font-medium">
-              {nakshatraEnd ? t('cards.nakshatraUntil', { name: nakshatraName, time: nakshatraEnd }) : nakshatraName}
+            <div>
+              <p className="panchang-label text-emerald-700 dark:text-emerald-500">
+                {t('cards.bestTimeTitle')}
+              </p>
+              <p className="panchang-label text-stone-400 dark:text-stone-600 normal-case tracking-normal text-[10px]">
+                {t('cards.shubhMuhuratBadge')}
+              </p>
             </div>
           </div>
+          {/* Status pill */}
+          <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 flex-shrink-0">
+            <span className="status-dot-active" aria-hidden="true" />
+            {t('cards.activeNow')}
+          </span>
         </div>
 
-        <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed border-t border-stone-200/60 dark:border-stone-800/80 pt-2.5">
-          {panchang.tithi?.deity 
-            ? t('cards.deityGuidance', { deity: panchang.tithi.deity, nature: panchang.tithi.nature || 'auspicious' })
-            : t('cards.defaultTithiGuidance')}
-        </p>
-      </div>
-
-      {/* 2. Best Time Today (Auspicious - Green) */}
-      <div className="p-5 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/60 shadow-sm flex flex-col justify-between space-y-3">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-400 flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
-              {t('cards.bestTimeTitle')}
-            </span>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300/40">
-              {t('cards.shubhMuhuratBadge')}
-            </span>
-          </div>
-
-          <div>
-            <div className="text-lg sm:text-xl font-bold font-serif text-emerald-950 dark:text-emerald-100">
-              {bestMuhuratName}
-            </div>
-            <div className="text-xs sm:text-sm font-semibold font-mono text-emerald-800 dark:text-emerald-300">
-              {bestMuhuratTime}
-            </div>
-          </div>
+        {/* Value */}
+        <div className="flex-1">
+          <p className="panchang-value text-xl sm:text-2xl">{bestMuhuratName}</p>
+          <p className="flex items-center gap-1.5 text-sm font-semibold text-emerald-700 dark:text-emerald-400 mt-1">
+            <Clock className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+            {bestMuhuratTime}
+          </p>
         </div>
 
-        <p className="text-xs text-emerald-800/80 dark:text-emerald-300/80 leading-relaxed border-t border-emerald-200/60 dark:border-emerald-900/60 pt-2.5">
+        {/* Guidance */}
+        <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed border-t border-stone-100 dark:border-vedic-nightBorder pt-3">
           {t('cards.bestTimeGuidance')}
         </p>
       </div>
 
-      {/* 3. Avoid Today (Inauspicious - Rose/Amber Caution) */}
-      <div className="p-5 rounded-2xl bg-rose-50/60 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/60 shadow-sm flex flex-col justify-between space-y-3">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-rose-800 dark:text-rose-400 flex items-center gap-1.5">
-              <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400" aria-hidden="true" />
-              {t('cards.avoidTitle')}
-            </span>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-900/60 text-rose-800 dark:text-rose-300 border border-rose-300/40">
-              {t('cards.ashubhKaalBadge')}
-            </span>
-          </div>
-
-          <div>
-            <div className="text-lg sm:text-xl font-bold font-serif text-rose-950 dark:text-rose-100">
-              {t('cards.rahuKalamTitle')}
+      {/* ── Card 2: Avoid Today (Inauspicious) ── */}
+      <div
+        className="vedic-card accent-inauspicious p-5 flex flex-col gap-4"
+        role="region"
+        aria-label={t('cards.avoidTitle')}
+      >
+        {/* Header */}
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-rose-100 dark:bg-rose-950/60 flex items-center justify-center flex-shrink-0">
+              <AlertTriangle className="w-4 h-4 text-rose-700 dark:text-rose-400" aria-hidden="true" />
             </div>
-            <div className="text-xs sm:text-sm font-semibold font-mono text-rose-800 dark:text-rose-300">
-              {rahuKalamTime}
+            <div>
+              <p className="panchang-label text-rose-700 dark:text-rose-500">
+                {t('cards.avoidTitle')}
+              </p>
+              <p className="panchang-label text-stone-400 dark:text-stone-600 normal-case tracking-normal text-[10px]">
+                {t('cards.ashubhKaalBadge')}
+              </p>
             </div>
           </div>
+          {/* Status pill */}
+          <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 flex-shrink-0">
+            <span className="status-dot-caution" aria-hidden="true" />
+            {isHi ? 'अशुभ काल' : 'Caution'}
+          </span>
         </div>
 
-        <p className="text-xs text-rose-800/80 dark:text-rose-300/80 leading-relaxed border-t border-rose-200/60 dark:border-rose-900/60 pt-2.5">
+        {/* Value */}
+        <div className="flex-1">
+          <p className="panchang-value text-xl sm:text-2xl">{t('cards.rahuKalamTitle')}</p>
+          <p className="flex items-center gap-1.5 text-sm font-semibold text-rose-700 dark:text-rose-400 mt-1">
+            <Clock className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+            {rahuKalamTime}
+          </p>
+        </div>
+
+        {/* Guidance */}
+        <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed border-t border-stone-100 dark:border-vedic-nightBorder pt-3">
           {t('cards.avoidGuidance')}
         </p>
       </div>

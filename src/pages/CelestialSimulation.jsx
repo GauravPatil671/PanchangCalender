@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useLocationContext } from '../context/LocationContext';
+import { useLanguage } from '../context/LanguageContext';
 import { getSolarPosition } from '../astronomy/solarCalculations';
 import { getLunarPosition } from '../astronomy/lunarCalculations';
 import { getTithiDetails } from '../astronomy/tithiCalculations';
@@ -28,6 +29,8 @@ import {
 
 export default function CelestialSimulation() {
   const { selectedLocation } = useLocationContext();
+  const { t, language } = useLanguage();
+  const isHi = language === 'hi';
 
   // Simulation State
   const [simulationDate, setSimulationDate] = useState(() => new Date());
@@ -55,7 +58,7 @@ export default function CelestialSimulation() {
     );
   }, []);
 
-  // Smooth Time Progression Loop with React Render Throttling (avoids 60 FPS DOM re-renders)
+  // Smooth Time Progression Loop with React Render Throttling
   const lastTickRef = useRef(performance.now());
   const simTimeRef = useRef(simulationDate.getTime());
   const lastReactUpdateRef = useRef(0);
@@ -73,9 +76,9 @@ export default function CelestialSimulation() {
 
       if (isPlaying) {
         simTimeRef.current += deltaSec * playbackSpeed * 1000;
-
-        // Throttle React state re-renders to ~25-30 FPS for buttery smooth performance
-        if (now - lastReactUpdateRef.current > 35) {
+        
+        // Throttle React state updates to 20 FPS (every 50ms) to ensure lightweight CPU performance
+        if (now - lastReactUpdateRef.current >= 50) {
           lastReactUpdateRef.current = now;
           setSimulationDate(new Date(simTimeRef.current));
         }
@@ -83,18 +86,28 @@ export default function CelestialSimulation() {
       animId = requestAnimationFrame(tick);
     };
 
-    lastTickRef.current = performance.now();
     animId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(animId);
   }, [isPlaying, playbackSpeed]);
 
-  // Compute live astronomical data based on simulationDate
-  const solarData = useMemo(() => getSolarPosition(simulationDate), [simulationDate]);
-  const lunarData = useMemo(() => getLunarPosition(simulationDate), [simulationDate]);
-  const tithiData = useMemo(() => getTithiDetails(simulationDate), [simulationDate]);
-  const eclipseData = useMemo(() => checkEclipse(simulationDate), [simulationDate]);
+  // Derived Astronomical Positions for current simulation time
+  const solarData = useMemo(() => {
+    return getSolarPosition(simulationDate, selectedLocation?.latitude || 19.0760, selectedLocation?.longitude || 72.8777);
+  }, [simulationDate, selectedLocation]);
 
-  // Debounced Panchang Data Fetching during playback
+  const lunarData = useMemo(() => {
+    return getLunarPosition(simulationDate, selectedLocation?.latitude || 19.0760, selectedLocation?.longitude || 72.8777);
+  }, [simulationDate, selectedLocation]);
+
+  const tithiData = useMemo(() => {
+    return getTithiDetails(simulationDate, selectedLocation?.latitude || 19.0760, selectedLocation?.longitude || 72.8777);
+  }, [simulationDate, selectedLocation]);
+
+  const eclipseData = useMemo(() => {
+    return checkEclipse(simulationDate);
+  }, [simulationDate]);
+
+  // Synchronized Panchang fetch for chosen simulation date
   useEffect(() => {
     let isCancelled = false;
     const timer = setTimeout(async () => {
@@ -127,18 +140,18 @@ export default function CelestialSimulation() {
   };
 
   const cameraButtons = [
-    { id: 'isometric', label: '3D Orbit', icon: Eye },
-    { id: 'top', label: 'Top View', icon: Compass },
-    { id: 'earth', label: 'Earth', icon: Globe },
-    { id: 'moon', label: 'Moon', icon: Moon },
-    { id: 'sun', label: 'Sun', icon: Sun }
+    { id: 'isometric', label: isHi ? '3D दृश्य' : '3D Orbit', icon: Eye },
+    { id: 'top', label: isHi ? 'शीर्ष' : 'Top View', icon: Compass },
+    { id: 'earth', label: isHi ? 'पृथ्वी' : 'Earth', icon: Globe },
+    { id: 'moon', label: isHi ? 'चन्द्र' : 'Moon', icon: Moon },
+    { id: 'sun', label: isHi ? 'सूर्य' : 'Sun', icon: Sun }
   ];
 
   const speedButtons = [
-    { label: 'Live', val: 1 },
-    { label: '1h/s', val: 3600 },
-    { label: '1d/s', val: 86400 },
-    { label: '10d/s', val: 864000 }
+    { label: isHi ? 'सजीव' : 'Live', val: 1 },
+    { label: isHi ? '1घं/से' : '1h/s', val: 3600 },
+    { label: isHi ? '1दिन/से' : '1d/s', val: 86400 },
+    { label: isHi ? '10दिन/से' : '10d/s', val: 864000 }
   ];
 
   return (
@@ -150,13 +163,13 @@ export default function CelestialSimulation() {
           <div>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-vedic-saffron-950/80 text-vedic-saffron-400 text-xs font-semibold border border-vedic-saffron-900/50 mb-1">
               <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
-              <span>Vedic Celestial Ephemeris</span>
+              <span>{t('simulation.badge')}</span>
             </div>
             <h1 className="text-xl sm:text-2xl font-bold font-serif text-white tracking-tight">
-              Interactive Sun–Earth–Moon Simulation
+              {t('simulation.title')}
             </h1>
             <p className="text-xs text-stone-400">
-              Visualize orbital dynamics, lunar elongation angle (θ), Udayatithi, Moon illumination, and eclipses.
+              {t('simulation.subtitle')}
             </p>
           </div>
         </div>
@@ -227,12 +240,12 @@ export default function CelestialSimulation() {
                 {isPlaying ? (
                   <>
                     <Pause className="w-3.5 h-3.5 fill-current" />
-                    <span>Pause</span>
+                    <span>{isHi ? 'रोकें' : 'Pause'}</span>
                   </>
                 ) : (
                   <>
                     <Play className="w-3.5 h-3.5 fill-current" />
-                    <span>Play</span>
+                    <span>{isHi ? 'चलाएं' : 'Play'}</span>
                   </>
                 )}
               </button>
@@ -283,7 +296,7 @@ export default function CelestialSimulation() {
           </div>
 
           <span className="text-[9px] xs:text-[10px] text-stone-400/80 italic select-none text-center px-2 hidden xs:block">
-            * Distances and sizes visually scaled for educational clarity
+            {t('simulation.scaledNotice')}
           </span>
         </div>
       </div>
@@ -303,7 +316,7 @@ export default function CelestialSimulation() {
               }`}
             >
               <Compass className="w-3.5 h-3.5" />
-              <span>Tithi & Angle</span>
+              <span>{t('simulation.tithiAngleTab')}</span>
             </button>
 
             <button
@@ -315,7 +328,7 @@ export default function CelestialSimulation() {
               }`}
             >
               <Globe className="w-3.5 h-3.5" />
-              <span>Planet Info</span>
+              <span>{t('simulation.planetInfoTab')}</span>
             </button>
 
             <button
@@ -327,12 +340,12 @@ export default function CelestialSimulation() {
               }`}
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Eclipse Mode</span>
+              <span>{t('simulation.eclipseModeTab')}</span>
             </button>
           </div>
 
           <div className="text-[11px] text-stone-400">
-            City: <strong className="text-stone-200">{selectedLocation?.city || 'New Delhi'}, {selectedLocation?.state || 'India'}</strong>
+            {isHi ? 'स्थान:' : 'City:'} <strong className="text-stone-200">{selectedLocation?.city || 'New Delhi'}, {selectedLocation?.state || 'India'}</strong>
           </div>
         </div>
 
@@ -403,47 +416,47 @@ export default function CelestialSimulation() {
             <div className="flex items-center justify-between mb-2.5 border-b border-stone-800 pb-2">
               <h3 className="text-xs font-bold font-serif text-vedic-gold-300 flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-vedic-saffron-500" aria-hidden="true" />
-                <span>Panchang for {panchangData.date}</span>
+                <span>{isHi ? `${panchangData.date} का पंचांग` : `Panchang for ${panchangData.date}`}</span>
               </h3>
               <span className="text-[11px] text-stone-400 font-mono">
-                {panchangData.samvat?.vikram} Vikram Samvat
+                {panchangData.samvat?.vikram} {t('hero.samvatPrefix')}
               </span>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2 text-xs">
               <div className="bg-stone-950/60 p-2 rounded-xl border border-stone-800/70">
-                <span className="text-stone-400 block text-[10px]">Tithi</span>
-                <span className="font-bold text-white truncate block">{panchangData.tithi?.name}</span>
-                <span className="text-[10px] text-vedic-saffron-400 block">{panchangData.paksha}</span>
+                <span className="text-stone-400 block text-[10px]">{isHi ? 'तिथि' : 'Tithi'}</span>
+                <span className="font-bold text-white truncate block">{isHi ? (panchangData.tithi?.hindi || panchangData.tithi?.name) : panchangData.tithi?.name}</span>
+                <span className="text-[10px] text-vedic-saffron-400 block">{isHi ? panchangData.pakshaHindi : panchangData.paksha}</span>
               </div>
 
               <div className="bg-stone-950/60 p-2 rounded-xl border border-stone-800/70">
-                <span className="text-stone-400 block text-[10px]">Nakshatra</span>
-                <span className="font-bold text-white truncate block">{panchangData.nakshatra?.name}</span>
-                <span className="text-[10px] text-amber-400 block">{panchangData.nakshatra?.lord}</span>
+                <span className="text-stone-400 block text-[10px]">{isHi ? 'नक्षत्र' : 'Nakshatra'}</span>
+                <span className="font-bold text-white truncate block">{isHi ? (panchangData.nakshatra?.hindi || panchangData.nakshatra?.name) : panchangData.nakshatra?.name}</span>
+                <span className="text-[10px] text-amber-400 block">{t('common.lord')}: {panchangData.nakshatra?.lord}</span>
               </div>
 
               <div className="bg-stone-950/60 p-2 rounded-xl border border-stone-800/70">
-                <span className="text-stone-400 block text-[10px]">Yoga</span>
-                <span className="font-bold text-white truncate block">{panchangData.yoga?.name}</span>
+                <span className="text-stone-400 block text-[10px]">{isHi ? 'योग' : 'Yoga'}</span>
+                <span className="font-bold text-white truncate block">{isHi ? (panchangData.yoga?.hindi || panchangData.yoga?.name) : panchangData.yoga?.name}</span>
               </div>
 
               <div className="bg-stone-950/60 p-2 rounded-xl border border-stone-800/70">
-                <span className="text-stone-400 block text-[10px]">Karana</span>
+                <span className="text-stone-400 block text-[10px]">{isHi ? 'करण' : 'Karana'}</span>
                 <span className="font-bold text-white truncate block">{panchangData.karana?.name}</span>
               </div>
 
               <div className="bg-stone-950/60 p-2 rounded-xl border border-stone-800/70">
-                <span className="text-stone-400 block text-[10px]">Sunrise - Sunset</span>
+                <span className="text-stone-400 block text-[10px]">{t('common.sunrise')} - {t('common.sunset')}</span>
                 <span className="font-bold text-amber-300 font-mono block">
                   {panchangData.sunMoon?.sunrise} - {panchangData.sunMoon?.sunset}
                 </span>
               </div>
 
               <div className="bg-stone-950/60 p-2 rounded-xl border border-stone-800/70">
-                <span className="text-stone-400 block text-[10px]">Surya / Chandra Rashi</span>
+                <span className="text-stone-400 block text-[10px]">{isHi ? 'सूर्य / चंद्र राशि' : 'Surya / Chandra Rashi'}</span>
                 <span className="font-bold text-white block truncate">
-                  ☀️ {solarData.rashi.name} / 🌙 {lunarData.rashi.name}
+                  ☀️ {solarData.rashi?.name} / 🌙 {lunarData.rashi?.name}
                 </span>
               </div>
             </div>

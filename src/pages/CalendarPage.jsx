@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Calendar as CalendarIcon, Sparkles, MapPin, Filter } from 'lucide-react';
 import { useMonthlyPanchang } from '../hooks/useMonthlyPanchang';
 import { useLocationContext } from '../context/LocationContext';
+import { useLanguage } from '../context/LanguageContext';
 import { updatePageSeo } from '../utils/seoUtils';
 import MonthNavigation from '../components/calendar/MonthNavigation';
 import MonthView from '../components/calendar/MonthView';
 import DayDetailModal from '../components/calendar/DayDetailModal';
 import LoadingSkeleton from '../components/common/LoadingSkeleton';
 import ErrorDisplay from '../components/common/ErrorDisplay';
-import SectionHeader from '../components/common/SectionHeader';
 
 export default function CalendarPage() {
   const today = new Date();
@@ -18,6 +18,7 @@ export default function CalendarPage() {
   const [activeFilter, setActiveFilter] = useState('all'); // 'all', 'festivals', 'ekadashi', 'purnima-amavasya'
 
   const { selectedLocation } = useLocationContext();
+  const { t, language } = useLanguage();
   const { data: monthData, loading, error, refetch } = useMonthlyPanchang(currentMonth, currentYear);
 
   useEffect(() => {
@@ -45,7 +46,7 @@ export default function CalendarPage() {
               ...f,
               date: d.date,
               dayNumber: d.dayNumber,
-              tithiName: d.tithi.name
+              tithiName: language === 'hi' ? (d.tithi.hindi || d.tithi.name) : d.tithi.name
             });
           }
         });
@@ -60,13 +61,13 @@ export default function CalendarPage() {
       <div className="text-center max-w-3xl mx-auto space-y-2">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-vedic-saffron-100 dark:bg-vedic-saffron-950/80 text-vedic-saffron-700 dark:text-vedic-saffron-300 text-xs font-semibold">
           <CalendarIcon className="w-3.5 h-3.5" aria-hidden="true" />
-          <span>Vedic Monthly Almanac</span>
+          <span>{t('calendar.badge')}</span>
         </div>
         <h1 className="text-2xl sm:text-4xl font-extrabold font-serif text-stone-900 dark:text-white tracking-tight">
-          Hindu Panchang Calendar
+          {t('calendar.title')}
         </h1>
         <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
-          Monthly lunar calendar featuring daily Tithis, Ekadashi fasts, Purnima, Amavasya, and major Hindu festivals.
+          {t('calendar.desc')}
         </p>
       </div>
 
@@ -83,7 +84,7 @@ export default function CalendarPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-stone-900 p-3.5 sm:p-4 rounded-2xl border border-stone-200 dark:border-stone-800 shadow-sm">
         <div className="flex items-center gap-2 text-xs font-bold text-stone-700 dark:text-stone-300">
           <Filter className="w-4 h-4 text-vedic-saffron-600" />
-          <span>Filter View:</span>
+          <span>{t('calendar.filterView')}</span>
         </div>
 
         <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-none -mx-1 px-1 sm:mx-0 sm:px-0">
@@ -95,7 +96,7 @@ export default function CalendarPage() {
                 : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700'
             }`}
           >
-            All Dates
+            {t('calendar.filterAll')}
           </button>
           <button
             onClick={() => setActiveFilter('festivals')}
@@ -105,7 +106,7 @@ export default function CalendarPage() {
                 : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700'
             }`}
           >
-            ✨ Major Festivals ({monthFestivals.length})
+            {t('calendar.filterFestivals', { count: monthFestivals.length })}
           </button>
           <button
             onClick={() => setActiveFilter('ekadashi')}
@@ -115,7 +116,7 @@ export default function CalendarPage() {
                 : 'bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 hover:bg-purple-100'
             }`}
           >
-            🌾 Ekadashi Vrats
+            {t('calendar.filterEkadashi')}
           </button>
           <button
             onClick={() => setActiveFilter('purnima-amavasya')}
@@ -125,7 +126,7 @@ export default function CalendarPage() {
                 : 'bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 hover:bg-amber-100'
             }`}
           >
-            🌕 Purnima & 🌑 Amavasya
+            {t('calendar.filterPurnima')}
           </button>
         </div>
       </div>
@@ -151,11 +152,11 @@ export default function CalendarPage() {
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-vedic-saffron-600 dark:text-vedic-saffron-400" />
                   <h3 className="text-lg font-bold font-serif text-stone-900 dark:text-white">
-                    Festivals & Important Vrats in this Month ({monthFestivals.length})
+                    {t('calendar.monthFestivalsTitle', { count: monthFestivals.length })}
                   </h3>
                 </div>
                 <span className="text-xs text-stone-500">
-                  Click any card to open day details
+                  {t('calendar.clickCardHint')}
                 </span>
               </div>
 
@@ -175,7 +176,7 @@ export default function CalendarPage() {
                       </span>
                     </div>
                     <div className="font-bold text-base text-stone-900 dark:text-white group-hover:text-vedic-saffron-600 transition-colors">
-                      {fest.name}
+                      {language === 'hi' ? (fest.hindi || fest.name) : fest.name}
                     </div>
                     <div className="text-xs text-stone-600 dark:text-stone-400 line-clamp-2 leading-relaxed">
                       {fest.description}
